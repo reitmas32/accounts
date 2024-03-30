@@ -21,13 +21,6 @@ phonenumbers = "^8.13.33"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 pyjwt = "^2.8.0"
 
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
-
-
-
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

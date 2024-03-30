@@ -6,15 +6,15 @@ from fastapi import (
 )
 from sqlalchemy.orm import Session
 from api.v1.users.schemas import (
-    CreateUserSchema,
+    CreateUserAuthEmailSchema,
+    CreateUserAuthPlatformSchema,
     ActivateAccountUserSchema,
-    LoginUserSchema,
-    ValidateTokenSchema
+    LoginAuthEmailSchema,
+    LoginAuthGeneralPlatformSchema
 )
 from api.v1.users.services import (
     CreateUserService,
     RetrieveUserService,
-    ListUserService,
     ActivateAccountService,
     LoginUserService,
     ResourcesServices
@@ -26,8 +26,26 @@ from core.utils.responses import (
 from core.settings.database import get_session
 from pydantic import EmailStr
 from uuid import UUID
+from core.utils.jwt import TokenDataSchema
+from api.v1.common.dependencies import get_data_token
+
 
 router = APIRouter(prefix="/users", tags=["users"])
+
+
+@router.get(
+    "/",
+    summary="Regresa los datos del usuario autenticado",
+    status_code=status.HTTP_200_OK,
+    response_model=EnvelopeResponse
+)
+async def retrieve(
+    request: Request,
+    token_payload: TokenDataSchema = Depends(get_data_token),
+    session: Session = Depends(get_session),
+):
+    log.info("Get User")
+    return RetrieveUserService(session=session).retrieve_by_id(id=token_payload.user_mother_id)
 
 
 @router.post(
@@ -38,42 +56,12 @@ router = APIRouter(prefix="/users", tags=["users"])
 )
 async def create(
     request: Request,
-    payload: CreateUserSchema,
+    payload: CreateUserAuthEmailSchema,
     session: Session = Depends(get_session)
 ):
 
     log.info("Create User")
-    return CreateUserService(session=session).create(payload=payload)
-
-
-@router.get(
-    "/{id}",
-    summary="Regresa los datos de un usuario en especifico a partir de su id", 
-    status_code=status.HTTP_200_OK, 
-    response_model=EnvelopeResponse
-)
-async def retrieve(
-    request: Request,
-    id : UUID,
-    session: Session = Depends(get_session),
-):
-    log.info("Get User")
-    return RetrieveUserService(session=session).retrieve_by_id(id=id)
-
-@router.get(
-    "",
-    summary="Listar todos los usuarios", 
-    status_code=status.HTTP_200_OK, 
-    response_model=EnvelopeResponse
-)
-async def get_all(
-    request: Request,
-    session: Session = Depends(get_session),
-):
-
-    log.info("Get List Users")
-    return ListUserService(session=session).list()
-
+    return CreateUserService(session=session).create_by_email(payload=payload)
 
 @router.post(
     "/activate-account",
@@ -90,8 +78,6 @@ async def activate_account(
     log.info("Activar cuenta de usuario")
     return ActivateAccountService(session=session).activate_account(payload=payload)
 
-
-
 @router.post(
     "/login",
     summary="Login de cuenta de usuario",
@@ -100,28 +86,12 @@ async def activate_account(
 )
 async def login(
     request: Request,
-    payload: LoginUserSchema,
+    payload: LoginAuthEmailSchema,
     session: Session = Depends(get_session),
 ):
     
     log.info("Login usuario")
-    return LoginUserService(session=session).login(payload=payload)
-
-
-@router.post(
-    "/validate-token",
-    summary="Valida el token y te regresa la data inmersa en el",
-    status_code=status.HTTP_200_OK,
-    response_model=EnvelopeResponse
-)
-async def validate_token(
-    request: Request,
-    payload: ValidateTokenSchema,
-    session: Session = Depends(get_session),
-):
-    
-    log.info("Validando token de usuario")
-    return LoginUserService(session=session).validate_token(payload=payload)
+    return LoginUserService(session=session).login_by_email(payload=payload)
 
 
 @router.get(
@@ -139,20 +109,6 @@ async def get_public_key(
 
 
 @router.get(
-    "/resources/2FA",
-    summary="Te regresa la lista de servicios disponibles con los cuales el usuario podra activar el doble factor de autenticacion", 
-    status_code=status.HTTP_200_OK, 
-    response_model=EnvelopeResponse
-)
-async def get_list_2FA_available_system(
-    request: Request
-):
-
-    log.info("Get all available 2FA system")
-    return ResourcesServices.get_list_2FA_available_system()
-
-
-@router.get(
     "/resources/activation_methods",
     summary="Te regresa la lista de servicios disponibles con los cuales el usuario podra crear una cuenta de usuario y hacer login", 
     status_code=status.HTTP_200_OK, 
@@ -164,3 +120,34 @@ async def get_list_activation_methods_available_system(
 
     log.info("Get all available activation methods")
     return ResourcesServices.get_list_activation_methods_available_system()
+
+
+@router.post(
+    "/platform/signup",
+    summary="Crear un registro de usuario a traves de una plataforma",
+    status_code=status.HTTP_201_CREATED,
+    response_model=EnvelopeResponse
+)
+async def create_by_platform(
+    request: Request,
+    payload: CreateUserAuthPlatformSchema,
+    session: Session = Depends(get_session),
+):
+    
+    log.info("Create User")
+    return CreateUserService(session=session).create_by_platform(payload=payload)
+
+@router.post(
+    "/platform/login",
+    summary="Login de cuenta de usuario",
+    status_code=status.HTTP_201_CREATED,
+    response_model=EnvelopeResponse
+)
+async def login_by_platform(
+    request: Request,
+    payload: LoginAuthGeneralPlatformSchema,
+    session: Session = Depends(get_session),
+):
+    
+    log.info("Login usuario")
+    return LoginUserService(session=session).login_by_platform(payload=payload)

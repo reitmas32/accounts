@@ -5,9 +5,13 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 from sqlalchemy import select
-from models.user import UserModel
-from models.code import CodeModel
-from models.auth_method import UserAuthMethodModel
+from models import (
+    UserModel,
+    CodeModel,
+    UserLoginMethodModel,
+    AuthGeneralPlatformModel,
+    AuthEmailModel
+)
 
 from core.settings import log, settings
 from core.utils.exceptions import BaseAppException
@@ -51,10 +55,13 @@ def validate_db_conections():
         log.info("1) Table 'users'................. O.K")
         session.execute( select(CodeModel).select_from(CodeModel).limit(1) ).all()
         log.info("2) Table 'codes'................. O.K")
-        session.execute( select(UserAuthMethodModel).select_from(UserAuthMethodModel).limit(1) ).all()
-        log.info("3) Table 'user_auth_methods'..... O.K")
+        session.execute( select(UserLoginMethodModel).select_from(UserLoginMethodModel).limit(1) ).all()
+        log.info("3) Table 'user_login_methods'..... O.K")
+        session.execute( select(AuthEmailModel).select_from(AuthEmailModel).limit(1) ).all()
+        log.info("4) Table 'auth_email'..... O.K")
+        session.execute( select(AuthGeneralPlatformModel).select_from(AuthGeneralPlatformModel).limit(1) ).all()
+        log.info("5) Table 'auth_general_platform'..... O.K")
         log.info("Connection 💲 Success")
-
     except Exception as e:
         session.close()
         message_error = f"Error on validate_db_conections, message error: {e}"

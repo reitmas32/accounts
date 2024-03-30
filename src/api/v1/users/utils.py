@@ -15,7 +15,7 @@ class CodeManager:
         self.manager_email : SendEmailAbstract = get_current_manager_email_to_app_standard()
 
     def generate_code(self, length):
-        return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+        return ''.join(random.choices(string.digits, k=length))
 
     def create_and_send_code(self, email,user_name, code_type:CodeTypeEnum):
         code_lenght = settings.LENGHT_CODE_VALIDATE_EMAIL
