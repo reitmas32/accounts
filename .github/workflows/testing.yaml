@@ -1,0 +1,45 @@
+name: Python CI
+
+on:
+  push:
+    branches:
+      - main
+      - development
+  pull_request:
+    branches:
+      - main
+      - development
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    container:
+      image: python:3.12.1
+      options: --mount type=bind,source="${{ github.workspace }}",target=/app
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        apt-get update && \
+        apt-get install -y --no-install-recommends \
+        git gcc libc-dev python3-dev && \
+        rm -rf /var/lib/apt/lists/*
+        pip install -U poetry
+        poetry export -f requirements.txt --output /tmp/requirements.txt --without-hashes --with dev
+        pip install --no-warn-script-location --disable-pip-version-check --no-cache-dir -r /tmp/requirements.txt
+
+    - name: Copy environment variables
+      run: |
+        cp ./envs.sh /tmp/envs.sh
+        chmod +x /tmp/envs.sh
+
+    - name: Run tests
+      run: |
+        cd /app
+        mkdir reports
+        . /tmp/envs.sh && coverage run -m pytest -s -v --lf --junitxml=reports/unittest_report.xml && coverage xml -o reports/coverage.xml && coverage report
