@@ -6,6 +6,11 @@ on:
       - main
       - development
 
+  push:
+    branches:
+      - main
+      - development
+
 jobs:
   ruff:
     runs-on: ubuntu-latest
