@@ -88,7 +88,7 @@ class RepositoryCode(RepositoryBase):
         query = select(CodeModel).select_from(CodeModel).where(
             CodeModel.email == email,
             CodeModel.code == code,
-            CodeModel.used_at == None,
+            CodeModel.used_at is None,
             CodeModel.created >= min_created
         ).order_by(desc(self.model.created))
         result = self.session.execute(query).one_or_none()

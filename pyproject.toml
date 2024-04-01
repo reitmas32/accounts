@@ -34,6 +34,7 @@ target-version = ['py310']
 src = ["src"]
 target-version = "py310"
 select = ["ALL"]
+
 ignore = [
     "ANN",    # Type hints related, let mypy/pyright handle these.
     "COM812", # "Trailing comma missing". If black is happy, I'm happy.
@@ -55,6 +56,8 @@ ignore = [
     "D",      # Documentation,
     "FBT002", # Boolean default positional argument in function definition
     "PT009",  # Use asserts in test
+    "ARG001", # TODO: add log to request
+    "F401",
 ]
 
 [tool.ruff.flake8-annotations]

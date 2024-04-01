@@ -68,7 +68,6 @@ class CreateUserService:
         self.repository_auth_platform = RepositoryAuthGeneralPlatform(
             session = session
         )
-        self.repository_auth_email
         self.code_manager = CodeManager(
             session = session
         )
@@ -246,7 +245,7 @@ class LoginUserService:
                     "email": "Don't exist any register with this email or the user account is not activate"
                 }
             )
-        elif not auth_email.active:
+        elif not auth_email.active:  # noqa: RET506
             raise FormException(
                 field_errors={
                     "general": "Your account is not active, you need active"
@@ -273,8 +272,8 @@ class LoginUserService:
             response = JWTHandler.validate_token(
                     token=payload.token
                 )
-        except Exception:
-            raise FormException(
+        except Exception:  # noqa: BLE001
+            raise FormException(  # noqa: B904
                 field_errors={
                     "token": "The activation code is invalid or has expired"
                 }

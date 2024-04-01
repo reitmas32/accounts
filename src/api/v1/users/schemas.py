@@ -28,16 +28,16 @@ class CreateUserAuthPlatformSchema(BaseModel):
     phone_number: str | None = None
     extra_data : dict | None = None
 
-
+    @staticmethod
     @validator("phone_number", pre=True, allow_reuse=True)
-    def validate_phone_number(cls, v):
+    def validate_phone_number(cls, v):  # noqa: ARG004
         if v is not None:
             try:
                 number = phonenumbers.parse(v, None)
                 if not phonenumbers.is_valid_number(number):
                     raise ValueError("Invalid phone number")
             except phonenumbers.NumberParseException:
-                raise ValueError("Invalid phone number format")
+                raise ValueError("Invalid phone number format")  # noqa: B904
         return v
 
 class CreateUserAuthEmailSchema(BaseModel):
@@ -48,15 +48,16 @@ class CreateUserAuthEmailSchema(BaseModel):
     phone_number: str | None = None
     extra_data : dict | None = None
 
+    @staticmethod
     @validator("phone_number", pre=True, allow_reuse=True)
-    def validate_phone_number(cls, v):
+    def validate_phone_number(cls, v):  # noqa: ARG004
         if v is not None:
             try:
                 number = phonenumbers.parse(v, None)
                 if not phonenumbers.is_valid_number(number):
                     raise ValueError("Invalid phone number")
             except phonenumbers.NumberParseException:
-                raise ValueError("Invalid phone number format")
+                raise ValueError("Invalid phone number format")  # noqa: B904
         return v
 
 class ResponseCreateUserAuthEmailSchema(BaseModel):
@@ -81,11 +82,6 @@ class LoginAuthEmailSchema(BaseModel):
     password: str
     code: str | None = None
     auth_method : UserAuthMethodEnum | None = None
-
-class ValidateTokenSchema(BaseModel):
-    token: str
-
-
 
 class ValidateTokenSchema(BaseModel):
     token: str

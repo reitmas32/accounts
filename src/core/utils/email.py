@@ -33,16 +33,16 @@ class GmailSendEmail(SendEmailAbstract):
             try:
                 log.info("enviando mensaje")
                 server.sendmail(self.EMAIL_SENDER, email_subject, msg.as_string())
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 log.error(f"******* Error al mandar mensaje, error: {e}")
             log.info("mensaje enviado....")
             server.close()
-        except Exception as e:
-            print(f"Error: {e}")
+        except Exception as e:  # noqa: BLE001
+            log.error(f"Error: {e}")
 
 
 class ZohoSendEmail(SendEmailAbstract):
-    def send_email(self,email_sender,email_subject,subject_text,message_text):
+    def send_email(self,email_subject,subject_text,message_text):
         try:
             server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
             server.ehlo()
@@ -59,12 +59,12 @@ class ZohoSendEmail(SendEmailAbstract):
             try:
                 log.info("enviando mensaje")
                 server.sendmail(self.EMAIL_SENDER, email_subject, msg.as_string())
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 log.error(f"******* Error al mandar mensaje, error: {e}")
             log.info("mensaje enviado....")
             server.close()
-        except Exception as e:
-            print(f"Error: {e}")
+        except Exception as e:  # noqa: BLE001
+            log.error(f"Error: {e}")
 
 
 

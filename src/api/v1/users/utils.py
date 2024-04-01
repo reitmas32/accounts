@@ -24,7 +24,7 @@ class CodeManager:
         self.manager_email : SendEmailAbstract = get_current_manager_email_to_app_standard()
 
     def generate_code(self, length):
-        return "".join(random.choices(string.digits, k=length))
+        return "".join(random.choices(string.digits, k=length))  # noqa: S311
 
     def create_and_send_code(self, email,user_name, code_type:CodeTypeEnum):
         code_lenght = settings.LENGHT_CODE_VALIDATE_EMAIL
@@ -41,7 +41,7 @@ class CodeManager:
                 user_name = user_name,
                 activation_code = new_code
             )
-        code = self.repository_code.add(
+        self.repository_code.add(
             code=new_code,
             email=email,
             type=code_type
@@ -72,5 +72,4 @@ class CodeManager:
                 new_value = current_time
             )
             return True
-        else:
-            return False
+        return False

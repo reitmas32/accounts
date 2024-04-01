@@ -62,10 +62,10 @@ def validate_db_conections():
         session.execute( select(AuthGeneralPlatformModel).select_from(AuthGeneralPlatformModel).limit(1) ).all()
         log.info("5) Table 'auth_general_platform'..... O.K")
         log.info("Connection 💲 Success")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         session.close()
         message_error = f"Error on validate_db_conections, message error: {e}"
-        raise BaseAppException(message_error)
+        raise BaseAppException(message_error)  # noqa: B904
 
 def init_db():
     create_schemas()
