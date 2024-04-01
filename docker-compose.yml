@@ -25,7 +25,7 @@ services:
 
   app:
     build:
-      dockerfile: ./Dockerfile
+      dockerfile: deployment/Dockerfile
     env_file:
       - ./.envs/.env.base
       - ./.envs/.env.local
