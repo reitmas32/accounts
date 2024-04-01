@@ -35,5 +35,9 @@ services:
       - 9001:9000
     networks:
       - "local-development"
+
+  linter:
+    build:
+      dockerfile: deployment/linter/Dockerfile
 networks:
   local-development:
