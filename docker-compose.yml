@@ -25,7 +25,7 @@ services:
 
   app:
     build:
-      dockerfile: ./Dockerfile
+      dockerfile: deployment/Dockerfile
     env_file:
       - ./.envs/.env.base
       - ./.envs/.env.local
@@ -35,5 +35,9 @@ services:
       - 9001:9000
     networks:
       - "local-development"
+
+  linter:
+    build:
+      dockerfile: deployment/linter/Dockerfile
 networks:
   local-development:

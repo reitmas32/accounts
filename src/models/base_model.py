@@ -18,7 +18,6 @@ class BaseModelClass(Base):
     is_removed = Column(Boolean, nullable=False, default=False)
 
     def as_dict(self):
-        data = {c.name: getattr(self, c.name) for c in self.__table__.columns}
-        return data
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 

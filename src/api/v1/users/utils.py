@@ -1,13 +1,22 @@
 import random
 import string
-from sqlalchemy.orm import Session
-from api.v1.users.proxies import RepositoryCode
-from core.settings import settings
-from models.code import CodeTypeEnum
-from core.utils.responses import get_current_date_time_to_app_standard
-from core.utils.email import SendEmailAbstract, get_current_manager_email_to_app_standard
-from api.v1.users.resources import get_data_for_email_activate_account, get_data_for_email_two_factor
 from datetime import timedelta
+
+from sqlalchemy.orm import Session
+
+from api.v1.users.proxies import RepositoryCode
+from api.v1.users.resources import (
+    get_data_for_email_activate_account,
+    get_data_for_email_two_factor,
+)
+from core.settings import settings
+from core.utils.email import (
+    SendEmailAbstract,
+    get_current_manager_email_to_app_standard,
+)
+from core.utils.responses import get_current_date_time_to_app_standard
+from models.code import CodeTypeEnum
+
 
 class CodeManager:
     def __init__(self, session: Session):
@@ -15,7 +24,7 @@ class CodeManager:
         self.manager_email : SendEmailAbstract = get_current_manager_email_to_app_standard()
 
     def generate_code(self, length):
-        return ''.join(random.choices(string.digits, k=length))
+        return "".join(random.choices(string.digits, k=length))  # noqa: S311
 
     def create_and_send_code(self, email,user_name, code_type:CodeTypeEnum):
         code_lenght = settings.LENGHT_CODE_VALIDATE_EMAIL
@@ -32,7 +41,7 @@ class CodeManager:
                 user_name = user_name,
                 activation_code = new_code
             )
-        code = self.repository_code.add(
+        self.repository_code.add(
             code=new_code,
             email=email,
             type=code_type
@@ -63,5 +72,4 @@ class CodeManager:
                 new_value = current_time
             )
             return True
-        else:
-            return False
+        return False

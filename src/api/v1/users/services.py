@@ -1,49 +1,44 @@
-from api.v1.users.schemas import (
-    CreateUserAuthEmailSchema,
-    CreateUserAuthPlatformSchema,
-    RetrieveUserSchema,
-    ListUserSchema,
-    ActivateAccountUserSchema,
-    LoginAuthEmailSchema,
-    LoginAuthGeneralPlatformSchema,
-    ValidateTokenSchema,
-    ResponseCreateUserAuthEmailSchema
-)
+import logging
+from uuid import UUID
+
 from api.v1.users.proxies import (
-    RepositoryUser,
     RepositoryAuthEmail,
     RepositoryAuthGeneralPlatform,
-    RepositoryUserLoginMethod
+    RepositoryUser,
+    RepositoryUserLoginMethod,
 )
-from core.utils.responses import create_envelope_response
-from core.utils.platform import PlatformIDHasher
-import logging
-from api.v1.users.utils import CodeManager
-from core.utils.exceptions import FormException
-from uuid import UUID
-from core.utils.email import SendEmailAbstract
-from core.utils.email import SendEmailAbstract, get_current_manager_email_to_app_standard
 from api.v1.users.resources import get_data_for_email_activation_success
-from models.enum import (
-    UserAuthMethodEnum,
-    UserActivationMethodEnum,
-    UserLoginMethodsTypeEnum,
-    CodeTypeEnum,
-    AuthGeneralPlatformsEnum
+from api.v1.users.schemas import (
+    ActivateAccountUserSchema,
+    CreateUserAuthEmailSchema,
+    CreateUserAuthPlatformSchema,
+    LoginAuthEmailSchema,
+    LoginAuthGeneralPlatformSchema,
+    ResponseCreateUserAuthEmailSchema,
+    RetrieveUserSchema,
+    ValidateTokenSchema,
 )
-from core.utils.password import PasswordManager
-from core.utils.jwt import JWTHandler,TokenDataSchema
+from api.v1.users.utils import CodeManager
 from core.settings import settings
-
+from core.utils.email import (
+    SendEmailAbstract,
+    get_current_manager_email_to_app_standard,
+)
+from core.utils.exceptions import FormException
+from core.utils.jwt import JWTHandler, TokenDataSchema
+from core.utils.password import PasswordManager
+from core.utils.platform import PlatformIDHasher
+from core.utils.responses import create_envelope_response
+from models.enum import CodeTypeEnum, UserActivationMethodEnum, UserLoginMethodsTypeEnum
 
 logger = logging.getLogger(__name__)
 
 
-class RetrieveUserService():
+class RetrieveUserService:
     def __init__(self,session):
         self.session = session
         self.repository_user = RepositoryUser(
-            session = session 
+            session = session
         )
     def retrieve_by_id(self,id:UUID):
         user = self.repository_user.get_by_id(
@@ -57,23 +52,22 @@ class RetrieveUserService():
         return create_envelope_response(data=data, count=count)
 
 
-class CreateUserService():
+class CreateUserService:
 
     def __init__(self,session):
         self.session = session
         self.repository_user = RepositoryUser(
-            session = session 
+            session = session
         )
         self.repository_auth_email = RepositoryAuthEmail(
-            session = session 
+            session = session
         )
         self.repository_login_method = RepositoryUserLoginMethod(
             session=session
         )
         self.repository_auth_platform = RepositoryAuthGeneralPlatform(
-            session = session 
+            session = session
         )
-        self.repository_auth_email
         self.code_manager = CodeManager(
             session = session
         )
@@ -92,14 +86,14 @@ class CreateUserService():
         if user_with_user_name or auth_platform:
             raise FormException(
                 field_errors={
-                    'general': "Already exist register user with the same platform or same user_name"
+                    "general": "Already exist register user with the same platform or same user_name"
                 }
             )
         user_created = self.repository_user.add(
             user_name = payload.user_name,
             phone_number = payload.phone_number,
             extra_data = payload.extra_data
-        )      
+        )
         auth_platform_created = self.repository_auth_platform.add(
             user_id = user_created.id,
             email = payload.email,
@@ -132,14 +126,14 @@ class CreateUserService():
         if user_with_user_name or auth_email:
             raise FormException(
                 field_errors={
-                    'general': "Already exist register user with the same email or same user_name"
+                    "general": "Already exist register user with the same email or same user_name"
                 }
             )
         user_created = self.repository_user.add(
             user_name = payload.user_name,
             phone_number = payload.phone_number,
             extra_data = payload.extra_data
-        )        
+        )
         auth_email_created = self.repository_auth_email.add(
             user_id = user_created.id,
             email = payload.email,
@@ -161,11 +155,11 @@ class CreateUserService():
         return create_envelope_response(data=user_schema)
 
 
-class ActivateAccountService():
+class ActivateAccountService:
     def __init__(self,session):
         self.session = session
         self.repository_auth_email = RepositoryAuthEmail(
-            session = session 
+            session = session
         )
         self.code_manager = CodeManager(
             session = session
@@ -178,13 +172,13 @@ class ActivateAccountService():
         if not auth_email:
             raise FormException(
                 field_errors={
-                    'email': "Don't exist any register with this email"
+                    "email": "Don't exist any register with this email"
                 }
             )
         if auth_email.active:
           raise FormException(
                 field_errors={
-                    'detail': "The user has been activated"
+                    "detail": "The user has been activated"
                 }
             )
         code_valid = self.code_manager.validate_code(
@@ -207,20 +201,20 @@ class ActivateAccountService():
         else:
             raise FormException(
                 field_errors={
-                    'code': "The activation code is invalid or has expired"
+                    "code": "The activation code is invalid or has expired"
                 }
             )
         return create_envelope_response(data=data)
-    
 
-class LoginUserService():
+
+class LoginUserService:
     def __init__(self,session):
         self.session = session
         self.repository_auth_email = RepositoryAuthEmail(
-            session = session 
+            session = session
         )
         self.repository_auth_platform = RepositoryAuthGeneralPlatform(
-            session = session 
+            session = session
         )
 
     def login_by_platform(self,payload:LoginAuthGeneralPlatformSchema):
@@ -231,11 +225,11 @@ class LoginUserService():
         if not auth_platform:
             raise FormException(
                 field_errors={
-                    'general': "Don't exist any register with this hashed_platform_id  and type"
+                    "general": "Don't exist any register with this hashed_platform_id  and type"
                 }
             )
         response = {
-            'token' : JWTHandler.create_token(
+            "token" : JWTHandler.create_token(
                 data = TokenDataSchema(user_mother_id=str(auth_platform.user_id))
             )
         }
@@ -248,13 +242,13 @@ class LoginUserService():
         if not auth_email:
             raise FormException(
                 field_errors={
-                    'email': "Don't exist any register with this email or the user account is not activate"
+                    "email": "Don't exist any register with this email or the user account is not activate"
                 }
             )
-        elif not auth_email.active:
+        elif not auth_email.active:  # noqa: RET506
             raise FormException(
                 field_errors={
-                    'general': "Your account is not active, you need active"
+                    "general": "Your account is not active, you need active"
                 }
             )
         is_valid_password = PasswordManager.verify_password(
@@ -264,11 +258,11 @@ class LoginUserService():
         if not is_valid_password:
             raise FormException(
                 field_errors={
-                    'password': "Password incorrect"
+                    "password": "Password incorrect"
                 }
             )
         response = {
-            'token' : JWTHandler.create_token(
+            "token" : JWTHandler.create_token(
                 data = TokenDataSchema(user_mother_id=str(auth_email.user_id))
             )
         }
@@ -278,21 +272,21 @@ class LoginUserService():
             response = JWTHandler.validate_token(
                     token=payload.token
                 )
-        except Exception as e:
-            raise FormException(
+        except Exception:  # noqa: BLE001
+            raise FormException(  # noqa: B904
                 field_errors={
-                    'token': "The activation code is invalid or has expired"
+                    "token": "The activation code is invalid or has expired"
                 }
-            )            
+            )
         return create_envelope_response(data=response.model_dump())
-    
 
-class ResourcesServices():
+
+class ResourcesServices:
     @staticmethod
     def get_public_key():
         return create_envelope_response(
             data={
-                'public_key' : settings.PRIVATE_KEY_JWT
+                "public_key" : settings.PRIVATE_KEY_JWT
             }
         )
     @staticmethod
@@ -302,5 +296,5 @@ class ResourcesServices():
         return create_envelope_response(
             data = list_activation_methods,
             count=count
-        )    
+        )
 

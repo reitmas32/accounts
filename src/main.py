@@ -2,11 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 
-from api.routers import api_v1_router,api_healthcheck_router
+from api.routers import api_healthcheck_router, api_v1_router
 from core.middlewares.catcher import CatcherExceptionsMiddleware
 from core.settings import settings
-from core.utils.validations import validation_pydantic_field
 from core.settings.database import validate_db_conections
+from core.utils.validations import validation_pydantic_field
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

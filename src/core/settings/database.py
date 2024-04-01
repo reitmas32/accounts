@@ -1,20 +1,20 @@
 from collections.abc import Generator
+
 import sentry_sdk
-from models.base_model import Base as BaseModel
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, select, text
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
-from sqlalchemy import select
-from models import (
-    UserModel,
-    CodeModel,
-    UserLoginMethodModel,
-    AuthGeneralPlatformModel,
-    AuthEmailModel
-)
 
 from core.settings import log, settings
 from core.utils.exceptions import BaseAppException
+from models import (
+    AuthEmailModel,
+    AuthGeneralPlatformModel,
+    CodeModel,
+    UserLoginMethodModel,
+    UserModel,
+)
+from models.base_model import Base as BaseModel
 
 engine = create_engine(
     settings.POSTGRESQL_URL.unicode_string(),
@@ -45,7 +45,7 @@ def create_schemas():
     with engine.connect() as conn:
         with conn.begin():
             conn.execute(query_schema_public)
-            
+
         conn.close()
 
 def validate_db_conections():
@@ -62,11 +62,11 @@ def validate_db_conections():
         session.execute( select(AuthGeneralPlatformModel).select_from(AuthGeneralPlatformModel).limit(1) ).all()
         log.info("5) Table 'auth_general_platform'..... O.K")
         log.info("Connection 💲 Success")
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         session.close()
         message_error = f"Error on validate_db_conections, message error: {e}"
-        raise BaseAppException(message_error)
-  
+        raise BaseAppException(message_error)  # noqa: B904
+
 def init_db():
     create_schemas()
     BaseModel.metadata.create_all(engine)

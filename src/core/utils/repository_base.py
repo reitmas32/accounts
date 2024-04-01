@@ -1,7 +1,7 @@
 import uuid
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Type, Union
+from typing import Any
 
 from pytz import timezone
 from sqlalchemy import and_
@@ -36,7 +36,7 @@ class RepositoryBase(ABC):
 
     @property
     @abstractmethod
-    def model(self) -> Type:
+    def model(self) -> type:
         """
         Abstract model property to be overridden by subclasses.
 
@@ -48,7 +48,6 @@ class RepositoryBase(ABC):
         Type
             The class of the associated database model.
         """
-        pass
 
     def __init__(self, session: Session):
         """
@@ -87,7 +86,7 @@ class RepositoryBase(ABC):
         >>> repo = UserRepository(session)
         >>> success = repo.update_field_by_id(some_uuid, "username", "new_username")
         """
-
+        result = False
         try:
             # Construct a dynamic update query
             update_query = (
@@ -100,15 +99,16 @@ class RepositoryBase(ABC):
             self.session.commit()
 
             # Return True if at least one row was affected
-            return update_query > 0
+            result = update_query > 0
 
         except Exception as e:
             # Roll back the changes in case of errors
             self.session.rollback()
             # Raise the exception to inform the caller about the error
-            raise e
+            raise e  # noqa: TRY201
+        return result
 
-    def get_by_id(self, id: uuid.UUID) -> Union[Type, None]:
+    def get_by_id(self, id: uuid.UUID) -> type | None:
         """
         Retrieve a record from the database by its unique identifier.
 
@@ -132,7 +132,7 @@ class RepositoryBase(ABC):
 
     def get_by_attributes(
         self,
-        return_query: bool = False,
+        return_query: bool = False,  # noqa: FBT001
         **filters: dict,
     ):
         """
@@ -176,7 +176,7 @@ class RepositoryBase(ABC):
 
         return query.all()
 
-    def add(self, **kwargs) -> Union[Type, None]:
+    def add(self, **kwargs) -> type | None:
         """
         Add a new record to the database.
 
@@ -195,6 +195,7 @@ class RepositoryBase(ABC):
         >>> repo = UserRepository(session)
         >>> new_user = repo.add(name="John", email="john@example.com")
         """
+        new_record = None
         try:
             current_time = datetime.now(timezone(settings.TIME_ZONE))
             new_record = self.model(
@@ -210,12 +211,12 @@ class RepositoryBase(ABC):
 
             # Commit the record to the database
             self.session.commit()
-            return new_record
         except SQLAlchemyError as e:
             # In case of an error, roll back the changes
             self.session.rollback()
             message_error = f"Failed to add a new record: {e}"
-            raise SQLAlchemyError(message_error)
+            raise SQLAlchemyError(message_error)  # noqa: B904
+        return new_record
 
     def delete_by_id(self, id: uuid.UUID) -> bool:
         """
@@ -237,6 +238,7 @@ class RepositoryBase(ABC):
         >>> success = repo.delete_by_id(some_uuid)
         """
 
+        result = False
         try:
             # Construct a delete query
             delete_query = (
@@ -247,13 +249,15 @@ class RepositoryBase(ABC):
             self.session.commit()
 
             # Return True if at least one row was affected
-            return delete_query > 0
+            result = delete_query > 0
 
         except Exception as e:
             # Roll back the changes in case of errors
             self.session.rollback()
             # Raise the exception to inform the caller about the error
-            raise e
+            log.error(e)
+            raise e  # noqa: TRY201
+        return result
 
     def _get_common_fields(self) -> dict:
         """

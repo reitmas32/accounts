@@ -1,9 +1,7 @@
-
+from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
-from core.utils.jwt import JWTHandler,TokenDataSchema
-from fastapi import (
-    Depends
-)
+
+from core.utils.jwt import JWTHandler, TokenDataSchema
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 

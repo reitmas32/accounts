@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+
 from api.health.endpoints import router as healthcheck_endpoints
 from api.v1.users.endpoints import router as user_endpoints
 from core.settings import settings

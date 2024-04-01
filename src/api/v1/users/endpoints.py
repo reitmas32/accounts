@@ -1,34 +1,28 @@
-from fastapi import (
-    APIRouter,
-    Depends,
-    status,
-    Request
-)
+
+from fastapi import APIRouter, Depends, Request, status
 from sqlalchemy.orm import Session
+
+from api.v1.common.dependencies import get_data_token
 from api.v1.users.schemas import (
+    ActivateAccountUserSchema,
     CreateUserAuthEmailSchema,
     CreateUserAuthPlatformSchema,
-    ActivateAccountUserSchema,
     LoginAuthEmailSchema,
-    LoginAuthGeneralPlatformSchema
+    LoginAuthGeneralPlatformSchema,
 )
 from api.v1.users.services import (
-    CreateUserService,
-    RetrieveUserService,
     ActivateAccountService,
+    CreateUserService,
     LoginUserService,
-    ResourcesServices
+    ResourcesServices,
+    RetrieveUserService,
 )
 from core.settings import log
+from core.settings.database import get_session
+from core.utils.jwt import TokenDataSchema
 from core.utils.responses import (
     EnvelopeResponse,
 )
-from core.settings.database import get_session
-from pydantic import EmailStr
-from uuid import UUID
-from core.utils.jwt import TokenDataSchema
-from api.v1.common.dependencies import get_data_token
-
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -74,7 +68,7 @@ async def activate_account(
     payload: ActivateAccountUserSchema,
     session: Session = Depends(get_session),
 ):
-    
+
     log.info("Activar cuenta de usuario")
     return ActivateAccountService(session=session).activate_account(payload=payload)
 
@@ -89,15 +83,15 @@ async def login(
     payload: LoginAuthEmailSchema,
     session: Session = Depends(get_session),
 ):
-    
+
     log.info("Login usuario")
     return LoginUserService(session=session).login_by_email(payload=payload)
 
 
 @router.get(
     "/resources/public-key",
-    summary="Te regresa la llave publica con la cual podras validar los token de los usuarios", 
-    status_code=status.HTTP_200_OK, 
+    summary="Te regresa la llave publica con la cual podras validar los token de los usuarios",
+    status_code=status.HTTP_200_OK,
     response_model=EnvelopeResponse
 )
 async def get_public_key(
@@ -110,8 +104,8 @@ async def get_public_key(
 
 @router.get(
     "/resources/activation_methods",
-    summary="Te regresa la lista de servicios disponibles con los cuales el usuario podra crear una cuenta de usuario y hacer login", 
-    status_code=status.HTTP_200_OK, 
+    summary="Te regresa la lista de servicios disponibles con los cuales el usuario podra crear una cuenta de usuario y hacer login",
+    status_code=status.HTTP_200_OK,
     response_model=EnvelopeResponse
 )
 async def get_list_activation_methods_available_system(
@@ -133,7 +127,7 @@ async def create_by_platform(
     payload: CreateUserAuthPlatformSchema,
     session: Session = Depends(get_session),
 ):
-    
+
     log.info("Create User")
     return CreateUserService(session=session).create_by_platform(payload=payload)
 
@@ -148,6 +142,6 @@ async def login_by_platform(
     payload: LoginAuthGeneralPlatformSchema,
     session: Session = Depends(get_session),
 ):
-    
+
     log.info("Login usuario")
     return LoginUserService(session=session).login_by_platform(payload=payload)

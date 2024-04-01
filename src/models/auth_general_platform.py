@@ -1,11 +1,11 @@
-from sqlalchemy import Column,String,Boolean,ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.sql import func
-from models.base_model import BaseModelClass
-from sqlalchemy import Enum
+from sqlalchemy import Boolean, Column, Enum, ForeignKey, String
 from sqlalchemy.orm import relationship
-from .user import UserModel
+
+from models.base_model import BaseModelClass
 from models.enum import AuthGeneralPlatformsEnum
+
+from .user import UserModel
+
 
 class AuthGeneralPlatformModel(BaseModelClass):
     __tablename__ = "auth_general_platforms"

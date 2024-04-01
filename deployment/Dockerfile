@@ -15,6 +15,6 @@ RUN cd /tmp \
     && poetry export -f requirements.txt --output /app/requirements.txt --without-hashes --dev \
     && pip install --no-warn-script-location --disable-pip-version-check --no-cache-dir -r /app/requirements.txt
 
-COPY ./src /app/
+COPY ../src /app/
 EXPOSE 9000
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9000", "--workers", "2"]

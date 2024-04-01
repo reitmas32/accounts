@@ -1,7 +1,6 @@
-from sqlalchemy import Column, String, DateTime, Boolean, JSON
-from sqlalchemy.sql import func
+from sqlalchemy import Column, DateTime, Enum, String
+
 from models.base_model import BaseModelClass
-from sqlalchemy import Enum
 from models.enum import CodeTypeEnum
 
 
