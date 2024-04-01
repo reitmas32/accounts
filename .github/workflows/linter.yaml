@@ -1,25 +1,23 @@
-name: linter
+name: Linter
 
 on:
   pull_request:
     branches:
       - main
       - development
-  push:
-    branches:
-      - main
-      - development
 
 jobs:
-  build_and_run:
+  ruff:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Build Docker image
-      run: docker build -t linter-image -f deployment/linter/Dockerfile .
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -U ruff
 
-    - name: Run Docker container
-      run: docker run --rm linter-image
+    - name: Run ruff
+      run: ruff check .
