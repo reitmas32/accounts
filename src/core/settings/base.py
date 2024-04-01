@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 from pydantic import PostgresDsn
 from pydantic_settings import BaseSettings as PydanticBaseSettings
 from pydantic_settings import SettingsConfigDict
-from core.settings.enum import HashingAlgorithmsEnum, JWTAlgorithmsEnum
 
+from core.settings.enum import HashingAlgorithmsEnum, JWTAlgorithmsEnum
 from core.utils.environment import EnvironmentsTypes
 
 LIST_PATH_TO_ADD = []
@@ -68,7 +68,7 @@ class Settings(PydanticBaseSettings):
 
     # Authenticate settings
     # ----------------------------------------------------------------
-    TIME_SECONDS_EXPIRE_CODE_VALIDATE_EMAIL:int = 60 * 60 * 24 * 30 
+    TIME_SECONDS_EXPIRE_CODE_VALIDATE_EMAIL:int = 60 * 60 * 24 * 30
     TIME_SECONDS_EXPIRE_CODE_2FA:int = 60 * 1
     LENGHT_CODE_VALIDATE_EMAIL : int = 4
     LENGHT_CODE_2FA: int = 4

@@ -1,16 +1,15 @@
-from sqlalchemy import asc, func,desc
+from datetime import datetime
+
+from sqlalchemy import desc, or_, select
+
+from core.utils.repository_base import RepositoryBase
 from models import (
-    CodeModel,
     AuthEmailModel,
     AuthGeneralPlatformModel,
-    UserModel,
+    CodeModel,
     UserLoginMethodModel,
+    UserModel,
 )
-from models.enum import AuthGeneralPlatformsEnum
-from core.utils.repository_base import RepositoryBase
-from sqlalchemy import select,or_
-from datetime import datetime
-from sqlalchemy.orm import Session
 
 
 class RepositoryAuthGeneralPlatform(RepositoryBase):
@@ -27,7 +26,7 @@ class RepositoryAuthGeneralPlatform(RepositoryBase):
 
 class RepositoryUserLoginMethod(RepositoryBase):
     model = UserLoginMethodModel
-    
+
 class RepositoryAuthEmail(RepositoryBase):
     model = AuthEmailModel
 

@@ -1,7 +1,7 @@
 import uuid
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Any, Type, Union
+from typing import Any
 
 from pytz import timezone
 from sqlalchemy import and_
@@ -36,7 +36,7 @@ class RepositoryBase(ABC):
 
     @property
     @abstractmethod
-    def model(self) -> Type:
+    def model(self) -> type:
         """
         Abstract model property to be overridden by subclasses.
 
@@ -48,7 +48,6 @@ class RepositoryBase(ABC):
         Type
             The class of the associated database model.
         """
-        pass
 
     def __init__(self, session: Session):
         """
@@ -108,7 +107,7 @@ class RepositoryBase(ABC):
             # Raise the exception to inform the caller about the error
             raise e
 
-    def get_by_id(self, id: uuid.UUID) -> Union[Type, None]:
+    def get_by_id(self, id: uuid.UUID) -> type | None:
         """
         Retrieve a record from the database by its unique identifier.
 
@@ -176,7 +175,7 @@ class RepositoryBase(ABC):
 
         return query.all()
 
-    def add(self, **kwargs) -> Union[Type, None]:
+    def add(self, **kwargs) -> type | None:
         """
         Add a new record to the database.
 

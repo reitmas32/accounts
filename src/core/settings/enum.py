@@ -1,7 +1,8 @@
 from enum import Enum
 
+
 class HashingAlgorithmsEnum(Enum):
-    '''
+    """
     Manages password hashing and verification using secure algorithms. Each algorithm is recommended
     for different use cases, considering security, performance, and compatibility:
     
@@ -22,7 +23,7 @@ class HashingAlgorithmsEnum(Enum):
       
     The choice of algorithm should be based on an assessment of the specific application environment, including security
     requirements, system resource availability, and the need for compatibility with other technologies or frameworks.
-    '''
+    """
     BCRYPT = "bcrypt"
     ARGON2 = "argon2"
     SCRYPT = "scrypt"

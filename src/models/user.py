@@ -1,6 +1,7 @@
-from sqlalchemy import Column, String,Boolean,JSON
+from sqlalchemy import JSON, Column, String
+
 from models.base_model import BaseModelClass
-from sqlalchemy import Enum
+
 
 class UserModel(BaseModelClass):
     __tablename__ = "users"

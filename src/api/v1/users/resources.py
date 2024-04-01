@@ -1,5 +1,6 @@
 from core.settings import settings
 
+
 def get_data_for_email_activation_success(user_name):
 
     subject = f"¡Bienvenido/a a bordo, {user_name}! Activación de Cuenta Exitosa"
@@ -83,7 +84,7 @@ def get_data_for_email_activation_success(user_name):
 
 def get_data_for_email_activate_account(user_name,activation_code):
 
-    subject = f'Activa tu cuenta, {user_name}'
+    subject = f"Activa tu cuenta, {user_name}"
     message = f"""
 <html>
 <head>
@@ -165,7 +166,7 @@ def get_data_for_email_activate_account(user_name,activation_code):
 
 def get_data_for_email_two_factor(user_name,two_factor_code):
 
-    subject = f'Código de Seguridad para {user_name} - Autenticación de Dos Factores'
+    subject = f"Código de Seguridad para {user_name} - Autenticación de Dos Factores"
     message = f"""
 <html>
 <head>

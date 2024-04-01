@@ -1,5 +1,6 @@
 import hashlib
 
+
 class PlatformIDHasher:
     """
     A class dedicated to hashing platform IDs for secure and efficient storage and lookup.

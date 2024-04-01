@@ -1,9 +1,10 @@
-from sqlalchemy import Column,String,Boolean,ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.sql import func
-from models.base_model import BaseModelClass
+from sqlalchemy import Boolean, Column, ForeignKey, String
 from sqlalchemy.orm import relationship
+
+from models.base_model import BaseModelClass
+
 from .user import UserModel
+
 
 class AuthEmailModel(BaseModelClass):
     __tablename__ = "auth_email"
