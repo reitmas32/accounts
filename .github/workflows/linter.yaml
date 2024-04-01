@@ -1,0 +1,25 @@
+name: linter
+
+on:
+  pull_request:
+    branches:
+      - main
+      - development
+  push:
+    branches:
+      - main
+      - development
+
+jobs:
+  build_and_run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build Docker image
+      run: docker build -t linter-image -f deployment/linter/Dockerfile .
+
+    - name: Run Docker container
+      run: docker run --rm linter-image
