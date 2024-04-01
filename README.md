@@ -82,3 +82,16 @@ print("Clave privada y pública RSA generadas y guardadas.")
 * backend: Especifica el backend criptográfico que se utilizará para la operación. El valor default_backend() indica que se usará el backend predeterminado proporcionado por la biblioteca.
 
 
+## Como correr el proyecto en local con DB local
+
+#### Crear local DB
+```bash
+docker-compose up db -d
+cd src
+python3 create_local_db.py
+```
+
+#### Crear CONTENEDOR DE dOCKER
+```bash
+docker-compose up app -d
+```
