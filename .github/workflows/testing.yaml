@@ -31,4 +31,4 @@ jobs:
       - name: Run tests
         run: |
           rm -rf reports && mkdir reports
-          coverage run -m pytest -s -v --lf --junitxml=reports/unittest_report.xml && coverage xml -o reports/coverage.xml && coverage report
+          coverage run -m pytest -s -v --lf --junitxml=reports/unittest_report.xml
