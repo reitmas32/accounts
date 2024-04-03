@@ -11,35 +11,24 @@ on:
       - development
 
 jobs:
-  build:
+  testing:
+      runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
+      steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    container:
-      image: python:3.12.1
-      options: --mount type=bind,source="${{ github.workspace }}",target=/app
+      - name: Install System dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -U poetry
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Install Project dependencies
+        run: |
+          poetry install --no-root
+          pip install coverage pytest
 
-    - name: Install dependencies
-      run: |
-        apt-get update && \
-        apt-get install -y --no-install-recommends \
-        git gcc libc-dev python3-dev && \
-        rm -rf /var/lib/apt/lists/*
-        pip install -U poetry
-        poetry export -f requirements.txt --output /tmp/requirements.txt --without-hashes --with dev
-        pip install --no-warn-script-location --disable-pip-version-check --no-cache-dir -r /tmp/requirements.txt
-
-    - name: Copy environment variables
-      run: |
-        cp ./envs.sh /tmp/envs.sh
-        chmod +x /tmp/envs.sh
-
-    - name: Run tests
-      run: |
-        cd /app
-        mkdir reports
-        . /tmp/envs.sh && coverage run -m pytest -s -v --lf --junitxml=reports/unittest_report.xml && coverage xml -o reports/coverage.xml && coverage report
+      - name: Run tests
+        run: |
+          rm -rf reports && mkdir reports
+          coverage run -m pytest -s -v --lf --junitxml=reports/unittest_report.xml && coverage xml -o reports/coverage.xml && coverage report
