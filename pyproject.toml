@@ -30,11 +30,15 @@ build-backend = "poetry.core.masonry.api"
 line-length = 120
 target-version = ['py310']
 
+[tool.poetry.group.testing.dependencies]
+coverage = "^7.4.0"
+httpx = "^0.26.0"
+pytest = "^7.4.4"
+
 [tool.ruff]
 src = ["src"]
 target-version = "py310"
 select = ["ALL"]
-
 ignore = [
     "ANN",    # Type hints related, let mypy/pyright handle these.
     "COM812", # "Trailing comma missing". If black is happy, I'm happy.
