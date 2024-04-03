@@ -1,0 +1,50 @@
+name: Deployment
+
+on:
+  push:
+    branches:
+      - main
+      - development
+
+jobs:
+  deployment:
+      runs-on: ubuntu-latest
+
+      env:
+        DEV_DEPLOY_HOCK: ${{ secrets.DEV_DEPLOY_HOCK }} 
+        PROD_DEPLOY_HOCK: ${{ secrets.PROD_DEPLOY_HOCK }} 
+
+      steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install System dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -U poetry
+
+      - name: Install Project dependencies
+        run: |
+          poetry install --no-root
+          pip install coverage pytest
+
+      - name: Run tests
+        run: |
+          rm -rf reports && mkdir reports
+          coverage run -m pytest -s -v --lf --junitxml=reports/unittest_report.xml
+
+      - name: Deployment Main
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "<=========Deployment in PROD=============>"
+          curl_output=$(curl -s -X 'GET' "$PROD_DEPLOY_HOCK" -H 'accept: application/json')
+          echo "$curl_output"
+
+      - name: Deployment Development
+        if: github.ref == 'refs/heads/development'
+        run: |
+          echo "<=========Deployment in DEV=============>"
+          curl_output=$(curl -s -X 'GET' "$DEV_DEPLOY_HOCK" -H 'accept: application/json')
+          echo "$curl_output"
+
+    

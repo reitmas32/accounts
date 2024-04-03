@@ -4,8 +4,9 @@ from fastapi.responses import RedirectResponse
 
 from api.routers import api_healthcheck_router, api_v1_router
 from core.middlewares.catcher import CatcherExceptionsMiddleware
-from core.settings import settings
-from core.settings.database import validate_db_conections
+from core.settings import log, settings
+from core.settings.database import init_db, validate_db_conections
+from core.utils.environment import EnvironmentsTypes
 from core.utils.validations import validation_pydantic_field
 
 app = FastAPI(
@@ -32,5 +33,8 @@ app.include_router(api_healthcheck_router)
 def root():
     return RedirectResponse(url="/docs")
 
+if EnvironmentsTypes.LOCAL.value[0] == settings.ENVIRONMENT:
+    init_db()
+log.info(f"ENVIRONMENT: {settings.ENVIRONMENT}")
 validate_db_conections()
 validation_pydantic_field(app)
