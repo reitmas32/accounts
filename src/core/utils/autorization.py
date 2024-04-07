@@ -49,7 +49,7 @@ def _check_general_autorization(
             .where(
                 and_(
                     ServiceModel.service_name == X_Service_Name,
-                    ServiceModel.is_removed is False,
+                    ServiceModel.is_removed == False,  # noqa: E712
                 )
             )
             .limit(1)
