@@ -20,6 +20,8 @@ secure-smtplib = "^0.1.1"
 phonenumbers = "^8.13.33"
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 pyjwt = "^2.8.0"
+fastapi-pagination = "^0.12.14"
+cryptocode = "0.1"
 
 [build-system]
 requires = ["poetry-core"]
@@ -53,7 +55,7 @@ ignore = [
     "FIX002", # Allow TODOs in the code
     "TD002",  # Missing author in TODO
     "TD003",  # Allow simples TODOs
-
+    "TRY200",
     "A002",   #
     "A003",   #
     "B008",   # Do not perform function call `function` in argument defaults

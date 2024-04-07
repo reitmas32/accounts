@@ -24,6 +24,7 @@ class HashingAlgorithmsEnum(Enum):
     The choice of algorithm should be based on an assessment of the specific application environment, including security
     requirements, system resource availability, and the need for compatibility with other technologies or frameworks.
     """
+
     BCRYPT = "bcrypt"
     ARGON2 = "argon2"
     SCRYPT = "scrypt"
@@ -49,6 +50,7 @@ class JWTAlgorithmsEnum(Enum):
     The choice of algorithm should be based on the application's security requirements, the infrastructure's capability to handle
     cryptographic operations, and the need for interoperability with other services or applications.
     """
+
     HS256 = "HS256"
     RS256 = "RS256"
     ES256 = "ES256"

@@ -8,22 +8,20 @@ from core.settings import log, settings
 
 
 class SendEmailAbstract:
-    def __init__(self,**kwargs):
-        for key,value in kwargs.items():
-            setattr(self,key,value)
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
-    def send_email(self,email_subject:str,subject_text:str,message_text:str):
+    def send_email(self, email_subject: str, subject_text: str, message_text: str):
         pass
 
+
 class GmailSendEmail(SendEmailAbstract):
-    def send_email(self,email_subject,subject_text,message_text):
+    def send_email(self, email_subject, subject_text, message_text):
         try:
             server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
             server.ehlo()
-            server.login(
-                user = self.EMAIL_SENDER,
-                password = self.EMAIL_SENDER_PASSWORD
-            )
+            server.login(user=self.EMAIL_SENDER, password=self.EMAIL_SENDER_PASSWORD)
             subject = Header(subject_text, "utf-8")
             msg = MIMEMultipart()
             msg["From"] = self.EMAIL_SENDER
@@ -42,14 +40,11 @@ class GmailSendEmail(SendEmailAbstract):
 
 
 class ZohoSendEmail(SendEmailAbstract):
-    def send_email(self,email_subject,subject_text,message_text):
+    def send_email(self, email_subject, subject_text, message_text):
         try:
             server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
             server.ehlo()
-            server.login(
-                user = self.EMAIL_SENDER,
-                password = self.EMAIL_SENDER_PASSWORD
-            )
+            server.login(user=self.EMAIL_SENDER, password=self.EMAIL_SENDER_PASSWORD)
             subject = Header(subject_text, "utf-8")
             msg = MIMEMultipart()
             msg["From"] = self.EMAIL_SENDER
@@ -67,7 +62,6 @@ class ZohoSendEmail(SendEmailAbstract):
             log.error(f"Error: {e}")
 
 
-
 class SendEmailManager(Enum):
     GMAIL_SENDER = GmailSendEmail
     ZOHO_SENDER = ZohoSendEmail
@@ -75,6 +69,5 @@ class SendEmailManager(Enum):
 
 def get_current_manager_email_to_app_standard():
     return SendEmailManager.GMAIL_SENDER.value(
-        EMAIL_SENDER = settings.EMAIL_SENDER,
-        EMAIL_SENDER_PASSWORD = settings.EMAIL_SENDER_PASSWORD
+        EMAIL_SENDER=settings.EMAIL_SENDER, EMAIL_SENDER_PASSWORD=settings.EMAIL_SENDER_PASSWORD
     )

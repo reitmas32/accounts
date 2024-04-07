@@ -11,6 +11,7 @@ from core.utils.responses import get_current_date_time_to_app_standard
 class TokenDataSchema(BaseModel):
     user_mother_id: str
 
+
 class JWTHandler:
     @staticmethod
     def create_token(data: TokenDataSchema) -> str:
@@ -25,8 +26,8 @@ class JWTHandler:
             payload = decode(token, settings.PUBLIC_KEY_JWT, algorithms=[settings.ALGORITHM_JWT.value])
             return TokenDataSchema(**payload)
         except ExpiredSignatureError:
-            raise ValueError("Token has expired")  # noqa: B904
+            raise ValueError("Token has expired")
         except InvalidTokenError:
-            raise ValueError("Invalid token")  # noqa: B904
+            raise ValueError("Invalid token")
         except ValidationError as e:
-            raise ValueError(f"Invalid token data: {e}")  # noqa: B904
+            raise ValueError(f"Invalid token data: {e}")

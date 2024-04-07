@@ -61,9 +61,7 @@ class RepositoryBase(ABC):
         self.session = session
         self.logger = log
 
-    def update_field_by_id(
-        self, id: uuid.UUID, field_name: str, new_value: Any
-    ) -> bool:
+    def update_field_by_id(self, id: uuid.UUID, field_name: str, new_value: Any) -> bool:
         """
         Update a specific field of a record in the database by its unique identifier.
 
@@ -89,11 +87,7 @@ class RepositoryBase(ABC):
         result = False
         try:
             # Construct a dynamic update query
-            update_query = (
-                self.session.query(self.model)
-                .filter(self.model.id == id)
-                .update({field_name: new_value})
-            )
+            update_query = self.session.query(self.model).filter(self.model.id == id).update({field_name: new_value})
 
             # Commit the changes
             self.session.commit()
@@ -159,9 +153,7 @@ class RepositoryBase(ABC):
         conditions = []
         for attribute, value in filters.items():
             if not hasattr(self.model, attribute):
-                raise ValueError(
-                    f"Attribute {attribute} not found in model {self.model.__name__}"
-                )
+                raise ValueError(f"Attribute {attribute} not found in model {self.model.__name__}")
 
             # Check if the value is a list, and use 'in_' if it is
             if isinstance(value, list):
@@ -198,9 +190,7 @@ class RepositoryBase(ABC):
         new_record = None
         try:
             current_time = datetime.now(timezone(settings.TIME_ZONE))
-            new_record = self.model(
-                **kwargs, created=current_time, updated=current_time, is_removed=False
-            )
+            new_record = self.model(**kwargs, created=current_time, updated=current_time, is_removed=False)
             self.session.add(new_record)
 
             # Persist the record to the database
@@ -215,7 +205,7 @@ class RepositoryBase(ABC):
             # In case of an error, roll back the changes
             self.session.rollback()
             message_error = f"Failed to add a new record: {e}"
-            raise SQLAlchemyError(message_error)  # noqa: B904
+            raise SQLAlchemyError(message_error)
         return new_record
 
     def delete_by_id(self, id: uuid.UUID) -> bool:
@@ -241,9 +231,7 @@ class RepositoryBase(ABC):
         result = False
         try:
             # Construct a delete query
-            delete_query = (
-                self.session.query(self.model).filter(self.model.id == id).delete()
-            )
+            delete_query = self.session.query(self.model).filter(self.model.id == id).delete()
 
             # Commit the changes
             self.session.commit()

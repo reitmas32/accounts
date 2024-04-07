@@ -17,10 +17,7 @@ def validation_pydantic_field(app: FastAPI):
             error_msg = error["msg"]
             error_detail[field].append(error_msg)
 
-        response = EnvelopeResponse(
-            errors=error_detail,
-            body=None,
-        )
+        response = EnvelopeResponse(errors=error_detail, body=None, status_code=1)
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
             content=dict(response),

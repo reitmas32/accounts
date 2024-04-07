@@ -33,6 +33,7 @@ app.include_router(api_healthcheck_router)
 def root():
     return RedirectResponse(url="/docs")
 
+
 if EnvironmentsTypes.LOCAL.value[0] == settings.ENVIRONMENT:
     init_db()
 log.info(f"ENVIRONMENT: {settings.ENVIRONMENT}")

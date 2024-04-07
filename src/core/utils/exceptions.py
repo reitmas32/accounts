@@ -99,3 +99,49 @@ class DisbursementMismatchException(BaseAppException):
 
 class FeeAlreadyExistsException(BaseAppException):
     error_key = "FeeAlreadyExists"
+
+
+class NotAuthorizationException(BaseAppException):
+    error_key = "NotAuthorization"
+    status_code = status.HTTP_401_UNAUTHORIZED
+
+    def __init__(self, message: str = "Not autorization", resource: str | None = None) -> None:
+        self.resource = resource
+        self.message = f"{message} to resorce {resource}"
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"endpoint": f"Dont autorization to resource {self.resource}"}
+
+    def __str__(self):
+        return f"Dont autorization to resource {self.resource}"
+
+
+class EncryptedException(BaseAppException):
+    error_key = "Encrypted"
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+
+    def __init__(self, message: str = "Not encrypted exception") -> None:
+        self.message = message
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"encrypted": self.message}
+
+    def __str__(self):
+        return f"Encrypted error {self.message}"
+
+class ServiceNameException(BaseAppException):
+    error_key = "ServiceName"
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+
+    def __init__(self, message: str = "The service name is already in use") -> None:
+        self.message = message
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"service_name": self.message}
+
+    def __str__(self):
+        return f"ServiceName error {self.message}"
+
