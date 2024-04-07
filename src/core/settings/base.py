@@ -52,21 +52,31 @@ class Settings(PydanticBaseSettings):
     TIME_ZONE: str = "utc"
     TIME_ZONE_UTC: str = "utc"
     DATE_FORMAT: str = "%Y-%m-%d"
+    DATE_TIME_FORMAT: str = "%Y-%m-%d %H:%M:%S"
     API_V1: str = "v1"
 
     # Password settings
     # ----------------------------------------------------------------
-    HASHING_ALGORITHM : HashingAlgorithmsEnum = HashingAlgorithmsEnum.BCRYPT
+    HASHING_ALGORITHM: HashingAlgorithmsEnum = HashingAlgorithmsEnum.BCRYPT
 
     # Token JWT settings
     # ----------------------------------------------------------------
     TIME_SECONDS_EXPIRE_TOKEN_JWT: int = 60 * 60 * 24
     ALGORITHM_JWT: JWTAlgorithmsEnum = JWTAlgorithmsEnum.RS256
 
+    # Root Settings
+    ROOT_API_KEY: str
+    ROOT_SERVICE_NAME: str
+    ROOT_ENCRYPTED_KEY: str
 
     # Authenticate settings
     # ----------------------------------------------------------------
-    TIME_SECONDS_EXPIRE_CODE_VALIDATE_EMAIL:int = 60 * 60 * 24 * 30
-    TIME_SECONDS_EXPIRE_CODE_2FA:int = 60 * 1
-    LENGHT_CODE_VALIDATE_EMAIL : int = 4
+    TIME_SECONDS_EXPIRE_CODE_VALIDATE_EMAIL: int = 60 * 60 * 24 * 30
+    TIME_SECONDS_EXPIRE_CODE_2FA: int = 60 * 1
+    LENGHT_CODE_VALIDATE_EMAIL: int = 4
     LENGHT_CODE_2FA: int = 4
+
+    # Pagination settings
+    # ----------------------------------------------------------------
+    DEFAULT_PAGE_SIZE: int = 30
+    DEFAULT_ORDER_FIELD: str = "created"
