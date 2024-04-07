@@ -11,8 +11,8 @@ jobs:
       runs-on: ubuntu-latest
 
       env:
-        DEV_DEPLOY_HOCK: ${{ secrets.DEV_DEPLOY_HOCK }} 
-        PROD_DEPLOY_HOCK: ${{ secrets.PROD_DEPLOY_HOCK }} 
+        DEV_DEPLOY_HOCK: ${{ secrets.DEV_DEPLOY_HOCK }}
+        PROD_DEPLOY_HOCK: ${{ secrets.PROD_DEPLOY_HOCK }}
 
       steps:
       - name: Checkout repository
@@ -46,5 +46,3 @@ jobs:
           echo "<=========Deployment in DEV=============>"
           curl_output=$(curl -s -X 'GET' "$DEV_DEPLOY_HOCK" -H 'accept: application/json')
           echo "$curl_output"
-
-    
