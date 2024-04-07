@@ -25,10 +25,10 @@ services:
 
   app:
     build:
-      dockerfile: deployment/Dockerfile
+      dockerfile: Dockerfile
     env_file:
       - ./.envs/.env.base
-      - ./.envs/.env.local
+      - ./.envs/.env.dev
     depends_on:
       - db
     ports:
