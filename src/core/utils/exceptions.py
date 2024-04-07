@@ -130,3 +130,18 @@ class EncryptedException(BaseAppException):
 
     def __str__(self):
         return f"Encrypted error {self.message}"
+
+class ServiceNameException(BaseAppException):
+    error_key = "ServiceName"
+    status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+
+    def __init__(self, message: str = "The service name is already in use") -> None:
+        self.message = message
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"service_name": self.message}
+
+    def __str__(self):
+        return f"ServiceName error {self.message}"
+
