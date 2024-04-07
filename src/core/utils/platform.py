@@ -7,7 +7,7 @@ class PlatformIDHasher:
     """
 
     @staticmethod
-    def hash_hashed_platform_id (hashed_platform_id : str) -> str:
+    def hash_hashed_platform_id(hashed_platform_id: str) -> str:
         """
         Hashes the hashed_platform_id  using SHA-256 and returns the hash as a hexadecimal string.
 

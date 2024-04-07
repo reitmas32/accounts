@@ -12,4 +12,4 @@ class TestBase(TestCase):
         super().tearDownClass()
 
     def test_pagination(self):
-        self.assertEqual(3,3)
+        self.assertEqual(3, 3)

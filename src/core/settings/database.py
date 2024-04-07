@@ -2,7 +2,7 @@ from collections.abc import Generator
 
 import sentry_sdk
 from sqlalchemy import create_engine, select, text
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import NullPool
 
 from core.settings import log, settings
@@ -21,7 +21,7 @@ engine = create_engine(
     poolclass=NullPool,
     connect_args={"application_name": "fee-api-service"},
 )
-Session = sessionmaker(bind=engine, autocommit=False)
+Session = sessionmaker(bind=engine, autocommit=False)  # noqa: F811
 
 
 def get_session() -> Generator:
@@ -48,24 +48,41 @@ def create_schemas():
 
         conn.close()
 
+
+class DatabaseSessionMixin:
+    """Database session mixin."""
+
+    def __enter__(self) -> Session:  # type: ignore  # noqa: PGH003
+        self.session = next(get_session())
+        return self.session
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.session.close()
+
+
+def use_database_session():
+    return DatabaseSessionMixin()
+
+
 def validate_db_conections():
     try:
         session = next(get_session())
-        session.execute( select(UserModel).select_from(UserModel).limit(1) ).all()
+        session.execute(select(UserModel).select_from(UserModel).limit(1)).all()
         log.info("1) Table 'users'................. O.K")
-        session.execute( select(CodeModel).select_from(CodeModel).limit(1) ).all()
+        session.execute(select(CodeModel).select_from(CodeModel).limit(1)).all()
         log.info("2) Table 'codes'................. O.K")
-        session.execute( select(UserLoginMethodModel).select_from(UserLoginMethodModel).limit(1) ).all()
+        session.execute(select(UserLoginMethodModel).select_from(UserLoginMethodModel).limit(1)).all()
         log.info("3) Table 'user_login_methods'..... O.K")
-        session.execute( select(AuthEmailModel).select_from(AuthEmailModel).limit(1) ).all()
+        session.execute(select(AuthEmailModel).select_from(AuthEmailModel).limit(1)).all()
         log.info("4) Table 'auth_email'..... O.K")
-        session.execute( select(AuthGeneralPlatformModel).select_from(AuthGeneralPlatformModel).limit(1) ).all()
+        session.execute(select(AuthGeneralPlatformModel).select_from(AuthGeneralPlatformModel).limit(1)).all()
         log.info("5) Table 'auth_general_platform'..... O.K")
         log.info("Connection 💲 Success")
     except Exception as e:  # noqa: BLE001
         session.close()
         message_error = f"Error on validate_db_conections, message error: {e}"
-        raise BaseAppException(message_error)  # noqa: B904
+        raise BaseAppException(message_error)
+
 
 def init_db():
     create_schemas()

@@ -7,6 +7,6 @@ from models.enum import UserLoginMethodsTypeEnum
 
 class UserLoginMethodModel(BaseModelClass):
     __tablename__ = "user_login_methods"
-    user_id = Column(UUID,nullable=False)
-    entity_id = Column(UUID,nullable=False)
+    user_id = Column(UUID, nullable=False)
+    entity_id = Column(UUID, nullable=False)
     entity_type = Column(Enum(UserLoginMethodsTypeEnum), nullable=False)
