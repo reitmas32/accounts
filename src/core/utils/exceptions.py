@@ -145,3 +145,127 @@ class ServiceNameException(BaseAppException):
     def __str__(self):
         return f"ServiceName error {self.message}"
 
+class EmailUniqueException(BaseAppException):
+    error_key = "EmailUnique"
+    status_code = status.HTTP_409_CONFLICT
+
+    def __init__(self, message: str = "There is already a registered user with the email: ", email: str = "") -> None:
+        self.message = f"{message} {email}"
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"email": self.message}
+
+    def __str__(self):
+        return self.message
+
+class UserNameUniqueException(BaseAppException):
+    error_key = "EmailUnique"
+    status_code = status.HTTP_409_CONFLICT
+
+    def __init__(self, message: str = "There is already a registered user with the user_name: ", user_name: str = "") -> None:
+        self.message = f"{message} {user_name}"
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"email": self.message}
+
+    def __str__(self):
+        return self.message
+
+class DontFindResourceException(BaseAppException):
+    error_key = "DontFindResoruce"
+    status_code = status.HTTP_404_NOT_FOUND
+
+    def __init__(self, message: str = "The resource dont find: ", resource: str = "") -> None:
+        self.message = f"{message} {resource}"
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"resource": self.message}
+
+    def __str__(self):
+        return self.message
+
+class DontValidCodeException(BaseAppException):
+    error_key = "DontValidCode"
+    status_code = status.HTTP_404_NOT_FOUND
+
+    def __init__(self, message: str = "The code is dont valid ", code: str = "", user_name: str = "") -> None:
+        self.message = f"{message} code :{code} user_name: {user_name}"
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"resource": self.message}
+
+    def __str__(self):
+        return self.message
+
+class CodeAlreadyExpiredException(BaseAppException):
+    error_key = "CodeAlreadyExpired"
+    status_code = status.HTTP_404_NOT_FOUND
+
+    def __init__(self, message: str = "The code has already expired ", code: str = "", user_name: str = "") -> None:
+        self.message = f"{message} code: {code} user_name: {user_name}"
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"resource": self.message}
+
+    def __str__(self):
+        return self.message
+
+class CodeAlreadyUseException(BaseAppException):
+    error_key = "CodeAlreadyUse"
+    status_code = status.HTTP_404_NOT_FOUND
+
+    def __init__(self, message: str = "The code has already used ", code: str = "", user_name: str = "") -> None:
+        self.message = f"{message} code :{code} user_name: {user_name}"
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"resource": self.message}
+
+    def __str__(self):
+        return self.message
+class PasswordNoneException(BaseAppException):
+    error_key = "PasswordNone"
+    status_code = status.HTTP_409_CONFLICT
+
+    def __init__(self, message: str = "The password cannot be None") -> None:
+        self.message = message
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"password": self.message}
+
+    def __str__(self):
+        return self.message
+
+class PasswordNotValidException(BaseAppException):
+    error_key = "PasswordNotValid"
+    status_code = status.HTTP_400_BAD_REQUEST
+
+    def __init__(self, message: str = "The password must have [A-Za-z0-9 &%$*?¿¡!]") -> None:
+        self.message = message
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"password": self.message}
+
+    def __str__(self):
+        return self.message
+
+class StepSAGAException(BaseAppException):
+    error_key = "StepSAGA"
+    status_code = status.HTTP_409_CONFLICT
+
+    def __init__(self, message: str = "Error in Step") -> None:
+        self.message = f"{message}"
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"step": self.message}
+
+    def __str__(self):
+        return self.message
