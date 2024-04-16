@@ -19,4 +19,3 @@ class ListUserSchema(BaseModel):
 
     id: UUID
     user_name: str
-

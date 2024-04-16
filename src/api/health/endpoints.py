@@ -30,5 +30,5 @@ def health_check(dependency: None = Depends(check_autorization)) -> EnvelopeResp
         body=result,
         status_code=status.HTTP_200_OK,
         successful=True,
-        message="The service is online and functioning properly."
+        message="The service is online and functioning properly.",
     )

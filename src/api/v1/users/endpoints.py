@@ -48,7 +48,6 @@ async def retrieve_all(
     return RetrieveUserService(session=session).retrieve_all()
 
 
-
 @router.get(
     "/{user_id}",
     summary="Returns the data of the authenticated user",
@@ -78,7 +77,6 @@ async def retrieve_one(
     """
     log.info("Get User")
     return RetrieveUserService(session=session).retrieve_by_id(id=user_id)
-
 
 
 @router.post(
@@ -111,6 +109,7 @@ async def email_signup(
         log.info("Create a DisbursementPeriod")
         return SignUpEmailService(session=session).create(payload=payload)
 
+
 @router.put(
     "/email/verify",
     summary="Verifica un email enviando un correo con un codigo",
@@ -140,6 +139,7 @@ async def email_verify(
     with use_database_session() as session:
         log.info("Create a DisbursementPeriod")
         return VerifyCodeService(session=session).verify(payload=payload)
+
 
 """
 @router.patch(

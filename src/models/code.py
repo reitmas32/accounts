@@ -18,4 +18,3 @@ class CodeModel(BaseModelClass):
     used_at = Column(DateTime, nullable=True)
 
     user = relationship(UserModel, primaryjoin="CodeModel.user_id == UserModel.id")
-

@@ -9,6 +9,7 @@ from .user import UserSchema
 # Requests
 #################
 
+
 class SignupEmailSchema(UserSchema):
     """
     Schema for email-based user signup.
@@ -99,10 +100,10 @@ class SignupPhoneNumberSchema(UserSchema):
         return v
 
 
-
 #################
 # Responses
 #################
+
 
 class RetrieveSingUpEmailEmailSchema(BaseSchema):
     """

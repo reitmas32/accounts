@@ -19,4 +19,3 @@ class RepositoryUserLoginMethod(RepositoryBase):
     """
 
     model: UserLoginMethodModel = UserLoginMethodModel
-

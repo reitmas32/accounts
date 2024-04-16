@@ -37,9 +37,7 @@ class CreateServicesService(BaseService):
         service: ServiceModel = self.session.execute(query).scalars().first()
 
         if service is not None:
-            raise ServiceNameException(
-                message=f"The service with name {service.service_name} is already in use"
-            )
+            raise ServiceNameException(message=f"The service with name {service.service_name} is already in use")
 
         if self.request_errors["validations_success"] is False:
             raise FormException(field_errors=self.request_errors["validations_errors"])

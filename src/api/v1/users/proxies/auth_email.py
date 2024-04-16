@@ -68,4 +68,3 @@ class RepositoryEmail(RepositoryBase):
         query = select(self.model).where(self.model.email == email).order_by(desc(self.model.created))
         result = self.session.execute(query).first()
         return result[0] if result else None
-

@@ -104,4 +104,3 @@ class CodeManager:
             self.repository_code.update_field_by_id(id=code_entry.id, field_name="used_at", new_value=current_time)
             return True
         return False
-

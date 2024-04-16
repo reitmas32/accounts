@@ -39,7 +39,6 @@ def check_authorization(
     )
 
 
-
 def _check_root_authorization(
     X_API_Key: str = "",  # noqa: N803
     X_Service_Name: str = "",  # noqa: N803,
@@ -59,13 +58,9 @@ def _check_root_authorization(
     Raises:
         NotAuthorizationException: If root authorization fails.
     """
-    if (
-        X_API_Key != settings.ROOT_API_KEY
-        or X_Service_Name != settings.ROOT_SERVICE_NAME
-    ):
+    if X_API_Key != settings.ROOT_API_KEY or X_Service_Name != settings.ROOT_SERVICE_NAME:
         raise NotAuthorizationException(resource="/api/v1/services")
     return True
-
 
 
 def _check_general_authorization(
@@ -106,9 +101,7 @@ def _check_general_authorization(
             raise NotAuthorizationException(resource=request.url.path)
 
         encrypted_controller = EncryptedController(key=settings.ROOT_ENCRYPTED_KEY)
-        if X_API_Key != encrypted_controller.decrypt(
-            encrypted_data=service.api_key.__str__()
-        ):
+        if X_API_Key != encrypted_controller.decrypt(encrypted_data=service.api_key.__str__()):
             raise NotAuthorizationException(resource=request.url.path)
 
     return True

@@ -57,9 +57,7 @@ class SendEmailCodeStep(StepSAGA):
         self.user_name = user_name
         self.code_created = None
         self.repository = RepositoryCode(session=session)
-        self.manager_email: SendEmailAbstract = (
-            get_current_manager_email_to_app_standard()
-        )
+        self.manager_email: SendEmailAbstract = get_current_manager_email_to_app_standard()
 
     def generate_code(self, length):
         """
@@ -178,7 +176,9 @@ class VerifyCodeStep(StepSAGA):
         if code.used_at is not None:
             raise CodeAlreadyUseException(user_name=payload.user_name, code=self.code)
 
-        created_and_timedelta: datetime = (code.created + timedelta(minutes=settings.TIME_MINUTES_EXPIRE_VERIFICATION_CODE))
+        created_and_timedelta: datetime = code.created + timedelta(
+            minutes=settings.TIME_MINUTES_EXPIRE_VERIFICATION_CODE
+        )
 
         if now > created_and_timedelta.astimezone(tz=timezone.utc):
             raise CodeAlreadyExpiredException(user_name=payload.user_name, code=self.code)

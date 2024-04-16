@@ -28,7 +28,7 @@ class CreateUserStep(StepSAGA):
         repository: Repository for user data operations.
     """
 
-    def __init__(self, user: SignupEmailSchema, session: Session): #TODO: Change SignupEmailSchema to UserSchema
+    def __init__(self, user: SignupEmailSchema, session: Session):  # TODO: Change SignupEmailSchema to UserSchema
         """
         Initialize the CreateUserStep.
 
@@ -72,6 +72,7 @@ class CreateUserStep(StepSAGA):
         if self.user_created is not None:
             self.repository.delete_by_id(self.user_created.id)
 
+
 class FindUserStep(StepSAGA):
     def __init__(self, user_name: str, session: Session):
         """
@@ -104,4 +105,3 @@ class FindUserStep(StepSAGA):
         """
         Rollback the step, deleting the user account if it was created.
         """
-

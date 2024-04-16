@@ -52,7 +52,6 @@ class RepositoryCode(RepositoryBase):
         result = self.session.execute(query).one_or_none()
         return result[0] if result else None
 
-
     def get_code_by_user_id(self, user_id: str, code: str) -> CodeModel:
         """
         Retrieves a verification code record associated with the given email, code, and minimum creation date.
@@ -71,7 +70,7 @@ class RepositoryCode(RepositoryBase):
             .where(
                 CodeModel.code == code,
                 CodeModel.user_id == user_id,
-                #CodeModel.used_at is None
+                # CodeModel.used_at is None
             )
         )
         result = self.session.execute(query).first()

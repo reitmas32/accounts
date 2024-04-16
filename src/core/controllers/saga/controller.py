@@ -10,6 +10,7 @@ class TransactionFailedException(HTTPException):
     def __init__(self):
         super().__init__(status_code=500, detail="Transaction failed. Reverting changes.")
 
+
 class StepSAGA(ABC):
     @abstractmethod
     def __call__(self, payload=None, all_payloads: dict | None = None):
@@ -18,6 +19,7 @@ class StepSAGA(ABC):
     @abstractmethod
     def rollback(self):
         pass
+
 
 class SagaController:
     def __init__(self, steps: list[StepSAGA]):
@@ -45,4 +47,3 @@ class SagaController:
             except Exception as e:  # noqa: PERF203, BLE001
                 # Si no se puede deshacer un paso, registrar el error y continuar
                 log.error(f"Failed to rollback step: {type(step).__name__}, Error: {e}")
-

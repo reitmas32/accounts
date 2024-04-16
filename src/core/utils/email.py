@@ -43,7 +43,6 @@ class SendEmailAbstract:
         """
 
 
-
 class GmailSendEmail(SendEmailAbstract):
     """
     Class for sending emails via Gmail.
@@ -93,7 +92,6 @@ class GmailSendEmail(SendEmailAbstract):
             return False
 
 
-
 class ZohoSendEmail(SendEmailAbstract):
     """
     Class for sending emails via Zoho.
@@ -137,7 +135,6 @@ class ZohoSendEmail(SendEmailAbstract):
             log.error(f"Error: {e}")
 
 
-
 class SendEmailManager(Enum):
     """
     Enum class for managing different email sender implementations.
@@ -148,6 +145,7 @@ class SendEmailManager(Enum):
         GMAIL_SENDER: Gmail email sender implementation.
         ZOHO_SENDER: Zoho email sender implementation.
     """
+
     GMAIL_SENDER = GmailSendEmail
     ZOHO_SENDER = ZohoSendEmail
 

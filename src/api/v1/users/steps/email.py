@@ -71,9 +71,7 @@ class CreateEmailAuthStep(StepSAGA):
 
         return
         # Regular expression to validate the password
-        regex = (
-            r"^(?=.*\d)(?=.*[&%$*?¿¡!])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d&%$*?¿¡!]{8,}$"
-        )
+        regex = r"^(?=.*\d)(?=.*[&%$*?¿¡!])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d&%$*?¿¡!]{8,}$"
 
         # Check if the password matches the pattern
         if not re.match(regex, password):
@@ -111,8 +109,9 @@ class CreateEmailAuthStep(StepSAGA):
         if self.auth_email_created is not None:
             self.repository.delete_by_id(self.auth_email_created.id)
 
+
 class FindEmailStep(StepSAGA):
-    def __init__(self, email: str ,session: Session):
+    def __init__(self, email: str, session: Session):
         """
         Initialize the CreateUserStep.
 
@@ -147,7 +146,7 @@ class FindEmailStep(StepSAGA):
 
 
 class ActivateEmailStep(StepSAGA):
-    def __init__(self, code: str ,session: Session):
+    def __init__(self, code: str, session: Session):
         """
         Initialize the CreateUserStep.
 
@@ -159,7 +158,6 @@ class ActivateEmailStep(StepSAGA):
         self.code = code
         self.repository_email = RepositoryEmail(session=session)
         self.repository_code = RepositoryCode(session=session)
-
 
     def __call__(self, payload: CodeModel | None = None, all_payloads: dict | None = None):
         """
@@ -180,7 +178,6 @@ class ActivateEmailStep(StepSAGA):
     def rollback(self):
         """
         Rollback the step, deleting the user account if it was created.
-        """ #NOTE: si hay un error al usar el codigo deberiamos marcarcomo usado el codigo??
+        """  # NOTE: si hay un error al usar el codigo deberiamos marcarcomo usado el codigo??
         self.repository_email.update_field_by_id(id=self.payload.entity_id, field_name="active", new_value=False)
         self.repository_code.update_field_by_id(id=self.payload.id, field_name="used_at", new_value=None)
-

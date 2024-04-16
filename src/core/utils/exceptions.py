@@ -131,6 +131,7 @@ class EncryptedException(BaseAppException):
     def __str__(self):
         return f"Encrypted error {self.message}"
 
+
 class ServiceNameException(BaseAppException):
     error_key = "ServiceName"
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -144,6 +145,7 @@ class ServiceNameException(BaseAppException):
 
     def __str__(self):
         return f"ServiceName error {self.message}"
+
 
 class EmailUniqueException(BaseAppException):
     error_key = "EmailUnique"
@@ -159,11 +161,14 @@ class EmailUniqueException(BaseAppException):
     def __str__(self):
         return self.message
 
+
 class UserNameUniqueException(BaseAppException):
     error_key = "EmailUnique"
     status_code = status.HTTP_409_CONFLICT
 
-    def __init__(self, message: str = "There is already a registered user with the user_name: ", user_name: str = "") -> None:
+    def __init__(
+        self, message: str = "There is already a registered user with the user_name: ", user_name: str = ""
+    ) -> None:
         self.message = f"{message} {user_name}"
         logger.error(self.message)
 
@@ -172,6 +177,7 @@ class UserNameUniqueException(BaseAppException):
 
     def __str__(self):
         return self.message
+
 
 class DontFindResourceException(BaseAppException):
     error_key = "DontFindResoruce"
@@ -187,6 +193,7 @@ class DontFindResourceException(BaseAppException):
     def __str__(self):
         return self.message
 
+
 class DontValidCodeException(BaseAppException):
     error_key = "DontValidCode"
     status_code = status.HTTP_404_NOT_FOUND
@@ -200,6 +207,7 @@ class DontValidCodeException(BaseAppException):
 
     def __str__(self):
         return self.message
+
 
 class CodeAlreadyExpiredException(BaseAppException):
     error_key = "CodeAlreadyExpired"
@@ -215,6 +223,7 @@ class CodeAlreadyExpiredException(BaseAppException):
     def __str__(self):
         return self.message
 
+
 class CodeAlreadyUseException(BaseAppException):
     error_key = "CodeAlreadyUse"
     status_code = status.HTTP_404_NOT_FOUND
@@ -228,6 +237,8 @@ class CodeAlreadyUseException(BaseAppException):
 
     def __str__(self):
         return self.message
+
+
 class PasswordNoneException(BaseAppException):
     error_key = "PasswordNone"
     status_code = status.HTTP_409_CONFLICT
@@ -242,6 +253,7 @@ class PasswordNoneException(BaseAppException):
     def __str__(self):
         return self.message
 
+
 class PasswordNotValidException(BaseAppException):
     error_key = "PasswordNotValid"
     status_code = status.HTTP_400_BAD_REQUEST
@@ -255,6 +267,7 @@ class PasswordNotValidException(BaseAppException):
 
     def __str__(self):
         return self.message
+
 
 class StepSAGAException(BaseAppException):
     error_key = "StepSAGA"
