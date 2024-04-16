@@ -73,6 +73,7 @@ class Settings(PydanticBaseSettings):
     # ----------------------------------------------------------------
     TIME_SECONDS_EXPIRE_CODE_VALIDATE_EMAIL: int = 60 * 60 * 24 * 30
     TIME_SECONDS_EXPIRE_CODE_2FA: int = 60 * 1
+    TIME_MINUTES_EXPIRE_VERIFICATION_CODE: int = 5
     LENGHT_CODE_VALIDATE_EMAIL: int = 4
     LENGHT_CODE_2FA: int = 4
 
