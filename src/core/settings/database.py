@@ -8,9 +8,9 @@ from sqlalchemy.pool import NullPool
 from core.settings import log, settings
 from core.utils.exceptions import BaseAppException
 from models import (
-    AuthEmailModel,
     AuthGeneralPlatformModel,
     CodeModel,
+    EmailModel,
     UserLoginMethodModel,
     UserModel,
 )
@@ -73,7 +73,7 @@ def validate_db_conections():
         log.info("2) Table 'codes'................. O.K")
         session.execute(select(UserLoginMethodModel).select_from(UserLoginMethodModel).limit(1)).all()
         log.info("3) Table 'user_login_methods'..... O.K")
-        session.execute(select(AuthEmailModel).select_from(AuthEmailModel).limit(1)).all()
+        session.execute(select(EmailModel).select_from(EmailModel).limit(1)).all()
         log.info("4) Table 'auth_email'..... O.K")
         session.execute(select(AuthGeneralPlatformModel).select_from(AuthGeneralPlatformModel).limit(1)).all()
         log.info("5) Table 'auth_general_platform'..... O.K")
