@@ -11,7 +11,7 @@ from api.v1.services.service import (
 )
 from core.settings import log
 from core.settings.database import use_database_session
-from core.utils.autorization import check_autorization
+from core.utils.autorization import check_authorization
 from core.utils.responses import (
     EnvelopeResponse,
     PaginationParams,
@@ -31,7 +31,7 @@ async def get_all(
     request: Request,
     pagination_params: PaginationParams = Depends(default_pagination_params),
     query_params: FilterServicesSchema = Depends(),
-    _=Depends(check_autorization),
+    _=Depends(check_authorization),
 ) -> ListServicesService:
     with use_database_session() as session:
         log.info("Get List of Services")
@@ -50,7 +50,7 @@ async def get_all(
 async def create(
     request: Request,
     payload: CreateServiceSchema,
-    _=Depends(check_autorization),
+    _=Depends(check_authorization),
 ):
     log.info("Create User")
     with use_database_session() as session:
@@ -66,7 +66,7 @@ async def create(
 )
 async def retrieve(
     id: UUID,
-    _=Depends(check_autorization),
+    _=Depends(check_authorization),
 ) -> RetrieveServicesService:
     with use_database_session() as session:
         log.info("Get only one Service")
