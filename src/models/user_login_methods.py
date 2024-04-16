@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Enum
+from sqlalchemy import Boolean, Column, Enum
 from sqlalchemy.dialects.postgresql import UUID
 
 from models.base_model import BaseModelClass
@@ -10,3 +10,4 @@ class UserLoginMethodModel(BaseModelClass):
     user_id = Column(UUID, nullable=False)
     entity_id = Column(UUID, nullable=False)
     entity_type = Column(Enum(UserLoginMethodsTypeEnum), nullable=False)
+    active = Column(Boolean, nullable=False)
