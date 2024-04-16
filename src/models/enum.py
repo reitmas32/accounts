@@ -7,28 +7,12 @@ class AbstractEnum(Enum):
         return [member.value for member in cls]
 
 
-class AuthGeneralPlatformsEnum(AbstractEnum):
-    FACEBOOK = "facebook"
-    GOOGLE = "google"
-    APPLE = "apple"
-
-
-class UserActivationMethodEnum(AbstractEnum):
+class UserLoginMethodsTypeEnum(AbstractEnum):
     FACEBOOK = "facebook"
     GOOGLE = "google"
     APPLE = "apple"
     EMAIL = "email"
-
-
-class UserLoginMethodsTypeEnum(AbstractEnum):
-    AUTH_GENERAL_PLATFORMS = "auth_general_platforms"
-    AUTH_EMAIL = "auth_email"
-
-    @staticmethod
-    def get_type(specific_method: UserActivationMethodEnum):
-        if specific_method == UserActivationMethodEnum.EMAIL:
-            return UserLoginMethodsTypeEnum.AUTH_EMAIL
-        return UserLoginMethodsTypeEnum.AUTH_GENERAL_PLATFORMS
+    PHONE_NUMBER = "phone_number"
 
 
 class UserAuthMethodEnum(AbstractEnum):
@@ -37,6 +21,6 @@ class UserAuthMethodEnum(AbstractEnum):
     EMAIL = "email"
 
 
-class CodeTypeEnum(Enum):
+class CodeTypeEnum(AbstractEnum):
     ACCOUNT_ACTIVATION = "account_activation"
     TWO_FACTOR = "two_factor"
