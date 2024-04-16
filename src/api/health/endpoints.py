@@ -1,9 +1,8 @@
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, status
 
-from core.settings import log, settings
-from core.utils.autorization import check_authorization
+from core.settings import settings
 from core.utils.responses import EnvelopeResponse
 
 router = APIRouter(tags=["Health Check"])
