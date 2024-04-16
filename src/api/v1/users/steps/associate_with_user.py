@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 from sqlalchemy.orm import Session
 
@@ -11,10 +12,12 @@ from api.v1.users.steps.user import FindUserStep
 from core.controllers.saga.controller import StepSAGA
 from core.utils.exceptions import DontFindResourceException
 from models.email import EmailModel
-from models.code import CodeModel
 from models.enum import UserLoginMethodsTypeEnum
 from models.user import UserModel
 from models.user_login_methods import UserLoginMethodModel
+
+if TYPE_CHECKING:
+    from models.code import CodeModel
 
 
 class AddUserLoginMethodStep(StepSAGA):
@@ -49,7 +52,7 @@ class AddUserLoginMethodStep(StepSAGA):
         self.type_login: UserLoginMethodsTypeEnum = type_login
         self.user_login_method = None
 
-    def __call__(self, payload: EmailModel, all_payloads: dict | None = None):
+    def __call__(self, payload: EmailModel, all_payloads: dict | None = None):  # noqa: ARG002
         """
         Execute the step, adding a user login method.
 
@@ -92,7 +95,7 @@ class FindUserLoginMethodStep(StepSAGA):
         self.repository = RepositoryUserLoginMethod(session=session)
         self.type_login: UserLoginMethodsTypeEnum = type_login
 
-    def __call__(self, payload: UserModel | None = None, all_payloads: dict | None = None):
+    def __call__(self, payload: UserModel | None = None, all_payloads: dict | None = None):  # noqa: ARG002
         """
         Execute the step, creating a user account.
 
@@ -148,7 +151,7 @@ class ActivateUserLoginMethodStep(StepSAGA):
         self.repository_auth = RepositoryUserLoginMethod(session=session)
         self.repository_code = RepositoryCode(session=session)
 
-    def __call__(self, payload: UserLoginMethodModel, all_payloads: dict | None = None):  # noqa: ARG002
+    def __call__(self, payload: UserLoginMethodModel, all_payloads: dict | None = None):
         """
         Execute the step, adding a user login method.
 

@@ -77,7 +77,7 @@ class CreateEmailAuthStep(StepSAGA):
         if not re.match(regex, password):
             raise PasswordNotValidException
 
-    def __call__(self, payload: UserModel, all_payloads: dict | None = None):
+    def __call__(self, payload: UserModel, all_payloads: dict | None = None):  # noqa: ARG002
         """
         Execute the step, creating email authentication.
 
@@ -159,7 +159,7 @@ class ActivateEmailStep(StepSAGA):
         self.repository_email = RepositoryEmail(session=session)
         self.repository_code = RepositoryCode(session=session)
 
-    def __call__(self, payload: CodeModel | None = None, all_payloads: dict | None = None):
+    def __call__(self, payload: CodeModel | None = None, all_payloads: dict | None = None):  # noqa: ARG002
         """
         Execute the step, creating a user account.
 

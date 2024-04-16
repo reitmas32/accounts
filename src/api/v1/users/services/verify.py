@@ -4,19 +4,14 @@ from fastapi import status
 
 from api.v1.users.schemas import (
     RetrieveSingUpEmailEmailSchema,
-    SignupEmailSchema,
 )
-from api.v1.users.schemas.user import UserSchema
 from api.v1.users.schemas.verify import VerifyEmailSchema
 from api.v1.users.steps.associate_with_user import (
     ActivateUserLoginMethodStep,
-    AddUserLoginMethodStep,
     FindUserLoginMethodStep,
 )
-from api.v1.users.steps.code import SendEmailCodeStep, VerifyCodeStep
-from api.v1.users.steps.email import CreateEmailAuthStep, FindEmailStep
-from api.v1.users.steps.user import CreateUserStep, FindUserStep
-from api.v1.users.utils import CodeManager
+from api.v1.users.steps.code import VerifyCodeStep
+from api.v1.users.steps.user import FindUserStep
 from core.controllers.saga.controller import SagaController
 from core.utils.generic_views import BaseService
 from core.utils.responses import (
@@ -24,7 +19,6 @@ from core.utils.responses import (
 )
 from models.code import CodeModel
 from models.enum import UserLoginMethodsTypeEnum
-from models.user import UserModel
 
 logger = logging.getLogger(__name__)
 

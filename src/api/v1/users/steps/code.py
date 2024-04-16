@@ -71,7 +71,7 @@ class SendEmailCodeStep(StepSAGA):
         """
         return "".join(random.choices(string.digits, k=length))  # noqa: S311
 
-    def __call__(self, payload: UserLoginMethodModel, all_payloads: dict | None = None):
+    def __call__(self, payload: UserLoginMethodModel, all_payloads: dict | None = None):  # noqa: ARG002
         """
         Execute the step, generating and sending the verification code.
 

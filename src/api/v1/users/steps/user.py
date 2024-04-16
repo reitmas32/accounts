@@ -4,7 +4,6 @@ from sqlalchemy.orm import Session
 
 from api.v1.users.proxies import RepositoryUser
 from api.v1.users.schemas.singup import SignupEmailSchema
-from api.v1.users.schemas.user import UserSchema
 from core.controllers.saga.controller import StepSAGA
 from core.utils.exceptions import DontFindResourceException, UserNameUniqueException
 
