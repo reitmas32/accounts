@@ -61,8 +61,8 @@ class VerifyCodeService(BaseService):
         controller.execute()
 
         return create_simple_envelope_response(
-            data="user_schema.dict()",
-            message="User created successfully",
-            status_code=status.HTTP_201_CREATED,
+            data=None,
+            message="La cuenta fue activada correctamente",
+            status_code=status.HTTP_200_OK,
             successful=True,
         )

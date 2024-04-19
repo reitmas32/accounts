@@ -1,7 +1,8 @@
 import random
 import string
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 
+from pytz import timezone as tz
 from sqlalchemy.orm import Session
 
 from api.v1.users.proxies import RepositoryCode
@@ -158,7 +159,11 @@ class VerifyCodeStep(StepSAGA):
         self.code = code
         self.repository = RepositoryCode(session=session)
 
-    def __call__(self, payload: UserModel | None = None, all_payloads: dict | None = None):  # noqa: ARG002
+    def __call__(
+        self,
+        payload: UserModel | None = None,
+        all_payloads: dict | None = None,  # noqa: ARG002
+    ):
         """
         Execute the step, creating a user account.
 
@@ -168,7 +173,7 @@ class VerifyCodeStep(StepSAGA):
         Returns:
             UserModel: User object created during the step.
         """
-        now = datetime.now(tz=timezone.utc)
+        now = datetime.now(timezone.utc)
 
         code = self.repository.get_code_by_user_id(code=self.code, user_id=payload.id)
         if code is None:
@@ -176,12 +181,11 @@ class VerifyCodeStep(StepSAGA):
         if code.used_at is not None:
             raise CodeAlreadyUseException(user_name=payload.user_name, code=self.code)
 
-        created_and_timedelta: datetime = code.created + timedelta(
-            minutes=settings.TIME_MINUTES_EXPIRE_VERIFICATION_CODE
-        )
+        code_date: datetime = code.created.replace(tzinfo=tz("UTC"))
 
-        if now > created_and_timedelta.astimezone(tz=timezone.utc):
-            raise CodeAlreadyExpiredException(user_name=payload.user_name, code=self.code)
+        timedelta_code = now - code_date
+        if int(timedelta_code.total_seconds()) > settings.TIME_SECONDS_EXPIRE_VERIFICATION_CODE:
+            raise CodeAlreadyExpiredException
         return code
 
     def rollback(self):

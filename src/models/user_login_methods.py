@@ -10,4 +10,5 @@ class UserLoginMethodModel(BaseModelClass):
     user_id = Column(UUID, nullable=False)
     entity_id = Column(UUID, nullable=False)
     entity_type = Column(Enum(UserLoginMethodsTypeEnum), nullable=False)
-    active = Column(Boolean, nullable=False)
+    active = Column(Boolean, nullable=False, default=False)
+    verify = Column(Boolean, nullable=False, default=False)

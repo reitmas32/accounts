@@ -68,3 +68,18 @@ class RepositoryEmail(RepositoryBase):
         query = select(self.model).where(self.model.email == email).order_by(desc(self.model.created))
         result = self.session.execute(query).first()
         return result[0] if result else None
+
+    def get_email_by_user_id(self, user_id: str) -> UserModel:
+        """
+        Retrieves an EmailModel record associated with the given email.
+
+        Args:
+            email (str): Email associated with the record.
+
+        Returns:
+            UserModel: User record associated with the given email, or None if not found.
+        """
+        emails = self.get_by_attributes(user_id=user_id)
+        if len(emails) == 0:
+            return None
+        return emails[0]

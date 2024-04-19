@@ -164,7 +164,7 @@ class ActivateUserLoginMethodStep(StepSAGA):
         now = datetime.now(tz=timezone.utc)
         self.auth_id = payload.id
         code: CodeModel = all_payloads[VerifyCodeStep]
-        self.repository_auth.update_field_by_id(id=self.auth_id, field_name="active", new_value=True)
+        self.repository_auth.update_field_by_id(id=self.auth_id, field_name="verify", new_value=True)
         self.repository_code.update_field_by_id(id=code.id.__str__(), field_name="used_at", new_value=now)
 
         return True
@@ -173,5 +173,5 @@ class ActivateUserLoginMethodStep(StepSAGA):
         """
         Rollback the step, deleting the user login method if it was created.
         """
-        self.repository_auth.update_field_by_id(id=self.auth_id, field_name="active", new_value=False)
+        self.repository_auth.update_field_by_id(id=self.auth_id, field_name="verify", new_value=False)
         self.repository_code.update_field_by_id(id=self.code_id, field_name="used_at", new_value=None)
