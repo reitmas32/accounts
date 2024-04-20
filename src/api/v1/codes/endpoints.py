@@ -19,7 +19,7 @@ from core.utils.responses import (
     default_pagination_params,
 )
 
-router = APIRouter(prefix="/codes", tags=["codes"])
+router = APIRouter(prefix="/codes", tags=["CRUD codes"])
 
 
 @router.get(

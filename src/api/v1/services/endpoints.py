@@ -18,7 +18,7 @@ from core.utils.responses import (
     default_pagination_params,
 )
 
-router = APIRouter(prefix="/services", tags=["services"])
+router = APIRouter(prefix="/services", tags=["CRUD services"])
 
 
 @router.get(

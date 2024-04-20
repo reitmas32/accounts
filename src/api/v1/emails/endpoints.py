@@ -19,7 +19,7 @@ from core.utils.responses import (
     default_pagination_params,
 )
 
-router = APIRouter(prefix="/emails", tags=["emails"])
+router = APIRouter(prefix="/emails", tags=["CRUD emails"])
 
 
 @router.get(
