@@ -88,3 +88,17 @@ class RetrieveServicesService(ObjectBaseService):
             status_code=status.HTTP_200_OK,
             successful=True,
         )
+
+class DeleteServicesService(ObjectBaseService):
+    model = ServiceProxy
+    schema = RetrieveServiceSchema
+
+    def delete(self, id: UUID):
+        self.delete_by_id(id=id)
+
+        return create_simple_envelope_response(
+            data=None,
+            message="Delete Service",
+            status_code=status.HTTP_200_OK,
+            successful=True,
+        )
