@@ -16,7 +16,7 @@ from core.utils.password import PasswordManager
 from models.email import EmailModel
 
 if TYPE_CHECKING:
-    from models.user_login_methods import UserLoginMethodModel
+    from models.login_methods import UserLoginMethodModel
 
 
 class FindEmailOfUserByEmailOrUserNameStep(StepSAGA):
@@ -46,9 +46,7 @@ class FindEmailOfUserByEmailOrUserNameStep(StepSAGA):
             user_obj = self.get_user_by_name(self.user_name)
             email_obj = self.repository_email.get_email_by_user_id(str(user_obj.id))
             if email_obj is None:
-                raise DontFindResourceException(
-                    message="Email dont find of user_name:", resource=self.user_name
-                )
+                raise DontFindResourceException(message="Email dont find of user_name:", resource=self.user_name)
         elif self.email is not None:
             email_obj = self.get_email(self.email)
         else:
@@ -59,17 +57,13 @@ class FindEmailOfUserByEmailOrUserNameStep(StepSAGA):
     def get_user_by_name(self, user_name):
         user = self.repository_user.get_user(user_name=user_name)
         if user is None:
-            raise DontFindResourceException(
-                message="User dont find with user_name", resource=user_name
-            )
+            raise DontFindResourceException(message="User dont find with user_name", resource=user_name)
         return user
 
     def get_email(self, email_str):
         email = self.repository_email.get_auth_email(email=email_str)
         if email is None:
-            raise DontFindResourceException(
-                message="User dont find with email", resource=email_str
-            )
+            raise DontFindResourceException(message="User dont find with email", resource=email_str)
         return email
 
     def __call__(self, payload: None = None, all_payloads: dict | None = None):  # noqa: ARG002
@@ -132,16 +126,12 @@ class AccountIsVerifiedStep(StepSAGA):
         """
         self.repository_user_login = RepositoryUserLoginMethod(session=session)
 
-    def __call__(
-        self, payload: EmailModel | None = None, all_payloads: dict | None = None
-    ):
+    def __call__(self, payload: EmailModel | None = None, all_payloads: dict | None = None):
         email: EmailModel = all_payloads[FindEmailOfUserByEmailOrUserNameStep]
         login = self.repository_user_login.get_by_attributes(user_id=email.user_id)
 
         if len(login) == 0:
-            raise DontFindResourceException(
-                message="User dont find with email login method", resource=payload.email
-            )
+            raise DontFindResourceException(message="User dont find with email login method", resource=payload.email)
 
         login: UserLoginMethodModel = login[0]
         if login.verify is False:

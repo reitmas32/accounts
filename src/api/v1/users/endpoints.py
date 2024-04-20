@@ -158,6 +158,7 @@ async def email_login(
     with use_database_session() as session:
         return LoginEmailService(session=session).login(payload=payload)
 
+
 @router.put(
     "/email/reset-password",
     summary="Logea a un usuario por email y password",
@@ -173,6 +174,7 @@ async def email_reset_password(
     log.info("Login")
     with use_database_session() as session:
         return LoginEmailService(session=session).login(payload=payload)
+
 
 @router.post(
     "/email/send-code",

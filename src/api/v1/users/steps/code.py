@@ -22,8 +22,8 @@ from core.utils.exceptions import (
     DontValidCodeException,
 )
 from models.enum import CodeTypeEnum
+from models.login_methods import UserLoginMethodModel
 from models.user import UserModel
-from models.user_login_methods import UserLoginMethodModel
 
 
 class SendEmailCodeStep(StepSAGA):

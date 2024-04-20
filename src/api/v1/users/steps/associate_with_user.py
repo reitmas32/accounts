@@ -13,8 +13,8 @@ from core.controllers.saga.controller import StepSAGA
 from core.utils.exceptions import DontFindResourceException
 from models.email import EmailModel
 from models.enum import UserLoginMethodsTypeEnum
+from models.login_methods import UserLoginMethodModel
 from models.user import UserModel
-from models.user_login_methods import UserLoginMethodModel
 
 if TYPE_CHECKING:
     from models.code import CodeModel

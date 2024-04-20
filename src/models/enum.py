@@ -6,6 +6,7 @@ class AbstractEnum(Enum):
     def list_values(cls):
         return [member.value for member in cls]
 
+
 class UserLoginMethodsTypeEnum(AbstractEnum):
     FACEBOOK = "facebook"
     GOOGLE = "google"
@@ -32,6 +33,7 @@ class UserAuthMethodEnum(AbstractEnum):
             if enum_value.value == value_str:
                 return enum_value
         raise ValueError("Invalid value for UserAuthMethodEnum")
+
 
 class CodeTypeEnum(AbstractEnum):
     ACCOUNT_ACTIVATION = "account_activation"

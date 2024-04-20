@@ -15,5 +15,3 @@ api_v1_router.include_router(users_endpoints)
 api_v1_router.include_router(services_endpoints)
 api_v1_router.include_router(codes_endpoints)
 api_v1_router.include_router(emails_endpoints)
-
-

@@ -6,6 +6,7 @@ from core.utils.schema_base import BaseSchema
 # Requests
 #################
 
+
 class LoginEmailSchema(BaseModel):
     user_name: str | None = None
     email: EmailStr | None = None
@@ -16,7 +17,7 @@ class LoginEmailSchema(BaseModel):
 # Responses
 #################
 
+
 class RetrieveLoginEmailEmailSchema(BaseSchema):
     user_name: str
     email: str
-

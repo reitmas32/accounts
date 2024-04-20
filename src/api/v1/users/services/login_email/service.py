@@ -30,14 +30,14 @@ class LoginEmailService(BaseService):
     def __init__(self, session):
         self.session = session
 
-
     def login(self, payload: LoginEmailSchema):
-
         logger.info(payload)
 
         controller = SagaController(
             [
-                FindEmailOfUserByEmailOrUserNameStep(user_name=payload.user_name, email=payload.email, session=self.session),
+                FindEmailOfUserByEmailOrUserNameStep(
+                    user_name=payload.user_name, email=payload.email, session=self.session
+                ),
                 PasswordVerifyStep(session=self.session, password=payload.password),
                 AccountIsVerifiedStep(session=self.session),
                 CreateJWTStep(session=self.session),
@@ -50,9 +50,7 @@ class LoginEmailService(BaseService):
         jwt = result[CreateJWTStep]
 
         return create_simple_envelope_response(
-            data={
-                "JWT": jwt
-            },
+            data={"JWT": jwt},
             message="Se inicio secion correctamente",
             status_code=status.HTTP_200_OK,
             successful=True,

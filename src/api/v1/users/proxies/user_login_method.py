@@ -1,5 +1,5 @@
 from core.utils.repository_base import RepositoryBase
-from models.user_login_methods import UserLoginMethodModel
+from models.login_methods import UserLoginMethodModel
 
 
 class RepositoryUserLoginMethod(RepositoryBase):

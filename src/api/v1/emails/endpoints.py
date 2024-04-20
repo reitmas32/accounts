@@ -1,4 +1,3 @@
-
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Request, status
@@ -56,6 +55,7 @@ async def retrieve(
     with use_database_session() as session:
         log.info("Get only one Service")
         return RetrieveEmailsService(session=session).retrieve(id=id)
+
 
 @router.post(
     "",

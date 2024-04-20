@@ -11,6 +11,7 @@ class CreateCodeSchema(BaseModel):
     entity_type: str
     type: str
 
+
 class ListCodeSchema(BaseModel):
     id: UUID
     created: datetime

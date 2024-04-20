@@ -37,6 +37,7 @@ class RetrieveCodesService(ObjectBaseService):
 class CreateCodesService(BaseService):
     model = CodeProxy
     schema = ListCodeSchema
+
     def _validate_request(self, payload: CreateCodeSchema):
         pass
 
@@ -48,7 +49,6 @@ class CreateCodesService(BaseService):
 
         payload.entity_type = UserLoginMethodsTypeEnum.get_enum_from_str(payload.entity_type)
         payload.type = CodeTypeEnum.get_enum_from_str(payload.type)
-
 
         instance = self.model(**payload.model_dump())
         self.session.add(instance)
