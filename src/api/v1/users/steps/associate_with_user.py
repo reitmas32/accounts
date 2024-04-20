@@ -13,7 +13,7 @@ from core.controllers.saga.controller import StepSAGA
 from core.utils.exceptions import DontFindResourceException
 from models.email import EmailModel
 from models.enum import UserLoginMethodsTypeEnum
-from models.login_methods import UserLoginMethodModel
+from models.login_methods import LoginMethodModel
 from models.user import UserModel
 
 if TYPE_CHECKING:
@@ -60,7 +60,7 @@ class AddUserLoginMethodStep(StepSAGA):
             payload (EmailModel): Data payload containing authentication email model.
 
         Returns:
-            UserLoginMethodModel: User login method object created during the step.
+            LoginMethodModel: User login method object created during the step.
         """
         self.user_login_method = self.repository.add(
             user_id=payload.user_id,
@@ -151,7 +151,7 @@ class ActivateUserLoginMethodStep(StepSAGA):
         self.repository_auth = RepositoryUserLoginMethod(session=session)
         self.repository_code = RepositoryCode(session=session)
 
-    def __call__(self, payload: UserLoginMethodModel, all_payloads: dict | None = None):
+    def __call__(self, payload: LoginMethodModel, all_payloads: dict | None = None):
         """
         Execute the step, adding a user login method.
 
@@ -159,7 +159,7 @@ class ActivateUserLoginMethodStep(StepSAGA):
             payload (EmailModel): Data payload containing authentication email model.
 
         Returns:
-            UserLoginMethodModel: User login method object created during the step.
+            LoginMethodModel: User login method object created during the step.
         """
         now = datetime.now(tz=timezone.utc)
         self.auth_id = payload.id

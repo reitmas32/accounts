@@ -16,7 +16,7 @@ from core.utils.password import PasswordManager
 from models.email import EmailModel
 
 if TYPE_CHECKING:
-    from models.login_methods import UserLoginMethodModel
+    from models.login_methods import LoginMethodModel
 
 
 class FindEmailOfUserByEmailOrUserNameStep(StepSAGA):
@@ -133,7 +133,7 @@ class AccountIsVerifiedStep(StepSAGA):
         if len(login) == 0:
             raise DontFindResourceException(message="User dont find with email login method", resource=payload.email)
 
-        login: UserLoginMethodModel = login[0]
+        login: LoginMethodModel = login[0]
         if login.verify is False:
             raise AccountUnverifiedException
 

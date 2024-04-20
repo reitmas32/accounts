@@ -22,7 +22,7 @@ from core.utils.exceptions import (
     DontValidCodeException,
 )
 from models.enum import CodeTypeEnum
-from models.login_methods import UserLoginMethodModel
+from models.login_methods import LoginMethodModel
 from models.user import UserModel
 
 
@@ -72,12 +72,12 @@ class SendEmailCodeStep(StepSAGA):
         """
         return "".join(random.choices(string.digits, k=length))  # noqa: S311
 
-    def __call__(self, payload: UserLoginMethodModel, all_payloads: dict | None = None):  # noqa: ARG002
+    def __call__(self, payload: LoginMethodModel, all_payloads: dict | None = None):  # noqa: ARG002
         """
         Execute the step, generating and sending the verification code.
 
         Args:
-            payload (UserLoginMethodModel): Data payload containing user login method model.
+            payload (LoginMethodModel): Data payload containing user login method model.
 
         Returns:
             CodeModel: Code object created during the step.
