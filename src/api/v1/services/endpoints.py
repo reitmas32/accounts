@@ -6,6 +6,7 @@ from api.v1.services.filters import FilterServicesSchema
 from api.v1.services.schemas import CreateServiceSchema
 from api.v1.services.service import (
     CreateServicesService,
+    DeleteServicesService,
     ListServicesService,
     RetrieveServicesService,
 )
@@ -71,3 +72,17 @@ async def retrieve(
     with use_database_session() as session:
         log.info("Get only one Service")
         return RetrieveServicesService(session=session).retrieve(id=id)
+
+@router.delete(
+    "/{id}",
+    summary="elimina un code",
+    status_code=status.HTTP_200_OK,
+    response_model=EnvelopeResponse,
+)
+async def delte(
+    id: UUID,
+    _=Depends(check_authorization),
+) -> RetrieveServicesService:
+    with use_database_session() as session:
+        log.info("Get only one Service")
+        return DeleteServicesService(session=session).delete(id=id)
