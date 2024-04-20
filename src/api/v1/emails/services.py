@@ -1,9 +1,7 @@
-from uuid import UUID, uuid4
+from uuid import UUID
 
 from fastapi import status
 
-from api.v1.codes.proxies import CodeProxy
-from api.v1.codes.schemas import ListCodeSchema
 from api.v1.emails.proxies import EmailProxy
 from api.v1.emails.schemas import CreateEmailSchema, ListEmailSchema
 from core.utils.generic_views import (
@@ -14,7 +12,6 @@ from core.utils.generic_views import (
 from core.utils.password import PasswordManager
 from core.utils.repository_base import RepositoryBase
 from core.utils.responses import create_simple_envelope_response
-from models.enum import CodeTypeEnum, UserLoginMethodsTypeEnum
 
 
 class ListEmailsService(ListBaseService):
