@@ -157,3 +157,35 @@ async def email_login(
     log.info("Login")
     with use_database_session() as session:
         return LoginEmailService(session=session).login(payload=payload)
+
+@router.put(
+    "/email/reset-password",
+    summary="Logea a un usuario por email y password",
+    status_code=status.HTTP_200_OK,
+    response_model=EnvelopeResponse,
+    tags=["email"],
+)
+async def email_reset_password(
+    request: Request,
+    payload: LoginEmailSchema,
+    _=Depends(check_authorization),
+):
+    log.info("Login")
+    with use_database_session() as session:
+        return LoginEmailService(session=session).login(payload=payload)
+
+@router.post(
+    "/email/send-code",
+    summary="Logea a un usuario por email y password",
+    status_code=status.HTTP_200_OK,
+    response_model=EnvelopeResponse,
+    tags=["email"],
+)
+async def email_send_code(
+    request: Request,
+    payload: LoginEmailSchema,
+    _=Depends(check_authorization),
+):
+    log.info("Login")
+    with use_database_session() as session:
+        return LoginEmailService(session=session).login(payload=payload)
