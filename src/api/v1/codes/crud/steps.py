@@ -175,20 +175,24 @@ class VerifyCodeStep(StepSAGA):
         """
         now = datetime.now(timezone.utc)
 
-        code = self.repository.get_code_by_user_id(code=self.code, user_id=payload.id)
-        if code is None:
+        self.code_model = self.repository.get_code_by_user_id(code=self.code, user_id=payload.id)
+        if self.code_model is None:
             raise DontValidCodeException(user_name=payload.user_name, code=self.code)
-        if code.used_at is not None:
+        if self.code_model.used_at is not None:
             raise CodeAlreadyUseException(user_name=payload.user_name, code=self.code)
 
-        code_date: datetime = code.created.replace(tzinfo=tz("UTC"))
+        code_date: datetime = self.code_model.created.replace(tzinfo=tz("UTC"))
+
+        self.repository.update_field_by_id(id=self.code_model.id, field_name="used_at", new_value=now)
 
         timedelta_code = now - code_date
         if int(timedelta_code.total_seconds()) > settings.TIME_SECONDS_EXPIRE_VERIFICATION_CODE:
             raise CodeAlreadyExpiredException
-        return code
+        return self.code_model
 
     def rollback(self):
         """
         Rollback the step, deleting the user account if it was created.
         """
+        if self.code_created is not None:
+            self.repository.delete_by_id(self.code_model.id)
