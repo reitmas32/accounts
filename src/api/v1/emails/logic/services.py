@@ -11,13 +11,14 @@ from api.v1.emails.logic.schemas import (
     SignupEmailSchema,
     VerifyEmailSchema,
 )
+from api.v1.emails.logic.steps import LoginUserStep
 from api.v1.login_methods.steps import AddUserLoginMethodStep
 from api.v1.users.crud.steps.associate_with_user import (
     ActivateUserLoginMethodStep,
     FindUserLoginMethodStep,
 )
 from api.v1.users.crud.steps.code import VerifyCodeStep
-from api.v1.users.crud.steps.user import CreateUserStep, FindUserStep, LoginUserStep
+from api.v1.users.crud.steps.user import CreateUserStep, FindUserStep
 from core.controllers.saga.controller import SagaController
 from core.utils.generic_views import (
     BaseService,

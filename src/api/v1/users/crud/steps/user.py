@@ -2,19 +2,13 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy.orm import Session
 
-from api.v1.emails.crud.proxies import RepositoryEmail
 from api.v1.emails.logic.schemas import SignupEmailSchema
-from api.v1.login_methods.proxies import LoginMethodsProxy, RepositoryUserLoginMethod
 from api.v1.users.crud.proxies import RepositoryUser
 from core.controllers.saga.controller import StepSAGA
 from core.utils.exceptions import (
     DontFindResourceException,
-    PasswordNoneException,
-    PasswordNotValidException,
-    UserNameAndEmailIsEmptyException,
     UserNameUniqueException,
 )
-from core.utils.password import PasswordManager
 
 if TYPE_CHECKING:
     from models import UserModel
