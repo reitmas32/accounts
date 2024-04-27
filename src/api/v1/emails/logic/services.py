@@ -153,8 +153,10 @@ class LoginEmailService(BaseService):
 
         controller.execute()
 
+        jwt = controller.payloads[LoginUserStep]
+
         return create_simple_envelope_response(
-            data=None,
+            data=jwt,
             message="Sesion iniciada con exito",
             status_code=status.HTTP_200_OK,
             successful=True,

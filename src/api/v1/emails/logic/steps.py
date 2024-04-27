@@ -10,6 +10,7 @@ from core.utils.exceptions import (
     PasswordNotValidException,
     UserNameAndEmailIsEmptyException,
 )
+from core.utils.jwt import JWTHandler, TokenDataSchema
 from core.utils.password import PasswordManager
 
 
@@ -73,15 +74,15 @@ class LoginUserStep(StepSAGA):
             )
 
         self.repository_login_method.update_field_by_id(
-            id=self.login_method.id, field_name="active", new_value=True
+            id=self.login_method[0].id, field_name="active", new_value=True
         )
 
-        return user
+        return JWTHandler.create_token(TokenDataSchema(user_id=user.id.__str__()))
 
     def rollback(self):
         """
         Rollback the step, deleting the user account if it was created.
         """
         self.repository_login_method.update_field_by_id(
-            id=self.login_method.id, field_name="active", new_value=False
+            id=self.login_method[0].id, field_name="active", new_value=False
         )
