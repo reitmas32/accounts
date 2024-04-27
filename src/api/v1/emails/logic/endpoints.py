@@ -2,11 +2,15 @@ from fastapi import APIRouter, Depends, Request, status
 
 from api.v1.emails.logic.schemas import (
     LoginEmailSchema,
+    ResetPasswordConfirmSchema,
+    ResetPasswordSchema,
     SignupEmailSchema,
     VerifyEmailSchema,
 )
 from api.v1.emails.logic.services import (
     LoginEmailService,
+    ResetPasswordConfirmService,
+    ResetPasswordService,
     SignUpEmailService,
     VerifyCodeService,
 )
@@ -102,12 +106,27 @@ async def email_verify(
 )
 async def email_reset_password(
     request: Request,
-    payload: LoginEmailSchema,
+    payload: ResetPasswordSchema,
     _=Depends(check_authorization),
 ):
     log.info("Login")
     with use_database_session() as session:
-        return LoginEmailService(session=session).login(payload=payload)
+        return ResetPasswordService(session=session).reset_password(payload=payload)
+
+@router.put(
+    "/reset-password-confirm",
+    summary="Logea a un usuario por email y password",
+    status_code=status.HTTP_200_OK,
+    response_model=EnvelopeResponse,
+)
+async def email_reset_password_conform(
+    request: Request,
+    payload: ResetPasswordConfirmSchema,
+    _=Depends(check_authorization),
+):
+    log.info("Login")
+    with use_database_session() as session:
+        return ResetPasswordConfirmService(session=session).reset_password(payload=payload)
 
 
 @router.post(

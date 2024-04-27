@@ -3,23 +3,29 @@ from typing import TYPE_CHECKING
 
 from fastapi import status
 
-from api.v1.codes.crud.steps import SendEmailCodeStep
-from api.v1.emails.crud.steps import CreateEmailAuthStep
+from api.v1.codes.crud.steps import SendEmailCodeStep, VerifyCodeStep
+from api.v1.emails.crud.steps import CreateEmailAuthStep, FindEmailStep
 from api.v1.emails.logic.schemas import (
     LoginEmailSchema,
+    ResetPasswordConfirmSchema,
+    ResetPasswordSchema,
     RetrieveSingUpEmailSchema,
     SignupEmailSchema,
     VerifyEmailSchema,
 )
-from api.v1.emails.logic.steps import LoginUserStep
+from api.v1.emails.logic.steps import (
+    LoginUserStep,
+    ResetPasswordConfirmStep,
+    ResetPasswordStep,
+)
 from api.v1.login_methods.steps import AddUserLoginMethodStep
 from api.v1.users.crud.steps.associate_with_user import (
     ActivateUserLoginMethodStep,
     FindUserLoginMethodStep,
 )
-from api.v1.users.crud.steps.code import VerifyCodeStep
 from api.v1.users.crud.steps.user import CreateUserStep, FindUserStep
 from core.controllers.saga.controller import SagaController
+from core.utils.email import hide_email
 from core.utils.generic_views import (
     BaseService,
 )
@@ -189,7 +195,7 @@ class VerifyCodeService(BaseService):
         controller = SagaController(
             [
                 FindUserStep(user_name=payload.user_name, session=self.session),
-                VerifyCodeStep(code=payload.code, session=self.session),
+                FindEmailStep(),
                 FindUserLoginMethodStep(
                     type_login=UserLoginMethodsTypeEnum.EMAIL,
                     session=self.session,
@@ -203,6 +209,97 @@ class VerifyCodeService(BaseService):
         return create_simple_envelope_response(
             data=None,
             message="La cuenta fue activada correctamente",
+            status_code=status.HTTP_200_OK,
+            successful=True,
+        )
+
+
+class ResetPasswordService(BaseService):
+    model = CodeModel
+    schema = RetrieveSingUpEmailSchema
+
+    def __init__(self, session):
+        """
+        Initialize the SignUpEmailService.
+
+        Args:
+            session: Database session for interacting with the data.
+        """
+        self.session = session
+
+    def reset_password(self, payload: ResetPasswordSchema):
+        """
+        Create a user account using email-based authentication.
+
+        Args:
+            payload (SignupEmailSchema): Data payload containing email and password for user signup.
+
+        Returns:
+            dict: Envelope response containing user data, message, and status code.
+        """
+        controller = SagaController(
+            [
+                ResetPasswordStep(user_name=payload.user_name, session=self.session),
+            ],
+        )
+
+        controller.execute()
+
+        email: EmailModel = controller.payloads[ResetPasswordStep]
+
+        email_str = hide_email(email.email)
+
+        return create_simple_envelope_response(
+            data=None,
+            message=f"Se envio un codigo de verificacion a tu email registrado {email_str}",
+            status_code=status.HTTP_200_OK,
+            successful=True,
+        )
+
+
+class ResetPasswordConfirmService(BaseService):
+    model = CodeModel
+    schema = RetrieveSingUpEmailSchema
+
+    def __init__(self, session):
+        """
+        Initialize the SignUpEmailService.
+
+        Args:
+            session: Database session for interacting with the data.
+        """
+        self.session = session
+
+    def reset_password(self, payload: ResetPasswordConfirmSchema):
+        """
+        Create a user account using email-based authentication.
+
+        Args:
+            payload (SignupEmailSchema): Data payload containing email and password for user signup.
+
+        Returns:
+            dict: Envelope response containing user data, message, and status code.
+        """
+        controller = SagaController(
+            [
+                ResetPasswordConfirmStep(
+                    user_name=payload.user_name,
+                    code=payload.code,
+                    password=payload.password,
+                    session=self.session,
+                ),
+                VerifyCodeStep(session=self.session, code=payload.code),
+                ActivateUserLoginMethodStep(session=self.session)
+            ],
+        )
+
+        controller.execute()
+
+        user: UserModel = controller.payloads[ResetPasswordConfirmStep]
+
+        return create_simple_envelope_response(
+            data=None,
+            message=f"Se activo la nueva contraseña para {user.user_name}",
             status_code=status.HTTP_200_OK,
             successful=True,
         )
