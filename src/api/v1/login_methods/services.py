@@ -2,7 +2,7 @@ from uuid import UUID
 
 from fastapi import status
 
-from api.v1.codes.schemas import CreateCodeSchema
+from api.v1.codes.crud.schemas import CreateCodeSchema
 from api.v1.login_methods.proxies import LoginMethodsProxy
 from api.v1.login_methods.schemas import ListLoginMethodsSchema
 from core.utils.generic_views import (

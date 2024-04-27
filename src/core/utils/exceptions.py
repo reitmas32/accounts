@@ -283,6 +283,21 @@ class AccountUnverifiedException(BaseAppException):
     def __str__(self):
         return self.message
 
+class UserNameAndEmailIsEmptyException(BaseAppException):
+    error_key = "UserNameAndEmailIsEmpty"
+    status_code = status.HTTP_400_BAD_REQUEST
+
+    def __init__(self, message: str = "The user_name and email is empty") -> None:
+        self.message = message
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"account": self.message}
+
+    def __str__(self):
+        return self.message
+
+
 
 class StepSAGAException(BaseAppException):
     error_key = "StepSAGA"
