@@ -37,9 +37,7 @@ class CreateServicesService(BaseService):
         service: ServiceModel = self.session.execute(query).scalars().first()
 
         if service is not None:
-            raise ServiceNameException(
-                message=f"The service with name {service.service_name} is already in use"
-            )
+            raise ServiceNameException(message=f"The service with name {service.service_name} is already in use")
 
         if self.request_errors["validations_success"] is False:
             raise FormException(field_errors=self.request_errors["validations_errors"])
@@ -87,6 +85,20 @@ class RetrieveServicesService(ObjectBaseService):
         return create_simple_envelope_response(
             data=instance.dict(),
             message="Retrive Service",
+            status_code=status.HTTP_200_OK,
+            successful=True,
+        )
+
+class DeleteServicesService(ObjectBaseService):
+    model = ServiceProxy
+    schema = RetrieveServiceSchema
+
+    def delete(self, id: UUID):
+        self.delete_by_id(id=id)
+
+        return create_simple_envelope_response(
+            data=None,
+            message="Delete Service",
             status_code=status.HTTP_200_OK,
             successful=True,
         )

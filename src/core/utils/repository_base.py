@@ -124,6 +124,27 @@ class RepositoryBase(ABC):
         query = self.session.query(self.model).filter(self.model.id == id)
         return query.first()
 
+    def get_all(self) -> type | None:
+        """
+        Retrieve a record from the database by its unique identifier.
+
+        Parameters
+        ----------
+        id : uuid.UUID
+            The unique identifier of the record.
+
+        Returns
+        -------
+        Union[Type, None]
+            An instance of the associated model if found, otherwise None.
+
+        Examples
+        --------
+        >>> repo = UserRepository(session)
+        >>> user = repo.get_by_id(some_uuid)
+        """
+        return self.session.query(self.model).all()
+
     def get_by_attributes(
         self,
         return_query: bool = False,  # noqa: FBT001
@@ -205,6 +226,7 @@ class RepositoryBase(ABC):
             # In case of an error, roll back the changes
             self.session.rollback()
             message_error = f"Failed to add a new record: {e}"
+            log.error(message_error)
             raise SQLAlchemyError(message_error)
         return new_record
 

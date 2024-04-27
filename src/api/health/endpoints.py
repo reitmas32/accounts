@@ -1,9 +1,8 @@
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, status
 
-from core.settings import log, settings
-from core.utils.autorization import check_autorization
+from core.settings import settings
 from core.utils.responses import EnvelopeResponse
 
 router = APIRouter(tags=["Health Check"])
@@ -17,9 +16,7 @@ router = APIRouter()
     summary="Health service",
     response_model=EnvelopeResponse,
 )
-def health_check(dependency: None = Depends(check_autorization)) -> EnvelopeResponse:
-    log.info(dependency)
-
+def health_check() -> EnvelopeResponse:
     result = {
         "status": "ok",
         "message": "The service is online and functioning properly.",
@@ -30,5 +27,5 @@ def health_check(dependency: None = Depends(check_autorization)) -> EnvelopeResp
         body=result,
         status_code=status.HTTP_200_OK,
         successful=True,
-        message="The service is online and functioning properly."
+        message="The service is online and functioning properly.",
     )

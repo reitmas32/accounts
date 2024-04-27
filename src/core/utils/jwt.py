@@ -9,7 +9,7 @@ from core.utils.responses import get_current_date_time_to_app_standard
 
 
 class TokenDataSchema(BaseModel):
-    user_mother_id: str
+    user_id: str
 
 
 class JWTHandler:

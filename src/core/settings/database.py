@@ -8,10 +8,10 @@ from sqlalchemy.pool import NullPool
 from core.settings import log, settings
 from core.utils.exceptions import BaseAppException
 from models import (
-    AuthEmailModel,
     AuthGeneralPlatformModel,
     CodeModel,
-    UserLoginMethodModel,
+    EmailModel,
+    LoginMethodModel,
     UserModel,
 )
 from models.base_model import Base as BaseModel
@@ -71,9 +71,9 @@ def validate_db_conections():
         log.info("1) Table 'users'................. O.K")
         session.execute(select(CodeModel).select_from(CodeModel).limit(1)).all()
         log.info("2) Table 'codes'................. O.K")
-        session.execute(select(UserLoginMethodModel).select_from(UserLoginMethodModel).limit(1)).all()
+        session.execute(select(LoginMethodModel).select_from(LoginMethodModel).limit(1)).all()
         log.info("3) Table 'user_login_methods'..... O.K")
-        session.execute(select(AuthEmailModel).select_from(AuthEmailModel).limit(1)).all()
+        session.execute(select(EmailModel).select_from(EmailModel).limit(1)).all()
         log.info("4) Table 'auth_email'..... O.K")
         session.execute(select(AuthGeneralPlatformModel).select_from(AuthGeneralPlatformModel).limit(1)).all()
         log.info("5) Table 'auth_general_platform'..... O.K")
@@ -81,7 +81,7 @@ def validate_db_conections():
     except Exception as e:  # noqa: BLE001
         session.close()
         message_error = f"Error on validate_db_conections, message error: {e}"
-        raise BaseAppException(message_error)
+        raise BaseAppException(message_error)  # noqa: B904
 
 
 def init_db():

@@ -1,5 +1,7 @@
 from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
+from psycopg2.errors import ForeignKeyViolation
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from starlette.middleware.base import BaseHTTPMiddleware
 
@@ -21,6 +23,14 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
             if isinstance(e, NoResultFound):
                 error_detail = {"detail": f"No found: {e}"}
                 status_code = status.HTTP_404_NOT_FOUND
+            elif isinstance(e, IntegrityError):
+                error_detail = e.orig
+                status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+                if isinstance(e.orig, ForeignKeyViolation):
+                    err = e.orig
+                    error_detail = {f"{err.diag.table_name}": f"ForeignKeyViolation: {err.diag.table_name}"}
+                    status_code = status.HTTP_409_CONFLICT
+                    e = f"ForeignKeyViolation: {err.diag.table_name}"
             elif isinstance(e, BaseAppException):
                 error_detail = e.to_dict()
                 status_code = e.status_code
