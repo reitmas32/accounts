@@ -162,3 +162,15 @@ def get_current_manager_email_to_app_standard():
     return SendEmailManager.GMAIL_SENDER.value(
         EMAIL_SENDER=settings.EMAIL_SENDER, EMAIL_SENDER_PASSWORD=settings.EMAIL_SENDER_PASSWORD
     )
+
+
+def hide_email(email):
+    # Split the email into username and domain
+    username, domain = email.split("@")
+
+    # Hide part of the username
+    hidden = username[0] + "*" * (len(username) - 2) + username[-1]
+
+    # Reconstruct the hidden email
+    return hidden + "@" + domain
+

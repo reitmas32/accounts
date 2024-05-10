@@ -36,7 +36,7 @@ class SagaController:
                 self.payloads[type(step)] = last_payload
             except Exception as e:  # noqa: PERF203, BLE001
                 self.rollback()
-                raise StepSAGAException(e)  # noqa: B904
+                raise StepSAGAException(e)
         return self.payloads
 
     def rollback(self):

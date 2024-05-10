@@ -22,3 +22,13 @@ class RetrieveSingUpEmailSchema(BaseSchema):
 class VerifyEmailSchema(BaseModel):
     user_name: str
     code: str
+
+class ResetPasswordSchema(BaseModel):
+    user_name: str
+
+
+class ResetPasswordConfirmSchema(BaseModel):
+    user_name: str
+    code: str
+    password: str
+

@@ -81,7 +81,7 @@ def validate_db_conections():
     except Exception as e:  # noqa: BLE001
         session.close()
         message_error = f"Error on validate_db_conections, message error: {e}"
-        raise BaseAppException(message_error)  # noqa: B904
+        raise BaseAppException(message_error)
 
 
 def init_db():
