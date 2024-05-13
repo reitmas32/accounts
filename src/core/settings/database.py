@@ -41,10 +41,13 @@ def get_session() -> Generator:
 def create_schemas():
     schema_format = "CREATE SCHEMA IF NOT EXISTS {}"
     query_schema_public = text(schema_format.format("public"))
+    query_schema_accounts = text(schema_format.format("accounts"))
 
     with engine.connect() as conn:
         with conn.begin():
             conn.execute(query_schema_public)
+            conn.execute(query_schema_accounts)
+
 
         conn.close()
 
