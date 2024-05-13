@@ -195,7 +195,7 @@ class VerifyCodeService(BaseService):
         controller = SagaController(
             [
                 FindUserStep(user_name=payload.user_name, session=self.session),
-                FindEmailStep(),
+                VerifyCodeStep(code=payload.code, session=self.session),
                 FindUserLoginMethodStep(
                     type_login=UserLoginMethodsTypeEnum.EMAIL,
                     session=self.session,
