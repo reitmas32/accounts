@@ -45,6 +45,10 @@ class Settings(PydanticBaseSettings):
     EMAIL_SENDER: str
     EMAIL_SENDER_PASSWORD: str
 
+    # Auth-Manager
+    # ----------------------------------------------------------------
+    AUTH_MANAGER_URL: str
+
     # Project Constants
     # ----------------------------------------------------------------
     PROJECT_NAME: str = "Accounts"

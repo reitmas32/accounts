@@ -12,6 +12,7 @@ Base = declarative_base()
 
 class BaseModelClass(Base, QueryModel):
     __abstract__ = True
+    __table_args__ = {"schema": "accounts"}  # noqa: RUF012
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     created = Column(DateTime, default=datetime.datetime.utcnow)
     updated = Column(DateTime, default=datetime.datetime.utcnow, onupdate=datetime.datetime.utcnow)

@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from fastapi import status
 
 from api.v1.codes.crud.steps import SendEmailCodeStep, VerifyCodeStep
-from api.v1.emails.crud.steps import CreateEmailAuthStep, FindEmailStep
+from api.v1.emails.crud.steps import CreateEmailAuthStep
 from api.v1.emails.logic.schemas import (
     LoginEmailSchema,
     ResetPasswordConfirmSchema,
@@ -195,7 +195,7 @@ class VerifyCodeService(BaseService):
         controller = SagaController(
             [
                 FindUserStep(user_name=payload.user_name, session=self.session),
-                FindEmailStep(),
+                VerifyCodeStep(code=payload.code, session=self.session),
                 FindUserLoginMethodStep(
                     type_login=UserLoginMethodsTypeEnum.EMAIL,
                     session=self.session,
