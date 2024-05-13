@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 from fastapi import status
 
 from api.v1.codes.crud.steps import SendEmailCodeStep, VerifyCodeStep
-from api.v1.emails.crud.steps import CreateEmailAuthStep, FindEmailStep
+from api.v1.emails.crud.steps import CreateEmailAuthStep
 from api.v1.emails.logic.schemas import (
     LoginEmailSchema,
     ResetPasswordConfirmSchema,
