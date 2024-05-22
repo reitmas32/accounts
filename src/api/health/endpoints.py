@@ -1,6 +1,5 @@
-from datetime import datetime
-
 from fastapi import APIRouter, status
+from loguru import logger
 
 from core.settings import settings
 from core.utils.responses import EnvelopeResponse
@@ -17,10 +16,11 @@ router = APIRouter()
     response_model=EnvelopeResponse,
 )
 def health_check() -> EnvelopeResponse:
+    logger.info("Health")
     result = {
         "status": "ok",
         "message": "The service is online and functioning properly.",
-        "timestamp": datetime.now().astimezone().strftime(format=settings.DATE_TIME_FORMAT),
+        "timestamp": settings.TIMESTAP,
     }
     return EnvelopeResponse(
         errors=None,
