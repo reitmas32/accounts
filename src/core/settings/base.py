@@ -1,6 +1,7 @@
 # Standard Library
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import ClassVar
 
@@ -52,6 +53,7 @@ class Settings(PydanticBaseSettings):
     # Project Constants
     # ----------------------------------------------------------------
     PROJECT_NAME: str = "Accounts"
+    PROJECT_ID: str = "API0002"
     TEAM_NAME: str = "R2"
     TIME_ZONE: str = "utc"
     TIME_ZONE_UTC: str = "utc"
@@ -89,3 +91,4 @@ class Settings(PydanticBaseSettings):
     # ----------------------------------------------------------------
     DEFAULT_PAGE_SIZE: int = 30
     DEFAULT_ORDER_FIELD: str = "created"
+    TIMESTAP: datetime = datetime.now().astimezone().strftime(format=DATE_TIME_FORMAT)
