@@ -7,6 +7,7 @@ class EnvironmentsTypes(Enum):
     STAGING = "staging", "stg"
     PRODUCTION = "production", "prd"
     TESTING = "testing", "test"
+    DOCKER = "docker", "docker"
 
     @classmethod
     def _is_valid_env(cls, value: str) -> bool:
