@@ -17,7 +17,7 @@ from models import (
 from models.base_model import Base as BaseModel
 
 engine = create_engine(
-    settings.POSTGRESQL_URL.unicode_string(),
+    settings.POSTGRES_DSN.unicode_string(),
     poolclass=NullPool,
     connect_args={"application_name": "fee-api-service"},
 )
@@ -47,7 +47,6 @@ def create_schemas():
         with conn.begin():
             conn.execute(query_schema_public)
             conn.execute(query_schema_accounts)
-
 
         conn.close()
 
