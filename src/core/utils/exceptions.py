@@ -283,6 +283,7 @@ class AccountUnverifiedException(BaseAppException):
     def __str__(self):
         return self.message
 
+
 class UserNameAndEmailIsEmptyException(BaseAppException):
     error_key = "UserNameAndEmailIsEmpty"
     status_code = status.HTTP_400_BAD_REQUEST
@@ -296,7 +297,6 @@ class UserNameAndEmailIsEmptyException(BaseAppException):
 
     def __str__(self):
         return self.message
-
 
 
 class StepSAGAException(BaseAppException):

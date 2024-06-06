@@ -7,6 +7,7 @@ from pydantic import BaseModel
 # CRUD
 #################
 
+
 class CreateEmailSchema(BaseModel):
     email: str
     user_id: UUID
@@ -18,4 +19,3 @@ class ListEmailSchema(BaseModel):
     created: datetime
     email: str
     user_id: UUID
-

@@ -80,13 +80,9 @@ class LoginUserStep(StepSAGA):
             user_id=user.id, entity_id=email.id, verify=True
         )
         if self.login_method is None or len(self.login_method) == 0:
-            raise DontFindResourceException(
-                message="The login email is dont exist by this user", resource=""
-            )
+            raise DontFindResourceException(message="The login email is dont exist by this user", resource="")
 
-        self.repository_login_method.update_field_by_id(
-            id=self.login_method[0].id, field_name="active", new_value=True
-        )
+        self.repository_login_method.update_field_by_id(id=self.login_method[0].id, field_name="active", new_value=True)
 
         return JWTHandler.create_token(TokenDataSchema(user_id=user.id.__str__()))
 
@@ -117,9 +113,7 @@ class ResetPasswordStep(StepSAGA):
         self.repository_email = RepositoryEmail(session=session)
         self.repository_login_method = RepositoryUserLoginMethod(session=session)
         self.repository_code = RepositoryCode(session=session)
-        self.manager_email: SendEmailAbstract = (
-            get_current_manager_email_to_app_standard()
-        )
+        self.manager_email: SendEmailAbstract = get_current_manager_email_to_app_standard()
 
     def verify(self):
         if self.user_name is None and self.email is None:
@@ -151,13 +145,9 @@ class ResetPasswordStep(StepSAGA):
         if email is None:
             raise DontFindResourceException(resource="email")
 
-        login_method = self.repository_login_method.get_by_attributes(
-            user_id=user.id, entity_id=email.id
-        )
+        login_method = self.repository_login_method.get_by_attributes(user_id=user.id, entity_id=email.id)
         if login_method is None or len(login_method) == 0:
-            raise DontFindResourceException(
-                message="The login email is dont exist by this user", resource=""
-            )
+            raise DontFindResourceException(message="The login email is dont exist by this user", resource="")
 
         #######################################
         # Send Code
@@ -216,9 +206,7 @@ class ResetPasswordConfirmStep(StepSAGA):
         self.repository_email = RepositoryEmail(session=session)
         self.repository_login_method = RepositoryUserLoginMethod(session=session)
         self.repository_code = RepositoryCode(session=session)
-        self.manager_email: SendEmailAbstract = (
-            get_current_manager_email_to_app_standard()
-        )
+        self.manager_email: SendEmailAbstract = get_current_manager_email_to_app_standard()
 
     def verify(self):
         if self.user_name is None and self.email is None:
@@ -250,13 +238,9 @@ class ResetPasswordConfirmStep(StepSAGA):
         if self.email is None:
             raise DontFindResourceException(resource="email")
 
-        login_method = self.repository_login_method.get_by_attributes(
-            user_id=user.id, entity_id=self.email.id
-        )
+        login_method = self.repository_login_method.get_by_attributes(user_id=user.id, entity_id=self.email.id)
         if login_method is None or len(login_method) == 0:
-            raise DontFindResourceException(
-                message="The login email is dont exist by this user", resource=""
-            )
+            raise DontFindResourceException(message="The login email is dont exist by this user", resource="")
 
         #######################################
         # Change Password
@@ -278,4 +262,3 @@ class ResetPasswordConfirmStep(StepSAGA):
         """
         Rollback the step, deleting the user account if it was created.
         """
-

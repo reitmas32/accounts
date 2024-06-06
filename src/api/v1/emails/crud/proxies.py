@@ -19,7 +19,6 @@ class RetrieveEmailSchema(BaseSchema):
     email: str
 
 
-
 class RepositoryEmail(RepositoryBase):
     """
     Repository for operations related to email authentication.

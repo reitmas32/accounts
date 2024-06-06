@@ -45,6 +45,7 @@ class UserSchema(BaseModel):
     birthday: date | None = None
     extra_data: dict | None = None
 
+
 class RetrieveUserSchema(BaseSchema):
     """
     Schema for retrieving user information.
@@ -64,6 +65,6 @@ class RetrieveUserSchema(BaseSchema):
     user_name: str
     extra_data: dict | None = None
 
+
 class CreateUserSchema(UserSchema):
     pass
-

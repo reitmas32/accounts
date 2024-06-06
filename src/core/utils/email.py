@@ -173,4 +173,3 @@ def hide_email(email):
 
     # Reconstruct the hidden email
     return hidden + "@" + domain
-

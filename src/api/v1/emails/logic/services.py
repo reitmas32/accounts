@@ -289,7 +289,7 @@ class ResetPasswordConfirmService(BaseService):
                     session=self.session,
                 ),
                 VerifyCodeStep(session=self.session, code=payload.code),
-                ActivateUserLoginMethodStep(session=self.session)
+                ActivateUserLoginMethodStep(session=self.session),
             ],
         )
 

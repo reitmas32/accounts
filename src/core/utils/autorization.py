@@ -1,9 +1,5 @@
-import requests
-from fastapi import Header, status
+from fastapi import Header
 from fastapi.requests import Request
-
-from core.settings import settings
-from core.utils.exceptions import NotAuthorizationException
 
 
 def check_authorization(

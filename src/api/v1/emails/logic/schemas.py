@@ -14,14 +14,16 @@ class LoginEmailSchema(BaseModel):
     email: EmailStr | None = None
     password: str
 
-class RetrieveSingUpEmailSchema(BaseSchema):
 
+class RetrieveSingUpEmailSchema(BaseSchema):
     user_name: str
     email: str
+
 
 class VerifyEmailSchema(BaseModel):
     user_name: str
     code: str
+
 
 class ResetPasswordSchema(BaseModel):
     user_name: str
@@ -31,4 +33,3 @@ class ResetPasswordConfirmSchema(BaseModel):
     user_name: str
     code: str
     password: str
-

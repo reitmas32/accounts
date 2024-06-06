@@ -4,9 +4,9 @@ from loguru._logger import Core, Logger
 
 
 class JaloLogger(Logger):
-    def contextualize(__self, **kwargs: Any):
-        __self.trace_id = kwargs.get("trace_id")
-        __self.caller_id = kwargs.get("caller_id")
+    def contextualize(self, **kwargs: Any):
+        self.trace_id = kwargs.get("trace_id")
+        self.caller_id = kwargs.get("caller_id")
 
         return super().contextualize(**kwargs)
 

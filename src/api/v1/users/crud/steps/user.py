@@ -30,9 +30,7 @@ class CreateUserStep(StepSAGA):
         repository: Repository for user data operations.
     """
 
-    def __init__(
-        self, user: SignupEmailSchema, session: Session
-    ):  # TODO: Change SignupEmailSchema to UserSchema
+    def __init__(self, user: SignupEmailSchema, session: Session):  # TODO: Change SignupEmailSchema to UserSchema
         """
         Initialize the CreateUserStep.
 

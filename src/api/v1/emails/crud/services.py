@@ -18,6 +18,7 @@ from core.utils.responses import (
 
 logger = logging.getLogger(__name__)
 
+
 class ListEmailsService(ListBaseService):
     model = EmailProxy
     schema = ListEmailSchema

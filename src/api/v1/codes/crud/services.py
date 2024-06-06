@@ -83,6 +83,7 @@ class DeleteCodesService(RepositoryBase):
             successful=True,
         )
 
+
 class RepositoryCode(RepositoryBase):
     """
     Repository for operations related to verification codes.
