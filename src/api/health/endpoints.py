@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status
-from loguru import logger
 
 from core.settings import settings
+from core.utils.logger import logger
 from core.utils.responses import EnvelopeResponse
 
 router = APIRouter(tags=["Health Check"])
