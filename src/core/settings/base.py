@@ -35,7 +35,7 @@ class Settings(PydanticBaseSettings):
     CORS_ORIGINS: ClassVar[list[str]] = ["*"]
     # Database settings
     # ----------------------------------------------------------------
-    POSTGRESQL_URL: PostgresDsn
+    POSTGRES_DSN: PostgresDsn
 
     # Sentry settings
     # ----------------------------------------------------------------
@@ -48,8 +48,17 @@ class Settings(PydanticBaseSettings):
 
     # Auth-Manager
     # ----------------------------------------------------------------
-    AUTH_MANAGER_URL: str
-
+    AUTH_SERVICE_API_HOST: str
+    AUTHTENTICATION_ACTIVE: bool = True
+    PUBLIC_ENDPOINTS: list[str] = [
+        "/health",
+        "/docs",
+        "/favicon.ico",
+        "/openapi.json",
+        "",
+    ]
+    AUTH_SERVICE_API_VERSION: str = "v1"
+    AUTH_SERVICE_API_PREFIX: str = "services"
     # Project Constants
     # ----------------------------------------------------------------
     PROJECT_NAME: str = "Accounts"
