@@ -1,24 +1,25 @@
-import sys
+from typing import Any
 
-from loguru import logger
-
-from core.settings import settings
+from loguru._logger import Core, Logger
 
 
-class LoggerConfig:
+class JaloLogger(Logger):
+    def contextualize(__self, **kwargs: Any):
+        __self.trace_id = kwargs.get("trace_id")
+        __self.caller_id = kwargs.get("caller_id")
+
+        return super().contextualize(**kwargs)
 
 
-    @staticmethod
-    def load_format():
-        _custom_format = (
-        "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | "
-        "<level>{level: <8}</level> | "
-        "<yellow>{extra[trace_id]}</yellow> | "
-        "<magenta>{extra[caller_id]}</magenta> | "
-        "<green>{extra[project_id]}</green> | "
-        "<cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - "
-        "<level>{message}</level> | "
-    )
-        logger.configure(extra={"trace_id": None, "caller_id": None, "project_id": settings.PROJECT_ID})
-        logger.remove()
-        logger.add(sys.stdout, colorize=True, format=_custom_format)
+logger = JaloLogger(
+    core=Core(),
+    exception=None,
+    depth=0,
+    record=False,
+    lazy=False,
+    colors=False,
+    raw=False,
+    capture=True,
+    patchers=[],
+    extra={},
+)
