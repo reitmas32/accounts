@@ -1,23 +1,18 @@
-version: "3"
-
 services:
   db:
     image: postgres:15
     env_file:
       - ./.envs/.env.postgres
     ports:
-      - 5433:5432
+      - 5440:5432
     networks:
       - "local-development"
-
   tests:
     build:
       dockerfile: ./deployment/testing/Dockerfile
     env_file:
       - ./.envs/.env.base
       - ./.envs/.env.test
-    depends_on:
-      - db
     ports:
       - 9001:9000
     networks:
@@ -26,18 +21,15 @@ services:
   app:
     build:
       dockerfile: Dockerfile
+    environment:
+      - ENVIRONMENT=docker
     env_file:
-      - ./.envs/.env.base
-      - ./.envs/.env.dev
-    depends_on:
-      - db
+      - ./.envs/.env.docker
     ports:
       - 9001:9000
     networks:
       - "local-development"
-
-  linter:
-    build:
-      dockerfile: deployment/linter/Dockerfile
+    depends_on:
+      - db
 networks:
   local-development:
