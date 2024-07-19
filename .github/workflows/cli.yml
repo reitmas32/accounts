@@ -1,0 +1,56 @@
+name: CI Pipeline
+on:
+  push:
+    branches:
+      - main
+      - development
+      - staging
+      - testing
+  pull_request:
+    branches:
+      - main
+      - development
+      - staging
+      - testing
+jobs:
+  run-tests:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run Tests and Collect Artifacts
+        uses: ronihdzz/test-action@v2
+        with:
+          gh-token: ${{ secrets.GH_TOKEN }}
+          artifacts-branch: 'artifacts'
+          dockerfile-path: 'deployment/Dockerfile.test'
+  build-and-push-docker-hub:
+    name: Push to Docker Hub
+    runs-on: ubuntu-latest
+    needs: run-tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build and Push
+        uses: ronihdzz/push-to-dockerhub-action@v2
+        with:
+          dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+          dockerhub-password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          dockerhub-repository: ${{ vars.DOCKERHUB_REPOSITORY }}
+          dockerfile-path: "deployment/Dockerfile.deploy"
+          branch-environment-map: '{"main": "prod", "development": "dev", "staging": "stg", "testing": "test"}'
+  build-and-push-digital-ocean:
+    name: Push to Digital Ocean
+    runs-on: ubuntu-latest
+    needs: run-tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build and Push
+        uses: ronihdzz/push-to-digitalocean-action@v2
+        with:
+          digitalocean-token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+          digitalocean-repository: ${{ vars.DIGITALOCEAN_REPOSITORY }}
+          dockerfile-path: "deployment/Dockerfile.deploy"
+          branch-environment-map: '{"main": "prod", "development": "dev", "staging": "stg", "testing": "test"}'
