@@ -273,6 +273,20 @@ files = [
 toml = ["tomli"]
 
 [[package]]
+name = "coverage-badge"
+version = "1.1.1"
+description = "Generate coverage badges for Coverage.py."
+optional = false
+python-versions = "*"
+files = [
+    {file = "coverage-badge-1.1.1.tar.gz", hash = "sha256:42252df917404af6147380861228a4ace3d9a29804df8fc2d34a22b2bc4f45b6"},
+    {file = "coverage_badge-1.1.1-py2.py3-none-any.whl", hash = "sha256:1d8e566ad47c37910fa2bbc74ea19972b171b5b4e40624b31b3e2f2d93680266"},
+]
+
+[package.dependencies]
+coverage = "*"
+
+[[package]]
 name = "cryptocode"
 version = "0.1"
 description = "Python library used to encrypt and decrypt strings in the simplest possible way."
@@ -1196,4 +1210,4 @@ dev = ["black (>=19.3b0)", "pytest (>=4.6.2)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "e5dfdb557a39deb352e486b7a123ebc70db6dbd8e2a9f309749c7b837d6581ae"
+content-hash = "27ff3a363b202227aae897aca4949df150510788ccf4b859b6f87bee72410764"
