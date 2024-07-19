@@ -9,7 +9,7 @@ services:
       - "local-development"
   tests:
     build:
-      dockerfile: ./deployment/testing/Dockerfile
+      dockerfile: deployment/Dockerfile.test
     env_file:
       - ./.envs/.env.base
       - ./.envs/.env.test
@@ -17,10 +17,11 @@ services:
       - 9001:9000
     networks:
       - "local-development"
-
+    depends_on:
+      - db
   app:
     build:
-      dockerfile: Dockerfile
+      dockerfile: deployment/Dockerfile.deploy
     environment:
       - ENVIRONMENT=docker
     env_file:
