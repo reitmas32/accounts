@@ -115,8 +115,9 @@ class ZohoSendEmail(SendEmailAbstract):
             message_text (str): Main message content of the email.
         """
         try:
-            server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-            server.ehlo()
+            server = smtplib.SMTP_SSL("smtp.zoho.com", 465)
+
+            # Perform operations via server
             server.login(user=self.EMAIL_SENDER, password=self.EMAIL_SENDER_PASSWORD)
             subject = Header(subject_text, "utf-8")
             msg = MIMEMultipart()
@@ -127,6 +128,7 @@ class ZohoSendEmail(SendEmailAbstract):
             try:
                 log.info("Sending message")
                 server.sendmail(self.EMAIL_SENDER, email_subject, msg.as_string())
+                server.quit()
             except Exception as e:  # noqa: BLE001
                 log.error(f"Error sending message, error: {e}")
             log.info("Message sent successfully")
@@ -159,7 +161,7 @@ def get_current_manager_email_to_app_standard():
     Returns:
         SendEmailAbstract: An instance of the email sender manager.
     """
-    return SendEmailManager.GMAIL_SENDER.value(
+    return SendEmailManager.ZOHO_SENDER.value(
         EMAIL_SENDER=settings.EMAIL_SENDER, EMAIL_SENDER_PASSWORD=settings.EMAIL_SENDER_PASSWORD
     )
 
