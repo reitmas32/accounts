@@ -6,6 +6,17 @@ class AbstractEnum(Enum):
     def list_values(cls):
         return [member.value for member in cls]
 
+class PlatformsLogin(str, Enum):
+    FACEBOOK = "facebook"
+    GOOGLE = "google"
+    APPLE = "apple"
+
+    @staticmethod
+    def get_enum_from_str(value_str: str):
+        for enum_value in UserAuthMethodEnum:
+            if enum_value.value == value_str:
+                return enum_value
+        raise ValueError("Invalid value for UserAuthMethodEnum")
 
 class UserLoginMethodsTypeEnum(AbstractEnum):
     FACEBOOK = "facebook"
