@@ -48,7 +48,7 @@ async def email_signup(
     """
     log.info("Create User")
     with use_database_session() as session:
-        log.info("Create a DisbursementPeriod")
+        log.info("Create a Email")
         return SignUpEmailService(session=session).create(payload=payload)
 
 
@@ -94,7 +94,7 @@ async def email_verify(
     """
     log.info("Create User")
     with use_database_session() as session:
-        log.info("Create a DisbursementPeriod")
+        log.info("Verify Email")
         return VerifyCodeService(session=session).verify(payload=payload)
 
 
