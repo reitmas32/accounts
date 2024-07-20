@@ -79,11 +79,6 @@ class Settings(PydanticBaseSettings):
     TIME_SECONDS_EXPIRE_TOKEN_JWT: int = 60 * 60 * 24
     ALGORITHM_JWT: JWTAlgorithmsEnum = JWTAlgorithmsEnum.RS256
 
-    # Root Settings
-    ROOT_API_KEY: str
-    ROOT_SERVICE_NAME: str
-    ROOT_ENCRYPTED_KEY: str
-
     # JWT
     PRIVATE_KEY_JWT: str
     PUBLIC_KEY_JWT: str
