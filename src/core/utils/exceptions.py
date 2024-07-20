@@ -178,6 +178,22 @@ class UserNameUniqueException(BaseAppException):
     def __str__(self):
         return self.message
 
+class PlatformSignUpUniqueException(BaseAppException):
+    error_key = "PlatformSignUpUnique"
+    status_code = status.HTTP_409_CONFLICT
+
+    def __init__(
+        self, message: str = "There is already a registered user with the platform: ", platform: str = ""
+    ) -> None:
+        self.message = f"{message} {platform}"
+        logger.error(self.message)
+
+    def to_dict(self):
+        return {"platform": self.message}
+
+    def __str__(self):
+        return self.message
+
 
 class DontFindResourceException(BaseAppException):
     error_key = "DontFindResoruce"
