@@ -87,7 +87,7 @@ async def create(
 ):
     log.info("Create User")
     with use_database_session() as session:
-        log.info("Create a DisbursementPeriod")
+        log.info("Create a User")
         return CreateUserService(session=session).create(payload=payload)
 
 
