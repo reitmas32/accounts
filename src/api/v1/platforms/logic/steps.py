@@ -1,25 +1,21 @@
 from typing import TYPE_CHECKING
-from uuid import UUID
 
 from sqlalchemy.orm import Session
 
-from api.v1.emails.logic.schemas import SignupEmailSchema
 from api.v1.platforms.crud.proxies import RepositoryPlatformUser
 from api.v1.platforms.logic.schemas import SignupPlatformSchema
 from api.v1.users.crud.proxies import RepositoryUser
 from api.v1.users.crud.schemas import UserSchema
 from core.controllers.saga.controller import StepSAGA
 from core.utils.exceptions import (
-    DontFindResourceException,
     PlatformSignUpUniqueException,
     UserNameUniqueException,
 )
 from core.utils.jwt import JWTHandler, TokenDataSchema
-from models.auth_general_platform import AuthGeneralPlatformModel
-from models.enum import PlatformsLogin
 
 if TYPE_CHECKING:
     from models import UserModel
+    from models.auth_general_platform import AuthGeneralPlatformModel
 
 
 class CreateUserStep(StepSAGA):
@@ -38,9 +34,7 @@ class CreateUserStep(StepSAGA):
         repository: Repository for user data operations.
     """
 
-    def __init__(
-        self, user: UserSchema, session: Session
-    ):  # TODO: Change SignupEmailSchema to UserSchema
+    def __init__(self, user: UserSchema, session: Session):  # TODO: Change SignupEmailSchema to UserSchema
         """
         Initialize the CreateUserStep.
 
@@ -101,9 +95,7 @@ class CreatePlatformUserStep(StepSAGA):
         repository: Repository for user data operations.
     """
 
-    def __init__(
-        self, user: SignupPlatformSchema, session: Session
-    ):  # TODO: Change SignupEmailSchema to UserSchema
+    def __init__(self, user: SignupPlatformSchema, session: Session):  # TODO: Change SignupEmailSchema to UserSchema
         """
         Initialize the CreateUserStep.
 
@@ -113,9 +105,7 @@ class CreatePlatformUserStep(StepSAGA):
         """
         self.user_created = None
         self.user = user
-        self.repository: RepositoryPlatformUser = RepositoryPlatformUser(
-            session=session
-        )
+        self.repository: RepositoryPlatformUser = RepositoryPlatformUser(session=session)
 
     def __call__(self, payload: None = None, all_payloads: dict | None = None):  # noqa: ARG002
         """
@@ -142,9 +132,7 @@ class CreatePlatformUserStep(StepSAGA):
             active=False,
         )
 
-        return JWTHandler.create_token(
-            TokenDataSchema(user_id=self.platform_user_created.user_id.__str__())
-        )
+        return JWTHandler.create_token(TokenDataSchema(user_id=self.platform_user_created.user_id.__str__()))
 
     def rollback(self):
         """

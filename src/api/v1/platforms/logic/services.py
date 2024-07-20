@@ -42,7 +42,7 @@ class SignUpPlatformService(BaseService):
         controller = SagaController(
             [
                 CreateUserStep(user=payload, session=self.session),
-                CreatePlatformUserStep(user=payload, session=self.session)
+                CreatePlatformUserStep(user=payload, session=self.session),
             ],
         )
         payloads = controller.execute()

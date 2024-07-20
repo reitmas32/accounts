@@ -156,7 +156,7 @@ def validation_group(validation_function):
     def wrapper(self, *args, **kwargs):
         result_validation_function = validation_function(self, *args, **kwargs)
         returns_validation_function_number = (
-            len(result_validation_function) if type(result_validation_function) == tuple else 1
+            len(result_validation_function) if type(result_validation_function) == tuple else 1  # noqa: E721
         )
         if returns_validation_function_number <= 1:
             errors = result_validation_function

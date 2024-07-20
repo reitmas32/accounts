@@ -1,11 +1,5 @@
 from fastapi import APIRouter, Depends, Request, status
 
-from api.v1.emails.logic.schemas import (
-    SignupEmailSchema,
-)
-from api.v1.emails.logic.services import (
-    SignUpEmailService,
-)
 from api.v1.platforms.logic.schemas import SignupPlatformSchema
 from api.v1.platforms.logic.services import SignUpPlatformService
 from core.settings import log
@@ -44,4 +38,3 @@ async def platform_signup(
     with use_database_session() as session:
         log.info("Signup with platform")
         return SignUpPlatformService(session=session).create(payload=payload)
-

@@ -2,7 +2,7 @@ from sqlalchemy import Boolean, Column, Enum, ForeignKey, String
 from sqlalchemy.orm import relationship
 
 from models.base_model import BaseModelClass
-from models.enum import PlatformsLogin, UserAuthMethodEnum
+from models.enum import PlatformsLogin
 
 from .user import UserModel
 

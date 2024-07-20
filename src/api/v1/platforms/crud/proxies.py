@@ -60,9 +60,7 @@ class RepositoryPlatformUser(RepositoryBase):
         result = self.session.execute(query).first()
         return result is not None
 
-    def get_platform_by_user_id(
-        self, user_id: str, platform: PlatformsLogin
-    ) -> UserModel:
+    def get_platform_by_user_id(self, user_id: str, platform: PlatformsLogin) -> UserModel:
         """
         Retrieves an EmailModel record associated with the given email.
 

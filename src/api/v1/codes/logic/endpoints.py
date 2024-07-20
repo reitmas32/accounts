@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, Depends, Request, status
 
 from api.v1.codes.logic.schemas import ResentCodeSchema
@@ -9,6 +8,7 @@ from core.utils.autorization import check_authorization
 from core.utils.responses import EnvelopeResponse
 
 router = APIRouter(prefix="/codes", tags=["codes"])
+
 
 @router.post(
     "",

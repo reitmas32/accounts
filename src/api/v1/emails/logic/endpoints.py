@@ -113,6 +113,7 @@ async def email_reset_password(
     with use_database_session() as session:
         return ResetPasswordService(session=session).reset_password(payload=payload)
 
+
 @router.put(
     "/reset-password-confirm",
     summary="Logea a un usuario por email y password",

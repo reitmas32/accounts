@@ -86,4 +86,3 @@ async def delte(
     with use_database_session() as session:
         log.info("Get only one Service")
         return DeleteEmailsService(session=session).delete(id=id)
-

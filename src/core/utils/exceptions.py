@@ -178,6 +178,7 @@ class UserNameUniqueException(BaseAppException):
     def __str__(self):
         return self.message
 
+
 class PlatformSignUpUniqueException(BaseAppException):
     error_key = "PlatformSignUpUnique"
     status_code = status.HTTP_409_CONFLICT

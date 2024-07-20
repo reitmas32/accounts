@@ -12,7 +12,7 @@ class UserModel(BaseModelClass):
     extra_data = Column(JSON, nullable=True)
 
     @staticmethod
-    def generate_default_username(target, connection, **kw):
+    def generate_default_username(target, connection, **kw):  # noqa: ARG004
         if target.user_name is None:
             session = Session.object_session(target)
             count = session.query(UserModel).count() if session else 0
