@@ -51,6 +51,11 @@ class Settings(PydanticBaseSettings):
     AUTH_SERVICE_API_HOST: str
     AUTHTENTICATION_ACTIVE: bool = True
     PUBLIC_ENDPOINTS: list[str] = [
+        "/accounts/health",
+        "/accounts/docs",
+        "/accounts/favicon.ico",
+        "/accounts/openapi.json",
+        "/accounts",
         "/health",
         "/docs",
         "/favicon.ico",

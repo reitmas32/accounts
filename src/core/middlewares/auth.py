@@ -16,8 +16,8 @@ class AuthenticationMiddelware(BaseHTTPMiddleware):
         if not settings.AUTHTENTICATION_ACTIVE:
             return await call_next(request)
 
-        path = request.url.path.rstrip("/")
-
+        path = request.url.path.rstrip("/") # /accounts/docs -> /docs
+        logger.info(f"The Path is {path}")
         try:
             if path not in settings.PUBLIC_ENDPOINTS:
                 service_name = request.headers.get("x-service-name", "")
