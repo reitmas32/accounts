@@ -1,7 +1,7 @@
 FROM python:3.11-alpine
 
 ENV PYTHONUNBUFFERED=1
-
+ENV ROOT_PATH=""
 RUN apk update && apk add --no-cache \
     gcc \
     musl-dev \
@@ -21,4 +21,4 @@ RUN cd /tmp \
 
 COPY ./src /application/src
 EXPOSE 9000
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "9000", "--workers", "1"]
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port 9000 --workers 1 --root-path $ROOT_PATH"]
