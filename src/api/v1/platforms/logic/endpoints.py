@@ -76,6 +76,7 @@ async def platform_signin(
         log.info("Signup with platform")
         return SignInPlatformService(session=session).signin(payload=payload)
 
+
 @router.get(
     "/verify-token",
     summary="Verify JWT via platform",
