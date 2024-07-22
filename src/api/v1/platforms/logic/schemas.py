@@ -5,7 +5,7 @@ from models.enum import PlatformsLogin
 
 
 class SignupPlatformSchema(UserSchema):
-    external_token: str
+    external_id: str
     user_name: str | None = None
     platform: PlatformsLogin
     metadata: dict | None = None
@@ -13,7 +13,7 @@ class SignupPlatformSchema(UserSchema):
 
 
 class SignInPlatformSchema(BaseModel):
-    external_token: str
+    external_id: str
     platform: PlatformsLogin
     token: str
 

@@ -119,7 +119,7 @@ class CreatePlatformUserStep(StepSAGA):
             UserModel: User object created during the step.
         """
         existing_platform_user = self.repository.exists_id_of_platform(
-            external_token=self.user.external_token,
+            external_id=self.user.external_id,
             platform=self.user.platform,
             user_id=payload.id,
         )
@@ -128,7 +128,7 @@ class CreatePlatformUserStep(StepSAGA):
 
         self.platform_user_created: AuthGeneralPlatformModel = self.repository.add(
             user_id=payload.id,
-            external_token=self.user.external_token,
+            external_id=self.user.external_id,
             type=self.user.platform,
             active=False,
         )
@@ -182,14 +182,14 @@ class FindPlatformUserStep(StepSAGA):
             UserModel: User object created during the step.
         """
         existing_platform_user = self.repository.exists_id_of_platform(
-            external_token=self.user.external_token,
+            external_id=self.user.external_id,
             platform=self.user.platform,
             user_id=None,
         )
         if not existing_platform_user:
             raise DontFindResourceException(resource=f"User with platform {self.user.platform}")
 
-        return JWTHandler.create_token(TokenDataSchema(user_id=self.user.external_token.__str__()))
+        return JWTHandler.create_token(TokenDataSchema(user_id=self.user.external_id.__str__()))
 
     def rollback(self):
         """
