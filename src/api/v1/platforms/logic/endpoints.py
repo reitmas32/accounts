@@ -85,7 +85,7 @@ async def platform_signin(
 )
 async def verify_token(
     request: Request,
-    token: str = Header(),
+    Authorization: str = Header(),
     _=Depends(check_authorization),
 ):
     """
@@ -102,4 +102,4 @@ async def verify_token(
         dict: Envelope response containing user data, message, and status code.
     """
     log.info("Verify JWT")
-    return VerifyJWTService().verify_token(token=token.split()[1])
+    return VerifyJWTService().verify_token(token=Authorization.split()[1])
