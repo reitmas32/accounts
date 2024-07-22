@@ -32,7 +32,7 @@ class RepositoryPlatformUser(RepositoryBase):
 
     def exists_id_of_platform(
         self,
-        hashed_platform_id: str,
+        external_token: str,
         platform: PlatformsLogin,
         user_id: UUID,
     ) -> bool:
@@ -48,7 +48,7 @@ class RepositoryPlatformUser(RepositoryBase):
         query = select(self.model).where(
             or_(
                 and_(
-                    self.model.hashed_platform_id == hashed_platform_id,
+                    self.model.external_token == external_token,
                     self.model.type == platform,
                 ),
                 and_(

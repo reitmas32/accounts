@@ -5,12 +5,16 @@ from models.enum import PlatformsLogin
 
 
 class SignupPlatformSchema(UserSchema):
-    id_user: str
+    external_token: str
     user_name: str | None = None
     platform: PlatformsLogin
     metadata: dict | None = None
 
 
 class SignInPlatformSchema(BaseModel):
-    id_user: str
+    external_token: str
     platform: PlatformsLogin
+
+
+class TokenData(BaseModel):
+    username: str | None = None
