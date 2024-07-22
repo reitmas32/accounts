@@ -40,9 +40,9 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
 
             response = EnvelopeResponse(
                 errors=error_detail,
-                body=None,
+                data=None,
                 message=str(e),
-                status_code=status_code,
-                successful=False,
+                response_code=status_code,
+                success=False,
             )
             return JSONResponse(status_code=status_code, content=dict(response))

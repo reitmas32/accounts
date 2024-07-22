@@ -109,6 +109,7 @@ class SignInPlatformService(BaseService):
             successful=True,
         )
 
+
 class VerifyJWTService(BaseService):
     """
     Service for platform user signup.
@@ -118,7 +119,6 @@ class VerifyJWTService(BaseService):
     Args:
         session: Database session for interacting with the data.
     """
-
 
     def __init__(self):
         """
@@ -133,7 +133,7 @@ class VerifyJWTService(BaseService):
 
         return create_simple_envelope_response(
             data=None,
-            message="Sesion iniciada con exito",
+            message="JWT Valid",
             status_code=status.HTTP_200_OK,
             successful=True,
         )
