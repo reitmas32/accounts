@@ -37,10 +37,10 @@ class SimpleEnvelopeResponseBody(BaseModel):
 class EnvelopeResponse(BaseModel):
     errors: Any | None = None
     message: str | None = None
-    status_code: int
-    successful: bool
+    response_code: int
+    success: bool
 
-    body: str | dict | EnvelopeResponseBody | ListEnvelopeResponseBody | None = None
+    data: str | dict | EnvelopeResponseBody | ListEnvelopeResponseBody | None = None
 
 
 def create_envelope_response(  # noqa: PLR0913
@@ -54,10 +54,10 @@ def create_envelope_response(  # noqa: PLR0913
     body = EnvelopeResponseBody(links=links, count=count, results=data).model_dump()
     return EnvelopeResponse(
         errors=None,
-        body=body,
+        data=body,
         message=message,
-        status_code=status_code,
-        successful=successful,
+        response_code=status_code,
+        success=successful,
     )
 
 
@@ -69,10 +69,10 @@ def create_simple_envelope_response(
 ):
     return EnvelopeResponse(
         errors=None,
-        body=data,
+        data=data,
         message=message,
-        status_code=status_code,
-        successful=successful,
+        response_code=status_code,
+        success=successful,
     )
 
 
