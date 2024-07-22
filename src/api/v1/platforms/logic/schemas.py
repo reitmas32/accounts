@@ -9,11 +9,13 @@ class SignupPlatformSchema(UserSchema):
     user_name: str | None = None
     platform: PlatformsLogin
     metadata: dict | None = None
+    token: str
 
 
 class SignInPlatformSchema(BaseModel):
     external_token: str
     platform: PlatformsLogin
+    token: str
 
 
 class TokenData(BaseModel):
