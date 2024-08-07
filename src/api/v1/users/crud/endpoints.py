@@ -104,3 +104,17 @@ async def delte(
     with use_database_session() as session:
         log.info("Get only one Service")
         return DeleteCodesService(session=session).delete(id=id)
+
+
+
+
+@router.get(
+    "/ceo",
+)
+async def retrieve_one(
+    request: Request,
+):
+    log.info("Get User")
+    return {
+        "name":"Alex"
+    }
