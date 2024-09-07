@@ -8,7 +8,6 @@ from api.v1.users.crud.schemas import CreateUserSchema
 from api.v1.users.crud.services import CreateUserService, RetrieveUserService
 from core.settings import log
 from core.settings.database import get_session, use_database_session
-from core.utils.autorization import check_authorization
 from core.utils.responses import (
     EnvelopeResponse,
 )
@@ -24,7 +23,6 @@ router = APIRouter(prefix="/users", tags=["CRUD users"])
 )
 async def retrieve_all(
     request: Request,
-    _=Depends(check_authorization),
     session: Session = Depends(get_session),
 ):
     """
@@ -53,7 +51,6 @@ async def retrieve_all(
 async def retrieve_one(
     request: Request,
     user_id: UUID,
-    _=Depends(check_authorization),
     session: Session = Depends(get_session),
 ):
     """
@@ -83,7 +80,6 @@ async def retrieve_one(
 async def create(
     request: Request,
     payload: CreateUserSchema,
-    _=Depends(check_authorization),
 ):
     log.info("Create User")
     with use_database_session() as session:
@@ -99,22 +95,7 @@ async def create(
 )
 async def delte(
     id: UUID,
-    _=Depends(check_authorization),
 ):
     with use_database_session() as session:
         log.info("Get only one Service")
         return DeleteCodesService(session=session).delete(id=id)
-
-
-
-
-@router.get(
-    "/ceo",
-)
-async def retrieve_one(
-    request: Request,
-):
-    log.info("Get User")
-    return {
-        "name":"Alex"
-    }

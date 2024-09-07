@@ -12,7 +12,6 @@ from api.v1.login_methods.services import (
 )
 from core.settings import log
 from core.settings.database import use_database_session
-from core.utils.autorization import check_authorization
 from core.utils.responses import (
     EnvelopeResponse,
     PaginationParams,
@@ -32,7 +31,6 @@ async def get_all(
     request: Request,
     pagination_params: PaginationParams = Depends(default_pagination_params),
     query_params: FilterLoginMethodSchema = Depends(),
-    _=Depends(check_authorization),
 ) -> ListLoginMethodService:
     with use_database_session() as session:
         log.info("Get List of login methods")
@@ -50,7 +48,6 @@ async def get_all(
 )
 async def retrieve(
     id: UUID,
-    _=Depends(check_authorization),
 ) -> RetrieveLoginMethodService:
     with use_database_session() as session:
         log.info("Get only one Login Method")
@@ -66,7 +63,6 @@ async def retrieve(
 async def create(
     request: Request,
     payload: CreateLoginMethodSchema,
-    _=Depends(check_authorization),
 ):
     log.info("Create Login Method")
     with use_database_session() as session:
@@ -81,7 +77,6 @@ async def create(
 )
 async def delte(
     id: UUID,
-    _=Depends(check_authorization),
 ) -> RetrieveLoginMethodService:
     with use_database_session() as session:
         return DeleteLoginMethodService(session=session).delete(id=id)

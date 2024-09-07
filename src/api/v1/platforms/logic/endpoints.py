@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Header, Request, status
+from fastapi import APIRouter, Header, Request, status
 
 from api.v1.platforms.logic.schemas import (
     SignInPlatformSchema,
@@ -11,7 +11,6 @@ from api.v1.platforms.logic.services import (
 )
 from core.settings import log
 from core.settings.database import use_database_session
-from core.utils.autorization import check_authorization
 from core.utils.responses import EnvelopeResponse
 
 router = APIRouter(prefix="/platforms", tags=["Logic Platforms"])
@@ -26,7 +25,6 @@ router = APIRouter(prefix="/platforms", tags=["Logic Platforms"])
 async def platform_signup(
     request: Request,
     payload: SignupPlatformSchema,
-    _=Depends(check_authorization),
 ):
     """
     Create a user registration via email.
@@ -56,7 +54,6 @@ async def platform_signup(
 async def platform_signin(
     request: Request,
     payload: SignInPlatformSchema,
-    _=Depends(check_authorization),
 ):
     """
     Create a user registration via email.
@@ -86,7 +83,6 @@ async def platform_signin(
 async def verify_token(
     request: Request,
     auth: str = Header(),
-    _=Depends(check_authorization),
 ):
     """
     Create a user registration via email.

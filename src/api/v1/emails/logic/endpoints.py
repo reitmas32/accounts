@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request, status
+from fastapi import APIRouter, Request, status
 
 from api.v1.emails.logic.schemas import (
     LoginEmailSchema,
@@ -16,7 +16,6 @@ from api.v1.emails.logic.services import (
 )
 from core.settings import log
 from core.settings.database import use_database_session
-from core.utils.autorization import check_authorization
 from core.utils.responses import EnvelopeResponse
 
 router = APIRouter(prefix="/emails", tags=["Logic emails"])
@@ -31,7 +30,6 @@ router = APIRouter(prefix="/emails", tags=["Logic emails"])
 async def email_signup(
     request: Request,
     payload: SignupEmailSchema,
-    _=Depends(check_authorization),
 ):
     """
     Create a user registration via email.
@@ -61,7 +59,6 @@ async def email_signup(
 async def email_login(
     request: Request,
     payload: LoginEmailSchema,
-    _=Depends(check_authorization),
 ):
     log.info("Login")
     with use_database_session() as session:
@@ -77,7 +74,6 @@ async def email_login(
 async def email_verify(
     request: Request,
     payload: VerifyEmailSchema,
-    _=Depends(check_authorization),
 ):
     """
     Create a user registration via email.\n
@@ -107,7 +103,6 @@ async def email_verify(
 async def email_reset_password(
     request: Request,
     payload: ResetPasswordSchema,
-    _=Depends(check_authorization),
 ):
     log.info("Login")
     with use_database_session() as session:
@@ -123,7 +118,6 @@ async def email_reset_password(
 async def email_reset_password_conform(
     request: Request,
     payload: ResetPasswordConfirmSchema,
-    _=Depends(check_authorization),
 ):
     log.info("Login")
     with use_database_session() as session:
@@ -139,7 +133,6 @@ async def email_reset_password_conform(
 async def email_send_code(
     request: Request,
     payload: LoginEmailSchema,
-    _=Depends(check_authorization),
 ):
     log.info("Login")
     with use_database_session() as session:
