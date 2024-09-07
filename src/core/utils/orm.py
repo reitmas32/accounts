@@ -38,7 +38,7 @@ class Manager(Generic[T]):
         return instance
 
     def get(self, *args, **kwargs) -> T:
-        self = self.filter(*args, **kwargs)
+        self = self.filter(*args, **kwargs)  # noqa: PLW0642
         return self.scalars().one_or_none()
 
     def all(self) -> list[T]:
