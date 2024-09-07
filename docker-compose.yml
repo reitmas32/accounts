@@ -1,8 +1,10 @@
 services:
   db:
     image: postgres:15
-    env_file:
-      - ./.envs/.env.postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: jalo
     ports:
       - 5440:5432
     networks:
