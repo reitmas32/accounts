@@ -4,7 +4,7 @@ from sqlalchemy import and_, or_, select
 
 from api.v1.platforms.logic.schemas import PlatformsLogin
 from core.utils.repository_base import RepositoryBase
-from models import (
+from shared.databases.postgres.models import (
     AuthGeneralPlatformModel,
     UserModel,
 )

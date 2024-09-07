@@ -7,9 +7,9 @@ from typing import TYPE_CHECKING
 from core.clients.auth.schemas import AuthSchema
 from core.settings import settings
 from core.utils.logger import logger
+from shared.app.errors import APIError, NotAuthorizedError
 from shared.client import APIRestClient
 from shared.constants import MethodType, ReturnType
-from shared.exceptions import APIExceptionError, NotAuthorizedError
 
 if TYPE_CHECKING:
     import requests
@@ -40,7 +40,7 @@ class AuthServiceClient(APIRestClient):
                 logger.error("Dont Autorization Service to resource")
                 raise NotAuthorizedError(resource)
 
-        except APIExceptionError as e:
+        except APIError as e:
             logger.info(f"Response: {e.response}")
             response = None
         return response

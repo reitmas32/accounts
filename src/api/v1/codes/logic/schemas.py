@@ -2,7 +2,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from models.enum import CodeTypeEnum, UserLoginMethodsTypeEnum
+from shared.app.enums import CodeTypeEnum, UserLoginMethodsTypeEnum
 
 
 class CreateCodeSchema(BaseModel):

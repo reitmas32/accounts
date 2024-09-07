@@ -11,7 +11,7 @@ from core.utils.exceptions import (
 )
 
 if TYPE_CHECKING:
-    from models import UserModel
+    from shared.databases.postgres.models import UserModel
 
 
 class CreateUserStep(StepSAGA):

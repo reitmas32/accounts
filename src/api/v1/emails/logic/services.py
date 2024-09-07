@@ -32,12 +32,12 @@ from core.utils.generic_views import (
 from core.utils.responses import (
     create_simple_envelope_response,
 )
-from models.code import CodeModel
-from models.enum import UserLoginMethodsTypeEnum
-from models.user import UserModel
+from shared.app.enums import UserLoginMethodsTypeEnum
+from shared.databases.postgres.models.code import CodeModel
+from shared.databases.postgres.models.user import UserModel
 
 if TYPE_CHECKING:
-    from models.email import EmailModel
+    from shared.databases.postgres.models.email import EmailModel
 
 logger = logging.getLogger(__name__)
 

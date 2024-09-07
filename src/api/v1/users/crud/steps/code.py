@@ -21,9 +21,9 @@ from core.utils.exceptions import (
     DontFindResourceException,
     DontValidCodeException,
 )
-from models.enum import CodeTypeEnum
-from models.login_methods import LoginMethodModel
-from models.user import UserModel
+from shared.app.enums import CodeTypeEnum
+from shared.databases.postgres.models.login_methods import LoginMethodModel
+from shared.databases.postgres.models.user import UserModel
 
 
 class SendEmailCodeStep(StepSAGA):

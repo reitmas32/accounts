@@ -4,7 +4,7 @@ from sqlalchemy import desc, or_, select
 
 from core.utils.repository_base import RepositoryBase
 from core.utils.schema_base import BaseSchema
-from models import (
+from shared.databases.postgres.models import (
     EmailModel,
     UserModel,
 )

@@ -13,10 +13,10 @@ from core.utils.generic_views import (
 )
 from core.utils.repository_base import RepositoryBase
 from core.utils.responses import create_simple_envelope_response
-from models import (
+from shared.app.enums import CodeTypeEnum, UserLoginMethodsTypeEnum
+from shared.databases.postgres.models import (
     CodeModel,
 )
-from models.enum import CodeTypeEnum, UserLoginMethodsTypeEnum
 
 
 class ListCodesService(ListBaseService):

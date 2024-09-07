@@ -10,7 +10,7 @@ from core.controllers.saga.controller import SagaController
 from core.utils.generic_views import BaseService
 from core.utils.jwt import JWTHandler
 from core.utils.responses import create_simple_envelope_response
-from models.user import UserModel
+from shared.databases.postgres.models.user import UserModel
 
 
 class SignUpPlatformService(BaseService):

@@ -1,5 +1,5 @@
 from core.utils.responses import FilterBaseSchema
-from models.enum import UserLoginMethodsTypeEnum
+from shared.app.enums import UserLoginMethodsTypeEnum
 
 
 class FilterLoginMethodSchema(FilterBaseSchema):

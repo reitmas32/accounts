@@ -6,7 +6,7 @@ from core.clients.auth.schemas import AuthSchema
 from core.settings import settings
 from core.utils.exceptions import NotAuthorizationException
 from core.utils.logger import logger
-from shared.exceptions import NotAuthorizedError
+from shared.app.errors import NotAuthorizedError
 
 auth_client = AuthServiceClient()
 

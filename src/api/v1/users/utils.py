@@ -15,7 +15,7 @@ from core.utils.email import (
     get_current_manager_email_to_app_standard,
 )
 from core.utils.responses import get_current_date_time_to_app_standard
-from models.code import CodeTypeEnum
+from shared.databases.postgres.models.code import CodeTypeEnum
 
 
 class CodeManager:

@@ -1,12 +1,8 @@
-import logging
-
 import requests
 from pydantic import BaseModel
 
+from shared.app.errors import APIError, RequestError
 from shared.constants import MethodType, ReturnType
-from shared.exceptions import APIExceptionError, RequestExceptionError
-
-logger = logging.getLogger(__name__)
 
 
 class APIRestClient:
@@ -58,7 +54,7 @@ class APIRestClient:
         response.
         """
         if not (requests.codes["ok"] <= response.status_code < requests.codes["multiple_choices"]):
-            raise APIExceptionError(response)
+            raise APIError(response)
         try:
             response_json = response.json()
             body = response_json.get("body")
@@ -66,7 +62,7 @@ class APIRestClient:
                 return body
             return body.get("results")
         except ValueError:
-            raise RequestExceptionError(f"Invalid Response: {response.text}")
+            raise RequestError(f"Invalid Response: {response.text}")
 
     def handle_params(self, filters: BaseModel | None = None):
         params = {}

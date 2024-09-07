@@ -3,7 +3,7 @@ from uuid import UUID
 
 from core.utils.repository_base import RepositoryBase
 from core.utils.schema_base import BaseSchema
-from models.login_methods import LoginMethodModel
+from shared.databases.postgres.models.login_methods import LoginMethodModel
 
 
 class LoginMethodsProxy(LoginMethodModel):

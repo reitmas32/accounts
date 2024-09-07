@@ -15,8 +15,10 @@ from core.utils.exceptions import (
 from core.utils.jwt import JWTHandler, TokenDataSchema
 
 if TYPE_CHECKING:
-    from models import UserModel
-    from models.auth_general_platform import AuthGeneralPlatformModel
+    from shared.databases.postgres.models import UserModel
+    from shared.databases.postgres.models.auth_general_platform import (
+        AuthGeneralPlatformModel,
+    )
 
 
 class CreateUserStep(StepSAGA):

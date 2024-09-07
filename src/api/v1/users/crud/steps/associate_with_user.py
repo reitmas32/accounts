@@ -9,13 +9,13 @@ from api.v1.login_methods.proxies import RepositoryUserLoginMethod
 from api.v1.users.crud.steps.user import FindUserStep
 from core.controllers.saga.controller import StepSAGA
 from core.utils.exceptions import DontFindResourceException
-from models.email import EmailModel
-from models.enum import UserLoginMethodsTypeEnum
-from models.login_methods import LoginMethodModel
-from models.user import UserModel
+from shared.app.enums import UserLoginMethodsTypeEnum
+from shared.databases.postgres.models.email import EmailModel
+from shared.databases.postgres.models.login_methods import LoginMethodModel
+from shared.databases.postgres.models.user import UserModel
 
 if TYPE_CHECKING:
-    from models.code import CodeModel
+    from shared.databases.postgres.models.code import CodeModel
 
 
 class AddUserLoginMethodStep(StepSAGA):

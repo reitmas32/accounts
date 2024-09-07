@@ -13,8 +13,8 @@ from core.utils.email import (
     SendEmailAbstract,
     get_current_manager_email_to_app_standard,
 )
-from models.enum import CodeTypeEnum
-from models.login_methods import LoginMethodModel
+from shared.app.enums import CodeTypeEnum
+from shared.databases.postgres.models.login_methods import LoginMethodModel
 
 
 class SendEmailCodeStep(StepSAGA):

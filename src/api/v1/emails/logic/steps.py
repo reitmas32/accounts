@@ -22,7 +22,7 @@ from core.utils.exceptions import (
 )
 from core.utils.jwt import JWTHandler, TokenDataSchema
 from core.utils.password import PasswordManager
-from models.enum import CodeTypeEnum, UserLoginMethodsTypeEnum
+from shared.app.enums import CodeTypeEnum, UserLoginMethodsTypeEnum
 
 
 class LoginUserStep(StepSAGA):

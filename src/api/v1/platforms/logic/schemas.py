@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 from api.v1.users.crud.schemas import UserSchema
-from models.enum import PlatformsLogin
+from shared.app.enums import PlatformsLogin
 
 
 class SignupPlatformSchema(UserSchema):

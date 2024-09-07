@@ -13,8 +13,8 @@ from core.utils.exceptions import (
     PasswordNotValidException,
 )
 from core.utils.password import PasswordManager
-from models import UserModel
-from models.code import CodeModel
+from shared.databases.postgres.models import UserModel
+from shared.databases.postgres.models.code import CodeModel
 
 
 class CreateEmailAuthStep(StepSAGA):

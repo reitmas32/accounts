@@ -49,7 +49,7 @@ class Settings(PydanticBaseSettings):
     # Auth-Manager
     # ----------------------------------------------------------------
     AUTH_SERVICE_API_HOST: str
-    AUTHTENTICATION_ACTIVE: bool = True
+    AUTHTENTICATION_ACTIVE: bool = False
     PUBLIC_ENDPOINTS: list[str] = [
         "/accounts/health",
         "/accounts/docs",

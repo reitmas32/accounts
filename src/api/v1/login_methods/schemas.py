@@ -3,7 +3,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from models.enum import UserLoginMethodsTypeEnum
+from shared.app.enums import UserLoginMethodsTypeEnum
 
 
 class CreateLoginMethodSchema(BaseModel):
