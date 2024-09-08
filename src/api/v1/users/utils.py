@@ -1,21 +1,21 @@
 import random
 import string
 from datetime import timedelta
+from typing import TYPE_CHECKING
 
 from sqlalchemy.orm import Session
 
-from api.v1.users.proxies import RepositoryCode
-from api.v1.users.resources import (
+from api.v1.codes.crud.services import RepositoryCode
+from api.v1.users.crud.resources import (
     get_data_for_email_activate_account,
     get_data_for_email_two_factor,
 )
-from core.settings import settings
-from core.utils.email import (
-    SendEmailAbstract,
-    get_current_manager_email_to_app_standard,
-)
+from core.settings import email_client, settings
 from core.utils.responses import get_current_date_time_to_app_standard
 from shared.databases.postgres.models.code import CodeTypeEnum
+
+if TYPE_CHECKING:
+    from shared.app.repositories.email.send import SendEmailRepository
 
 
 class CodeManager:
@@ -40,7 +40,8 @@ class CodeManager:
             session: Database session for interacting with the data.
         """
         self.repository_code = RepositoryCode(session=session)
-        self.manager_email: SendEmailAbstract = get_current_manager_email_to_app_standard()
+        self.email_client: SendEmailRepository = email_client
+
 
     def generate_code(self, length):
         """
@@ -74,7 +75,7 @@ class CodeManager:
                 user_name=user_name, activation_code=new_code
             )
         self.repository_code.add(code=new_code, email=email, type=code_type)
-        self.manager_email.send_email(
+        self.email_client.send_email(
             email_subject=email,
             subject_text=subject_text,
             message_text=message_text,

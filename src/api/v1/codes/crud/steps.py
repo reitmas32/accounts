@@ -1,6 +1,7 @@
 import random
 import string
 from datetime import datetime, timezone
+from typing import TYPE_CHECKING
 
 from pytz import timezone as tz
 from sqlalchemy.orm import Session
@@ -10,11 +11,7 @@ from api.v1.users.crud.resources import (
     get_data_for_email_activate_account,
 )
 from core.controllers.saga.controller import StepSAGA
-from core.settings import settings
-from core.utils.email import (
-    SendEmailAbstract,
-    get_current_manager_email_to_app_standard,
-)
+from core.settings import email_client, settings
 from core.utils.exceptions import (
     CodeAlreadyExpiredException,
     CodeAlreadyUseException,
@@ -24,6 +21,9 @@ from core.utils.exceptions import (
 from shared.app.enums import CodeTypeEnum
 from shared.databases.postgres.models.login_methods import LoginMethodModel
 from shared.databases.postgres.models.user import UserModel
+
+if TYPE_CHECKING:
+    from shared.app.repositories.email.send import SendEmailRepository
 
 
 class SendEmailCodeStep(StepSAGA):
@@ -58,7 +58,7 @@ class SendEmailCodeStep(StepSAGA):
         self.user_name = user_name
         self.code_created = None
         self.repository = RepositoryCode(session=session)
-        self.manager_email: SendEmailAbstract = get_current_manager_email_to_app_standard()
+        self.email_client: SendEmailRepository = email_client
 
     def generate_code(self, length):
         """
@@ -97,7 +97,7 @@ class SendEmailCodeStep(StepSAGA):
             user_id=payload.user_id,
         )
 
-        self.manager_email.send_email(
+        self.email_client.send_email(
             email_subject=self.email,
             subject_text=subject_text,
             message_text=message_text,

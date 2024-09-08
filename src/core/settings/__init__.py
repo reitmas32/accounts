@@ -6,6 +6,8 @@ import sentry_sdk
 from pydantic import BaseModel
 
 from core.utils.environment import EnvironmentsTypes
+from shared.app.managers.email import EmailManager
+from shared.app.repositories.email.send import SendEmailRepository
 
 from .base import Settings
 
@@ -43,6 +45,8 @@ dictConfig(LogConfig().model_dump())
 log = logging.getLogger(__name__)
 settings: Settings = Settings()
 
+email_manager = EmailManager(client=settings.EMAIL_CLIENT)
+email_client: SendEmailRepository = email_manager.client(EMAIL_SENDER=settings.EMAIL_SENDER, EMAIL_SENDER_PASSWORD=settings.EMAIL_SENDER_PASSWORD)
 
 if settings.ENVIRONMENT in [EnvironmentsTypes.PRODUCTION.value[0], EnvironmentsTypes.STAGING.value[0]]:
     sentry_sdk.init(

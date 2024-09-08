@@ -45,6 +45,7 @@ class Settings(PydanticBaseSettings):
     # ----------------------------------------------------------------
     EMAIL_SENDER: str
     EMAIL_SENDER_PASSWORD: str
+    EMAIL_CLIENT: str
 
     # Auth-Manager
     # ----------------------------------------------------------------

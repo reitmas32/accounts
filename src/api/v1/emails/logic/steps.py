@@ -1,5 +1,6 @@
 import random
 import string
+from typing import TYPE_CHECKING
 
 from sqlalchemy.orm import Session
 
@@ -9,11 +10,7 @@ from api.v1.login_methods.proxies import RepositoryUserLoginMethod
 from api.v1.users.crud.proxies import RepositoryUser
 from api.v1.users.crud.resources import get_data_for_email_activate_account
 from core.controllers.saga.controller import StepSAGA
-from core.settings import settings
-from core.utils.email import (
-    SendEmailAbstract,
-    get_current_manager_email_to_app_standard,
-)
+from core.settings import email_client, settings
 from core.utils.exceptions import (
     DontFindResourceException,
     PasswordNoneException,
@@ -23,6 +20,9 @@ from core.utils.exceptions import (
 from core.utils.jwt import JWTHandler, TokenDataSchema
 from core.utils.password import PasswordManager
 from shared.app.enums import CodeTypeEnum, UserLoginMethodsTypeEnum
+
+if TYPE_CHECKING:
+    from shared.app.repositories.email.send import SendEmailRepository
 
 
 class LoginUserStep(StepSAGA):
@@ -113,7 +113,7 @@ class ResetPasswordStep(StepSAGA):
         self.repository_email = RepositoryEmail(session=session)
         self.repository_login_method = RepositoryUserLoginMethod(session=session)
         self.repository_code = RepositoryCode(session=session)
-        self.manager_email: SendEmailAbstract = get_current_manager_email_to_app_standard()
+        self.email_client: SendEmailRepository = email_client
 
     def verify(self):
         if self.user_name is None and self.email is None:
@@ -168,7 +168,7 @@ class ResetPasswordStep(StepSAGA):
             user_id=user.id,
         )
 
-        self.manager_email.send_email(
+        self.email_client.send_email(
             email_subject=email.email,
             subject_text=subject_text,
             message_text=message_text,
@@ -206,7 +206,6 @@ class ResetPasswordConfirmStep(StepSAGA):
         self.repository_email = RepositoryEmail(session=session)
         self.repository_login_method = RepositoryUserLoginMethod(session=session)
         self.repository_code = RepositoryCode(session=session)
-        self.manager_email: SendEmailAbstract = get_current_manager_email_to_app_standard()
 
     def verify(self):
         if self.user_name is None and self.email is None:
