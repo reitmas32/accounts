@@ -1,4 +1,7 @@
-def hide_email(email):
+from pydantic import EmailStr
+
+
+def hide_email(email: EmailStr):
     # Split the email into username and domain
     username, domain = email.split("@")
 

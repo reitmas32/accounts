@@ -25,7 +25,6 @@ from api.v1.users.crud.steps.associate_with_user import (
 )
 from api.v1.users.crud.steps.user import CreateUserStep, FindUserStep
 from core.controllers.saga.controller import SagaController
-from core.utils.email import hide_email
 from core.utils.generic_views import (
     BaseService,
 )
@@ -35,6 +34,7 @@ from core.utils.responses import (
 from shared.app.enums import UserLoginMethodsTypeEnum
 from shared.databases.postgres.models.code import CodeModel
 from shared.databases.postgres.models.user import UserModel
+from shared.utils.email import hide_email
 
 if TYPE_CHECKING:
     from shared.databases.postgres.models.email import EmailModel
