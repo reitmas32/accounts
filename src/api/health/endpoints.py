@@ -1,4 +1,7 @@
+import json
+
 from fastapi import APIRouter, status
+from pydantic import BaseModel
 
 from core.settings import settings
 from core.utils.logger import logger
@@ -29,3 +32,18 @@ def health_check() -> EnvelopeResponse:
         successful=True,
         message="The service is online and functioning properly.",
     )
+
+
+class WebHookDTO(BaseModel):
+    resource: str
+    response: dict
+
+@router.post("/webhook-test")
+async def webhook(request: WebHookDTO):
+    # Lee el cuerpo JSON recibido
+    json_body = request.model_dump()
+
+    print(json.dumps(json_body, indent=2))
+
+    # Retorna el mismo cuerpo JSON como respuesta
+    return json_body
