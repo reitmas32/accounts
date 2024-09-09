@@ -6,6 +6,7 @@ from api.routers import api_healthcheck_router, api_v1_router
 from core.middlewares.auth import AuthenticationMiddelware
 from core.middlewares.catcher import CatcherExceptionsMiddleware
 from core.middlewares.log_interceptor import LoggerMiddleware
+from core.middlewares.webhook import CallWebHookMiddleware
 from core.settings import settings
 from core.settings.database import init_db, validate_db_conections
 from core.utils.environment import EnvironmentsTypes
@@ -24,6 +25,7 @@ LoggerConfig.load_format()
 app.add_middleware(AuthenticationMiddelware)
 app.add_middleware(CatcherExceptionsMiddleware)
 app.add_middleware(LoggerMiddleware)
+app.add_middleware(CallWebHookMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[str(origin) for origin in settings.CORS_ORIGINS],
