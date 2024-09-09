@@ -63,6 +63,22 @@ class Settings(PydanticBaseSettings):
         "/openapi.json",
         "",
     ]
+
+    # WebHook
+    # ----------------------------------------------------------------
+    WEBHOOK: str
+    WEBHOOK_SIGNALS: list[str] = [
+        "/api/v1/platforms/signup",
+        "/api/v1/platforms/signin",
+        "/api/v1/platforms/verify-token",
+        "/api/v1/emails/signup",
+        "/api/v1/emails/login",
+        "/api/v1/emails/verify",
+        "/api/v1/emails/reset-password",
+        "/api/v1/emails/reset-password-confirm",
+        "/api/v1/emails/send-code",
+    ]
+
     AUTH_SERVICE_API_VERSION: str = "v1"
     AUTH_SERVICE_API_PREFIX: str = "services"
     # Project Constants
