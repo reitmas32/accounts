@@ -41,7 +41,7 @@ def root():
     return RedirectResponse(url="/docs")
 
 
-if EnvironmentsTypes.DOCKER.value[0] == settings.ENVIRONMENT:
+if EnvironmentsTypes.DOCKER.value.env_name == settings.ENVIRONMENT:
     init_db()
 logger.info(f"ENVIRONMENT: {settings.ENVIRONMENT}")
 validate_db_conections()

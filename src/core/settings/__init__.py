@@ -48,7 +48,7 @@ settings: Settings = Settings()
 email_manager = EmailManager(client=settings.EMAIL_CLIENT)
 email_client: SendEmailRepository = email_manager.client(EMAIL_SENDER=settings.EMAIL_SENDER, EMAIL_SENDER_PASSWORD=settings.EMAIL_SENDER_PASSWORD)
 
-if settings.ENVIRONMENT in [EnvironmentsTypes.PRODUCTION.value[0], EnvironmentsTypes.STAGING.value[0]]:
+if settings.ENVIRONMENT in [EnvironmentsTypes.PRODUCTION.value.env_name, EnvironmentsTypes.STAGING.value.env_name]:
     sentry_sdk.init(
         dsn=settings.SENTRY_DSN,
         environment=settings.ENVIRONMENT,

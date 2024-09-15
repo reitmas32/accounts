@@ -25,7 +25,7 @@ ENVS_DIR = BASE_DIR.parent / ".envs"
 ENV_BASE_FILE_PATH = ENVS_DIR / ".env.base"
 load_dotenv(ENV_BASE_FILE_PATH)
 ENVIRONMENT = os.environ.get("ENVIRONMENT")
-EnvironmentsTypes.check_env_value(ENVIRONMENT)
+EnvironmentsTypes.validate(ENVIRONMENT)
 ENV_FILE_PATH = ENVS_DIR / EnvironmentsTypes.get_env_file_name(ENVIRONMENT)
 
 
