@@ -13,7 +13,7 @@ from pydantic_settings import BaseSettings as PydanticBaseSettings
 from pydantic_settings import SettingsConfigDict
 
 from core.settings.enum import HashingAlgorithmsEnum, JWTAlgorithmsEnum
-from core.utils.environment import EnvironmentsTypes
+from shared.app.environment import EnvironmentsTypes
 
 LIST_PATH_TO_ADD = []
 if LIST_PATH_TO_ADD:

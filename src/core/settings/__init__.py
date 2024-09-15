@@ -5,7 +5,7 @@ from logging.config import dictConfig
 import sentry_sdk
 from pydantic import BaseModel
 
-from core.utils.environment import EnvironmentsTypes
+from shared.app.environment import EnvironmentsTypes
 from shared.app.managers.email import EmailManager
 from shared.app.repositories.email.send import SendEmailRepository
 
