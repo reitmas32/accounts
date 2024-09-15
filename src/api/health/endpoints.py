@@ -17,6 +17,7 @@ router = APIRouter()
     status_code=status.HTTP_200_OK,
     summary="Health service",
     response_model=EnvelopeResponse,
+    tags=["Health"],
 )
 def health_check() -> EnvelopeResponse:
     logger.info("Health")
@@ -38,12 +39,18 @@ class WebHookDTO(BaseModel):
     resource: str
     response: dict
 
-@router.post("/webhook-test")
+
+@router.post(
+    "/webhook-test",
+    status_code=status.HTTP_200_OK,
+    summary="Simple WebHook",
+    tags=["WebHook"],
+)
 async def webhook(request: WebHookDTO):
     # Lee el cuerpo JSON recibido
     json_body = request.model_dump()
 
-    print(json.dumps(json_body, indent=2))
+    logger.info(json.dumps(json_body, indent=2))
 
     # Retorna el mismo cuerpo JSON como respuesta
     return json_body
