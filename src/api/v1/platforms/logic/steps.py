@@ -8,8 +8,9 @@ from api.v1.users.crud.proxies import RepositoryUser
 from api.v1.users.crud.schemas import UserSchema
 from core.controllers.saga.controller import StepSAGA
 from shared.app.errors.uniques import PlatformIDUniqueError, UserNameUniqueError
-from shared.app.handlers.jwt import JWTHandler, TokenDataSchema
+from shared.app.handlers.jwt import JWTHandler
 from shared.databases.errors import EntityNotFoundError
+from shared.presentation.schemas import JWTSchema
 
 if TYPE_CHECKING:
     from shared.databases.postgres.models import UserModel
@@ -132,7 +133,7 @@ class CreatePlatformUserStep(StepSAGA):
             active=False,
         )
 
-        return JWTHandler.create_token(TokenDataSchema(user_id=self.platform_user_created.user_id.__str__()))
+        return JWTHandler.create_token(JWTSchema(user_id=self.platform_user_created.user_id.__str__()))
 
     def rollback(self):
         """
@@ -188,7 +189,7 @@ class FindPlatformUserStep(StepSAGA):
         if not existing_platform_user:
             raise EntityNotFoundError(resource=f"User with platform {self.user.platform}")
 
-        return JWTHandler.create_token(TokenDataSchema(user_id=self.user.external_id.__str__()))
+        return JWTHandler.create_token(JWTSchema(user_id=self.user.external_id.__str__()))
 
     def rollback(self):
         """

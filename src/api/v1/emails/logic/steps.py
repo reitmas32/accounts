@@ -14,8 +14,9 @@ from core.settings import email_client, settings
 from core.utils.password import PasswordManager
 from shared.app.enums import CodeTypeEnum, UserLoginMethodsTypeEnum
 from shared.app.errors.invalid import MissingCredentialsError, PasswordError
-from shared.app.handlers.jwt import JWTHandler, TokenDataSchema
+from shared.app.handlers.jwt import JWTHandler
 from shared.databases.errors import EntityNotFoundError
+from shared.presentation.schemas import JWTSchema
 
 if TYPE_CHECKING:
     from shared.app.repositories.email.send import SendEmailRepository
@@ -80,7 +81,7 @@ class LoginUserStep(StepSAGA):
 
         self.repository_login_method.update_field_by_id(id=self.login_method[0].id, field_name="active", new_value=True)
 
-        return JWTHandler.create_token(TokenDataSchema(user_id=user.id.__str__()))
+        return JWTHandler.create_token(JWTSchema(user_id=user.id.__str__()))
 
     def rollback(self):
         """
