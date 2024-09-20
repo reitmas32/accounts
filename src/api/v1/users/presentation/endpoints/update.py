@@ -1,6 +1,6 @@
 from fastapi import Request, status
 
-from api.v1.users.crud.schemas import CreateUserSchema
+from api.v1.users.presentation.dtos import UpdateUserDto
 from core.settings import log
 from core.utils.responses import (
     EnvelopeResponse,
@@ -17,7 +17,7 @@ from .routers import router
 )
 async def update(
     request: Request,
-    payload: CreateUserSchema,
+    payload: UpdateUserDto,
 ):
     log.info("Create User")
     return EnvelopeResponse(
