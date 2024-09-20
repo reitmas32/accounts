@@ -8,8 +8,8 @@ from api.v1.codes.crud.steps import VerifyCodeStep
 from api.v1.login_methods.proxies import RepositoryUserLoginMethod
 from api.v1.users.crud.steps.user import FindUserStep
 from core.controllers.saga.controller import StepSAGA
-from core.utils.exceptions import DontFindResourceException
 from shared.app.enums import UserLoginMethodsTypeEnum
+from shared.databases.errors import EntityNotFoundError
 from shared.databases.postgres.models.email import EmailModel
 from shared.databases.postgres.models.login_methods import LoginMethodModel
 from shared.databases.postgres.models.user import UserModel
@@ -108,7 +108,7 @@ class FindUserLoginMethodStep(StepSAGA):
             user_id=user.id.__str__(), entity_type=self.type_login, active=False
         )
         if login_method is None:
-            raise DontFindResourceException(resource="login_method")
+            raise EntityNotFoundError(resource="login_method")
 
         return login_method[0]
 

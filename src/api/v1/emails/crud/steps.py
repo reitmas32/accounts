@@ -6,13 +6,10 @@ from sqlalchemy.orm import Session
 from api.v1.codes.crud.services import RepositoryCode
 from api.v1.emails.crud.proxies import RepositoryEmail
 from core.controllers.saga.controller import StepSAGA
-from core.utils.exceptions import (
-    DontFindResourceException,
-    EmailUniqueException,
-    PasswordNoneException,
-    PasswordNotValidException,
-)
 from core.utils.password import PasswordManager
+from shared.app.errors.invalid import PasswordError
+from shared.app.errors.uniques import EmailUniqueError
+from shared.databases.errors import EntityNotFoundError
 from shared.databases.postgres.models import UserModel
 from shared.databases.postgres.models.code import CodeModel
 
@@ -67,15 +64,14 @@ class CreateEmailAuthStep(StepSAGA):
             PasswordNotValidException: If password does not meet the required pattern.
         """
         if password is None:
-            raise PasswordNoneException
-
+            raise PasswordError
         return
         # Regular expression to validate the password
         regex = r"^(?=.*\d)(?=.*[&%$*?¿¡!])(?=.*[A-Z])(?=.*[a-z])[A-Za-z\d&%$*?¿¡!]{8,}$"
 
         # Check if the password matches the pattern
         if not re.match(regex, password):
-            raise PasswordNotValidException
+            raise PasswordError
 
     def __call__(self, payload: UserModel, all_payloads: dict | None = None):  # noqa: ARG002
         """
@@ -92,7 +88,7 @@ class CreateEmailAuthStep(StepSAGA):
         existing_email = self.repository.get_auth_email(email=self.email)
 
         if existing_email is not None:
-            raise EmailUniqueException(email=self.email)
+            raise EmailUniqueError(email=self.email)
 
         self.auth_email_created = self.repository.add(
             user_id=payload.id,
@@ -135,7 +131,7 @@ class FindEmailStep(StepSAGA):
         """
         email = self.repository.get_auth_email(email=self.email)
         if email is None:
-            raise DontFindResourceException(resource=self.email)
+            raise EntityNotFoundError(resource=self.email)
 
         return email
 

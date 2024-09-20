@@ -5,8 +5,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from core.utils.exceptions import BaseAppException
 from core.utils.responses import EnvelopeResponse
+from shared.app.errors.base import BaseError
 
 
 class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
@@ -31,9 +31,9 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
                     error_detail = {f"{err.diag.table_name}": f"ForeignKeyViolation: {err.diag.table_name}"}
                     status_code = status.HTTP_409_CONFLICT
                     e = f"ForeignKeyViolation: {err.diag.table_name}"
-            elif isinstance(e, BaseAppException):
+            elif isinstance(e, BaseError):
                 error_detail = e.to_dict()
-                status_code = e.status_code
+                status_code = e.external_code.http
             else:
                 error_detail = {"detail": str(e)}
                 status_code = status.HTTP_500_INTERNAL_SERVER_ERROR

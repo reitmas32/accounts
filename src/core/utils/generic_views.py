@@ -10,11 +10,11 @@ from sqlalchemy import JSON, DateTime, Select, select, types
 from sqlalchemy.dialects.postgresql import JSON as PJSON
 from sqlalchemy.orm import DeclarativeBase, Session
 
-from core.utils.exceptions import NoResultFound
 from core.utils.filters import ManagerFilter
 from core.utils.orm import Manager, QueryModel
 from core.utils.responses import PaginationParams, create_envelope_response
 from core.utils.schema_base import BaseSchema
+from shared.databases.errors.entity_not_found import EntityNotFoundError
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +82,7 @@ class ObjectBaseService(BaseService):
         if not instance:
             message_error = f"There is no {self.model.__tablename__} with this ID: {id}"
             logger.warning(message_error)
-            raise NoResultFound(message_error)
+            raise EntityNotFoundError(message=message_error)
         return instance
 
 
@@ -152,25 +152,4 @@ class ListBaseService(BaseService):
         )
 
 
-def validation_group(validation_function):
-    def wrapper(self, *args, **kwargs):
-        result_validation_function = validation_function(self, *args, **kwargs)
-        returns_validation_function_number = (
-            len(result_validation_function) if type(result_validation_function) == tuple else 1  # noqa: E721
-        )
-        if returns_validation_function_number <= 1:
-            errors = result_validation_function
-            data = None
-        elif returns_validation_function_number == 2:  # noqa: PLR2004
-            errors, data = result_validation_function
-        else:
-            errors, *data = result_validation_function
 
-        validations_success = not bool(len(errors))
-        self.request_errors["validations_errors"].update(errors)
-        self.request_errors["validations_success"] = (
-            self.request_errors.get("validations_success", True) and validations_success
-        )
-        return validations_success, errors, data
-
-    return wrapper

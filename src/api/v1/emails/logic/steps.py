@@ -11,15 +11,11 @@ from api.v1.users.crud.proxies import RepositoryUser
 from api.v1.users.crud.resources import get_data_for_email_activate_account
 from core.controllers.saga.controller import StepSAGA
 from core.settings import email_client, settings
-from core.utils.exceptions import (
-    DontFindResourceException,
-    PasswordNoneException,
-    PasswordNotValidException,
-    UserNameAndEmailIsEmptyException,
-)
 from core.utils.jwt import JWTHandler, TokenDataSchema
 from core.utils.password import PasswordManager
 from shared.app.enums import CodeTypeEnum, UserLoginMethodsTypeEnum
+from shared.app.errors.invalid import MissingCredentialsError, PasswordError
+from shared.databases.errors import EntityNotFoundError
 
 if TYPE_CHECKING:
     from shared.app.repositories.email.send import SendEmailRepository
@@ -50,10 +46,10 @@ class LoginUserStep(StepSAGA):
 
     def verify(self):
         if self.user_name is None and self.email is None:
-            raise UserNameAndEmailIsEmptyException
+            raise MissingCredentialsError
 
         if self.password is None:
-            raise PasswordNoneException
+            raise PasswordError
 
     def __call__(self, payload: None = None, all_payloads: dict | None = None):  # noqa: ARG002
         """
@@ -67,20 +63,20 @@ class LoginUserStep(StepSAGA):
         """
         user = self.repository_user.get_user(user_name=self.user_name)
         if user is None:
-            raise DontFindResourceException(resource=self.user_name)
+            raise EntityNotFoundError(resource=self.user_name)
 
         email = self.repository_email.get_email_by_user_id(user_id=user.id)
         if email is None:
-            raise DontFindResourceException(resource=self.email)
+            raise EntityNotFoundError(resource=self.email)
 
         if not self.password_manager.verify_password(self.password, email.password):
-            raise PasswordNotValidException(message="La contraseña no es valida")
+            raise PasswordError(message="La contraseña no es valida")
 
         self.login_method = self.repository_login_method.get_by_attributes(
             user_id=user.id, entity_id=email.id, verify=True
         )
         if self.login_method is None or len(self.login_method) == 0:
-            raise DontFindResourceException(message="The login email is dont exist by this user", resource="")
+            raise EntityNotFoundError(message="The login email is dont exist by this user", resource="")
 
         self.repository_login_method.update_field_by_id(id=self.login_method[0].id, field_name="active", new_value=True)
 
@@ -117,10 +113,10 @@ class ResetPasswordStep(StepSAGA):
 
     def verify(self):
         if self.user_name is None and self.email is None:
-            raise UserNameAndEmailIsEmptyException
+            raise MissingCredentialsError
 
         if self.password is None:
-            raise PasswordNoneException
+            raise PasswordError
 
     def __call__(self, payload: None = None, all_payloads: dict | None = None):  # noqa: ARG002
         """
@@ -139,15 +135,15 @@ class ResetPasswordStep(StepSAGA):
 
         user = self.repository_user.get_user(user_name=self.user_name)
         if user is None:
-            raise DontFindResourceException(resource=self.user_name)
+            raise EntityNotFoundError(resource=self.user_name)
 
         email = self.repository_email.get_email_by_user_id(user_id=user.id)
         if email is None:
-            raise DontFindResourceException(resource="email")
+            raise EntityNotFoundError(resource="email")
 
         login_method = self.repository_login_method.get_by_attributes(user_id=user.id, entity_id=email.id)
         if login_method is None or len(login_method) == 0:
-            raise DontFindResourceException(message="The login email is dont exist by this user", resource="")
+            raise EntityNotFoundError(message="The login email is dont exist by this user", resource="")
 
         #######################################
         # Send Code
@@ -209,10 +205,10 @@ class ResetPasswordConfirmStep(StepSAGA):
 
     def verify(self):
         if self.user_name is None and self.email is None:
-            raise UserNameAndEmailIsEmptyException
+            raise MissingCredentialsError
 
         if self.password is None:
-            raise PasswordNoneException
+            raise PasswordError
 
     def __call__(self, payload: None = None, all_payloads: dict | None = None):  # noqa: ARG002
         """
@@ -231,15 +227,15 @@ class ResetPasswordConfirmStep(StepSAGA):
 
         user = self.repository_user.get_user(user_name=self.user_name)
         if user is None:
-            raise DontFindResourceException(resource=self.user_name)
+            raise EntityNotFoundError(resource=self.user_name)
 
         self.email = self.repository_email.get_email_by_user_id(user_id=user.id)
         if self.email is None:
-            raise DontFindResourceException(resource="email")
+            raise EntityNotFoundError(resource="email")
 
         login_method = self.repository_login_method.get_by_attributes(user_id=user.id, entity_id=self.email.id)
         if login_method is None or len(login_method) == 0:
-            raise DontFindResourceException(message="The login email is dont exist by this user", resource="")
+            raise EntityNotFoundError(message="The login email is dont exist by this user", resource="")
 
         #######################################
         # Change Password

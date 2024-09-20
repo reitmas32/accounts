@@ -7,12 +7,9 @@ from api.v1.platforms.logic.schemas import SignInPlatformSchema, SignupPlatformS
 from api.v1.users.crud.proxies import RepositoryUser
 from api.v1.users.crud.schemas import UserSchema
 from core.controllers.saga.controller import StepSAGA
-from core.utils.exceptions import (
-    DontFindResourceException,
-    PlatformSignUpUniqueException,
-    UserNameUniqueException,
-)
 from core.utils.jwt import JWTHandler, TokenDataSchema
+from shared.app.errors.uniques import PlatformIDUniqueError, UserNameUniqueError
+from shared.databases.errors import EntityNotFoundError
 
 if TYPE_CHECKING:
     from shared.databases.postgres.models import UserModel
@@ -61,7 +58,7 @@ class CreateUserStep(StepSAGA):
         """
         existing_user_name = self.repository.get_user(user_name=self.user.user_name)
         if existing_user_name is not None:
-            raise UserNameUniqueException(user_name=self.user.user_name)
+            raise UserNameUniqueError(user_name=self.user.user_name)
 
         self.user_created: UserModel = self.repository.add(
             user_name=self.user.user_name,
@@ -70,7 +67,7 @@ class CreateUserStep(StepSAGA):
         )
 
         if self.user_created is None:
-            raise UserNameUniqueException(user_name=self.user.user_name)
+            raise UserNameUniqueError(user_name=self.user.user_name)
 
         return self.user_created
 
@@ -126,7 +123,7 @@ class CreatePlatformUserStep(StepSAGA):
             user_id=payload.id,
         )
         if existing_platform_user:
-            raise PlatformSignUpUniqueException(platform=self.user.platform)
+            raise PlatformIDUniqueError(platform=self.user.platform, id=self.user.external_id)
 
         self.platform_user_created: AuthGeneralPlatformModel = self.repository.add(
             user_id=payload.id,
@@ -189,7 +186,7 @@ class FindPlatformUserStep(StepSAGA):
             user_id=None,
         )
         if not existing_platform_user:
-            raise DontFindResourceException(resource=f"User with platform {self.user.platform}")
+            raise EntityNotFoundError(resource=f"User with platform {self.user.platform}")
 
         return JWTHandler.create_token(TokenDataSchema(user_id=self.user.external_id.__str__()))
 

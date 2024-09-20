@@ -6,8 +6,8 @@ from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import NullPool
 
 from core.settings import settings
-from core.utils.exceptions import BaseAppException
 from core.utils.logger import logger
+from shared.app.errors.base import BaseError
 from shared.databases.postgres.models import (
     AuthGeneralPlatformModel,
     CodeModel,
@@ -84,7 +84,7 @@ def validate_db_conections():
     except Exception as e:  # noqa: BLE001
         session.close()
         message_error = f"Error on validate_db_conections, message error: {e}"
-        raise BaseAppException(message_error)
+        raise BaseError(message=message_error)
 
 
 def init_db():

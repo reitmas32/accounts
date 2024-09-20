@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from fastapi import HTTPException
 
 from core.settings import log
-from core.utils.exceptions import StepSAGAException
+from shared.app.errors.saga import SAGAError
 
 
 class TransactionFailedException(HTTPException):
@@ -36,7 +36,7 @@ class SagaController:
                 self.payloads[type(step)] = last_payload
             except Exception as e:  # noqa: PERF203, BLE001
                 self.rollback()
-                raise StepSAGAException(e)
+                raise SAGAError(e)
         return self.payloads
 
     def rollback(self):
