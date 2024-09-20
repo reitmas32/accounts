@@ -9,8 +9,8 @@ from api.v1.emails.crud.proxies import RepositoryEmail
 from api.v1.login_methods.proxies import RepositoryUserLoginMethod
 from api.v1.users.crud.proxies import RepositoryUser
 from api.v1.users.crud.resources import get_data_for_email_activate_account
-from core.controllers.saga.controller import StepSAGA
 from core.settings import email_client, settings
+from shared.app.controllers.saga.controller import StepSAGA
 from shared.app.enums import CodeTypeEnum, UserLoginMethodsTypeEnum
 from shared.app.errors.invalid import MissingCredentialsError, PasswordError
 from shared.app.handlers.jwt import JWTHandler

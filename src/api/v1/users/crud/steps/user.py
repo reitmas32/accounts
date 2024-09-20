@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from api.v1.emails.logic.schemas import SignupEmailSchema
 from api.v1.users.crud.proxies import RepositoryUser
-from core.controllers.saga.controller import StepSAGA
+from shared.app.controllers.saga.controller import StepSAGA
 from shared.app.errors.uniques import UserNameUniqueError
 from shared.databases.errors import EntityNotFoundError
 

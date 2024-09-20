@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from api.v1.codes.crud.services import RepositoryCode
 from api.v1.emails.crud.proxies import RepositoryEmail
-from core.controllers.saga.controller import StepSAGA
+from shared.app.controllers.saga.controller import StepSAGA
 from shared.app.errors.invalid import PasswordError
 from shared.app.errors.uniques import EmailUniqueError
 from shared.app.handlers.password import PasswordHandler

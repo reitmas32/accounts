@@ -7,7 +7,7 @@ from api.v1.codes.crud.services import RepositoryCode
 from api.v1.codes.crud.steps import VerifyCodeStep
 from api.v1.login_methods.proxies import RepositoryUserLoginMethod
 from api.v1.users.crud.steps.user import FindUserStep
-from core.controllers.saga.controller import StepSAGA
+from shared.app.controllers.saga.controller import StepSAGA
 from shared.app.enums import UserLoginMethodsTypeEnum
 from shared.databases.errors import EntityNotFoundError
 from shared.databases.postgres.models.email import EmailModel

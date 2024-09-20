@@ -10,8 +10,8 @@ from api.v1.codes.crud.services import RepositoryCode
 from api.v1.users.crud.resources import (
     get_data_for_email_activate_account,
 )
-from core.controllers.saga.controller import StepSAGA
 from core.settings import email_client, settings
+from shared.app.controllers.saga.controller import StepSAGA
 from shared.app.enums import CodeTypeEnum
 from shared.app.errors.invalid import (
     CodeAlreadyUsedError,
