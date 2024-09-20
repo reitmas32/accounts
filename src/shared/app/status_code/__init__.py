@@ -59,6 +59,7 @@ class StatusCodes(Enum):
     # Generic
     APP_INVALID_DATA = 100_401, "The provided data is invalid."
     APP_STEPS_ERROR = 100_402, "Steps Erros."
+    APP_UNIMPLEMENTED_ERROR = 100_403, "The resource is not implemented yet."
     APP_DONT_FOUND_ENTITY = 100_404, "The entity was not found."
 
     # Specific by App
