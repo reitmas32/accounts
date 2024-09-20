@@ -6,9 +6,9 @@ from typing import Any
 from pytz import timezone
 from sqlalchemy import and_
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Session
 
 from core.settings import log, settings
+from core.settings.database import use_database_session
 from shared.app.errors.unimplemented import UnimplementedError
 from shared.databases.infrastructure.repository import RepositoryInterface
 
@@ -25,8 +25,9 @@ class RepositoryPostgresBase(RepositoryInterface):
     def entity(self) -> type:
         raise UnimplementedError(resource="RepositoryBase.model")
 
-    def __init__(self, session: Session):
-        self.session = session
+    def __init__(self):
+        with use_database_session() as session: #TODO: Pensar si es correcto esto o sera mejor inyectar el session
+            self.session = session
         self.logger = log
 
     def update_field_by_id(self, id: uuid.UUID, field_name: str, new_value: Any) -> bool:
