@@ -18,6 +18,14 @@ class RepositoryInterface(ABC):
         """
         raise UnimplementedError(resource="RepositoryInterface.model")
 
+    @property
+    @abstractmethod
+    def entity(self) -> type:
+        """
+        Returns the entity model associated with the repository.
+        """
+        raise UnimplementedError(resource="RepositoryInterface.entity")
+
     @abstractmethod
     def update_field_by_id(self, id: uuid.UUID, field_name: str, new_value: Any) -> bool:
         """
