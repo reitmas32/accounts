@@ -10,8 +10,8 @@ from core.settings import settings
 from core.settings.database import init_db, validate_db_conections
 from core.utils.logger import logger
 from core.utils.logger_config import LoggerConfig
-from core.utils.validations import validation_pydantic_field
 from shared.app.environment import EnvironmentsTypes
+from shared.presentation.dtos.validations import validation_pydantic_field
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
