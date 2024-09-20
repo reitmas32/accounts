@@ -6,9 +6,9 @@ from api.v1.platforms.logic.steps import (
     CreateUserStep,
     FindPlatformUserStep,
 )
-from core.controllers.saga.controller import SagaController
 from core.utils.generic_views import BaseService
 from core.utils.responses import create_simple_envelope_response
+from shared.app.controllers import SagaController
 from shared.app.handlers.jwt import JWTHandler
 from shared.databases.postgres.models.user import UserModel
 
