@@ -7,8 +7,8 @@ from api.v1.platforms.logic.schemas import SignInPlatformSchema, SignupPlatformS
 from api.v1.users.crud.proxies import RepositoryUser
 from api.v1.users.crud.schemas import UserSchema
 from core.controllers.saga.controller import StepSAGA
-from core.utils.jwt import JWTHandler, TokenDataSchema
 from shared.app.errors.uniques import PlatformIDUniqueError, UserNameUniqueError
+from shared.app.handlers.jwt import JWTHandler, TokenDataSchema
 from shared.databases.errors import EntityNotFoundError
 
 if TYPE_CHECKING:

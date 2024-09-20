@@ -11,10 +11,10 @@ from api.v1.users.crud.proxies import RepositoryUser
 from api.v1.users.crud.resources import get_data_for_email_activate_account
 from core.controllers.saga.controller import StepSAGA
 from core.settings import email_client, settings
-from core.utils.jwt import JWTHandler, TokenDataSchema
 from core.utils.password import PasswordManager
 from shared.app.enums import CodeTypeEnum, UserLoginMethodsTypeEnum
 from shared.app.errors.invalid import MissingCredentialsError, PasswordError
+from shared.app.handlers.jwt import JWTHandler, TokenDataSchema
 from shared.databases.errors import EntityNotFoundError
 
 if TYPE_CHECKING:
