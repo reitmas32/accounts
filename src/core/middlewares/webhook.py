@@ -32,8 +32,9 @@ class CallWebHookMiddleware(BaseHTTPMiddleware):
             response.body_iterator = iterate_in_threadpool(iter(response_body))
             task = asyncio.create_task(
                 CallWebHookMiddleware.call_webhook(
-                    resource=request.base_url.path,
+                    resource=path,
                     response=response_body[0].decode(),
+                    # TODO: Add request: Taking into account that sensitive data must be deleted
                 ),
             )
 
