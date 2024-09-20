@@ -5,12 +5,10 @@ from sqlalchemy import Boolean, Column, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.ext.declarative import declarative_base
 
-from core.utils.orm import QueryModel
-
 Base = declarative_base()
 
 
-class BaseModelClass(Base, QueryModel):
+class BaseModelClass(Base):
     """
     Abstract base class for ORM models in SQLAlchemy that defines some common
     fields and behaviors. This class extends SQLAlchemy's `Base` and a custom
