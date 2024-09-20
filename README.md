@@ -1,5 +1,22 @@
 # API de Administración de Usuarios
 
+![Accounts](assets/logo-accounts.svg)
+
+Esta API está diseñada para resolver problemas comunes en la gestión de usuarios en aplicaciones web. Ofrece funcionalidades esenciales como la creación, autenticación y autorización de usuarios, así como un sistema de notificaciones que informa sobre cualquier cambio en los perfiles de los usuarios. Con un enfoque en la seguridad y la flexibilidad, esta API está pensada para ser fácil de integrar en cualquier aplicación, proporcionando las herramientas necesarias para gestionar usuarios de manera eficiente sin complicaciones.
+
+Funcionalidades Actuales:
+
+* Autenticación Federada
+* Autenticación via Email
+* Notificación de cambios de usuarios (Webhook)
+* Roles 
+
+Funcionalidades Planeadas:
+* 2FA
+* Autenticacion OTP
+* Envio de notificaciones por SMS, WhatsApp, Telegram, etc.
+* Generacion de QRs para autenticacion
+
 ## 1) Ejecutar la aplicacion
 
 ```shell
