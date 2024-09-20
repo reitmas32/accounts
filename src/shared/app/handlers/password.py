@@ -3,7 +3,7 @@ from passlib.context import CryptContext
 from core.settings import settings
 
 
-class PasswordManager:
+class PasswordHandler:
     # Creates a Passlib context with the selected algorithm
     pwd_context = CryptContext(schemes=[settings.HASHING_ALGORITHM.value], deprecated="auto")
 

@@ -11,10 +11,10 @@ from api.v1.users.crud.proxies import RepositoryUser
 from api.v1.users.crud.resources import get_data_for_email_activate_account
 from core.controllers.saga.controller import StepSAGA
 from core.settings import email_client, settings
-from core.utils.password import PasswordManager
 from shared.app.enums import CodeTypeEnum, UserLoginMethodsTypeEnum
 from shared.app.errors.invalid import MissingCredentialsError, PasswordError
 from shared.app.handlers.jwt import JWTHandler
+from shared.app.handlers.password import PasswordHandler
 from shared.databases.errors import EntityNotFoundError
 from shared.presentation.schemas import JWTSchema
 
@@ -40,7 +40,7 @@ class LoginUserStep(StepSAGA):
         self.user_name = user_name
         self.email = email
         self.password = password
-        self.password_manager = PasswordManager()
+        self.password_manager = PasswordHandler()
         self.repository_user = RepositoryUser(session=session)
         self.repository_email = RepositoryEmail(session=session)
         self.repository_login_method = RepositoryUserLoginMethod(session=session)
@@ -243,7 +243,7 @@ class ResetPasswordConfirmStep(StepSAGA):
         #######################################
 
         self.repository_email.update_field_by_id(
-            id=self.email.id, field_name="password", new_value=PasswordManager.hash_password(password=self.password)
+            id=self.email.id, field_name="password", new_value=PasswordHandler.hash_password(password=self.password)
         )
 
         #######################################
