@@ -63,4 +63,6 @@ class CallWebHookMiddleware(BaseHTTPMiddleware):
             logger.error("Error call the webhook")
         except requests.Timeout:
             pass
+        except requests.ConnectionError as e:
+            logger.error(f"Error call the webhook {e}")
 
