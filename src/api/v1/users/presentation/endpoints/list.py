@@ -1,13 +1,13 @@
-
 from fastapi import Depends, Request, status
-from sqlalchemy.orm import Session
 
+from api.v1.users.domain.usecase.list import ListUserUseCase
+from api.v1.users.infrastructure.repositories.postgres.user import UserRepository
+from api.v1.users.presentation.dtos.filters import UserFilters
 from core.settings import log
-from core.settings.database import get_session
 from core.utils.responses import (
     EnvelopeResponse,
-    EnvelopeResponseBody,
 )
+from shared.app.use_cases.list import PaginationParams
 
 from .routers import router
 
@@ -20,13 +20,24 @@ from .routers import router
 )
 async def retrieve_all(
     request: Request,
-    session: Session = Depends(get_session),
+    pagination_params: PaginationParams = Depends(),
+    query_params: UserFilters = Depends(),
 ):
     log.info("Get All Users")
-    body = EnvelopeResponseBody(links=None, count=0, results=[]).model_dump()
+
+    filters = query_params.model_dump(exclude_unset=True, exclude_defaults=True)
+
+    use_case = ListUserUseCase(repository=UserRepository())
+
+    entities = use_case.execute(
+        filters=filters,
+        pagination_params=pagination_params,
+        url=request.url,
+    )
+
     return EnvelopeResponse(
         errors=None,
-        data=body,
+        data=entities.model_dump(),
         response_code=status.HTTP_200_OK,
         success=True,
     )
