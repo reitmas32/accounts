@@ -45,7 +45,16 @@ class RepositoryInterface(ABC):
         raise UnimplementedError(resource="RepositoryInterface.get_all")
 
     @abstractmethod
-    def get_by_attributes(self, **filters: Any) -> Any:
+    def lenght(self) -> int:
+        """
+        Returns all records from the model.
+
+        :return: List of model instances.
+        """
+        raise UnimplementedError(resource="RepositoryInterface.lengh")
+
+    @abstractmethod
+    def get_by_attributes(self, offset: int = 0, limit: int = 100, filters: dict | None = None) -> Any:
         """
         Retrieves records filtered by specific attributes.
 
