@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from pytz import timezone
 from sqlalchemy import and_
@@ -10,19 +10,29 @@ from core.settings import log, settings
 from core.settings.database import use_database_session
 from shared.databases.infrastructure.repository import RepositoryInterface
 
+if TYPE_CHECKING:
+    from sqlalchemy.orm import Session
+
 
 class RepositoryPostgresBase(RepositoryInterface):
-
     def __init__(self):
-        with use_database_session() as session: #TODO: Pensar si es correcto esto o sera mejor inyectar el session
-            self.session = session
+        with (
+            use_database_session() as session
+        ):  # TODO: Pensar si es correcto esto o sera mejor inyectar el session
+            self.session: Session = session
         self.logger = log
 
-    def update_field_by_id(self, id: uuid.UUID, field_name: str, new_value: Any) -> bool:
+    def update_field_by_id(
+        self, id: uuid.UUID, field_name: str, new_value: Any
+    ) -> bool:
         result = False
         try:
             # Construct a dynamic update query
-            update_query = self.session.query(self.model).filter(self.model.id == id).update({field_name: new_value})
+            update_query = (
+                self.session.query(self.model)
+                .filter(self.model.id == id)
+                .update({field_name: new_value})
+            )
 
             # Commit the changes
             self.session.commit()
@@ -45,25 +55,38 @@ class RepositoryPostgresBase(RepositoryInterface):
         return self.entity(**result.as_dict())
 
     def get_all(self) -> list[Any]:
-        entities =  self.session.query(self.model).all()
+        entities = self.session.query(self.model).all()
         return [self.entity(**entity.as_dict()) for entity in entities]
+
+    def lenght(self) -> int:
+        """
+        Returns all records from the model.
+
+        :return: List of model instances.
+        """
+        return self.session.query(self.model).count()
 
     def get_by_attributes(
         self,
-        **filters: Any,
+        offset: int = 0,
+        limit: int = 100,
+        filters: dict | None = None,
     ):
         conditions = []
-        for attribute, value in filters.items():
-            if not hasattr(self.model, attribute):
-                raise ValueError(f"Attribute {attribute} not found in model {self.model.__name__}")
+        if len(filters) > 0:
+            for attribute, value in filters.items():
+                if not hasattr(self.model, attribute):
+                    raise ValueError(
+                        f"Attribute {attribute} not found in model {self.model.__name__}"
+                    )
 
-            # Check if the value is a list, and use 'in_' if it is
-            if isinstance(value, list):
-                conditions.append(getattr(self.model, attribute).in_(value))
-            else:
-                conditions.append(getattr(self.model, attribute) == value)
+                # Check if the value is a list, and use 'in_' if it is
+                if isinstance(value, list):
+                    conditions.append(getattr(self.model, attribute).in_(value))
+                else:
+                    conditions.append(getattr(self.model, attribute) == value)
 
-        query = self.session.query(self.model).filter(and_(*conditions))
+        query = self.session.query(self.model).filter(and_(*conditions)).limit(limit).offset(offset)
 
         entities = query.all()
         return [self.entity(**entity.as_dict()) for entity in entities]
@@ -92,14 +115,16 @@ class RepositoryPostgresBase(RepositoryInterface):
             message_error = f"Failed to add a new record: {e}"
             log.error(message_error)
             raise SQLAlchemyError(message_error)
-        entitie =  new_record
+        entitie = new_record
         return self.entity(**entitie.as_dict())
 
     def delete_by_id(self, id: uuid.UUID) -> bool:
         result = False
         try:
             # Construct a delete query
-            delete_query = self.session.query(self.model).filter(self.model.id == id).delete()
+            delete_query = (
+                self.session.query(self.model).filter(self.model.id == id).delete()
+            )
 
             # Commit the changes
             self.session.commit()
