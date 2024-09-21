@@ -1,5 +1,4 @@
 import uuid
-from abc import abstractmethod
 from datetime import datetime
 from typing import Any
 
@@ -9,21 +8,10 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from core.settings import log, settings
 from core.settings.database import use_database_session
-from shared.app.errors.unimplemented import UnimplementedError
 from shared.databases.infrastructure.repository import RepositoryInterface
 
 
 class RepositoryPostgresBase(RepositoryInterface):
-
-    @property
-    @abstractmethod
-    def model(self) -> type:
-        raise UnimplementedError(resource="RepositoryBase.model")
-
-    @property
-    @abstractmethod
-    def entity(self) -> type:
-        raise UnimplementedError(resource="RepositoryBase.model")
 
     def __init__(self):
         with use_database_session() as session: #TODO: Pensar si es correcto esto o sera mejor inyectar el session
@@ -56,13 +44,13 @@ class RepositoryPostgresBase(RepositoryInterface):
             return None
         return self.entity(**result.as_dict())
 
-    def get_all(self) -> type | None:
+    def get_all(self) -> list[Any]:
         entities =  self.session.query(self.model).all()
         return [self.entity(**entity.as_dict()) for entity in entities]
 
     def get_by_attributes(
         self,
-        **filters: dict,
+        **filters: Any,
     ):
         conditions = []
         for attribute, value in filters.items():

@@ -9,22 +9,9 @@ class RepositoryInterface(ABC):
     """
     Abstract interface defining the basic methods of a repository.
     """
+    model: type
 
-    @property
-    @abstractmethod
-    def model(self) -> type:
-        """
-        Returns the database model associated with the repository.
-        """
-        raise UnimplementedError(resource="RepositoryInterface.model")
-
-    @property
-    @abstractmethod
-    def entity(self) -> type:
-        """
-        Returns the entity model associated with the repository.
-        """
-        raise UnimplementedError(resource="RepositoryInterface.entity")
+    entity: type
 
     @abstractmethod
     def update_field_by_id(self, id: uuid.UUID, field_name: str, new_value: Any) -> bool:
