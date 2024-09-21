@@ -72,7 +72,10 @@ class RepositoryPostgresBase(RepositoryInterface):
         new_record = None
         try:
             current_time = datetime.now(timezone(settings.TIME_ZONE))
-            new_record = self.model(**kwargs, created=current_time, updated=current_time, is_removed=False)
+            kwargs["created"] = current_time
+            kwargs["updated"] = current_time
+            kwargs["is_removed"] = False
+            new_record = self.model(**kwargs)
             self.session.add(new_record)
 
             # Persist the record to the database
