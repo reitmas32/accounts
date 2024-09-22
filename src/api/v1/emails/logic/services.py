@@ -24,13 +24,13 @@ from api.v1.users.crud.steps.associate_with_user import (
     FindUserLoginMethodStep,
 )
 from api.v1.users.crud.steps.user import CreateUserStep, FindUserStep
-from core.controllers.saga.controller import SagaController
 from core.utils.generic_views import (
     BaseService,
 )
 from core.utils.responses import (
     create_simple_envelope_response,
 )
+from shared.app.controllers import SagaController
 from shared.app.enums import UserLoginMethodsTypeEnum
 from shared.databases.postgres.models.code import CodeModel
 from shared.databases.postgres.models.user import UserModel

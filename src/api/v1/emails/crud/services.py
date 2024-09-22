@@ -1,4 +1,3 @@
-import logging
 from uuid import UUID
 
 from fastapi import status
@@ -10,13 +9,11 @@ from core.utils.generic_views import (
     ListBaseService,
     ObjectBaseService,
 )
-from core.utils.password import PasswordManager
 from core.utils.repository_base import RepositoryBase
 from core.utils.responses import (
     create_simple_envelope_response,
 )
-
-logger = logging.getLogger(__name__)
+from shared.app.handlers.password import PasswordHandler
 
 
 class ListEmailsService(ListBaseService):
@@ -52,7 +49,7 @@ class CreateEmailsService(BaseService):
         self.request_errors = {"validations_errors": {}, "validations_success": True}
         self._validate_request(payload=payload)
 
-        payload.password = PasswordManager.hash_password(password=payload.password)
+        payload.password = PasswordHandler.hash_password(password=payload.password)
 
         instance = self.model(**payload.model_dump())
         self.session.add(instance)

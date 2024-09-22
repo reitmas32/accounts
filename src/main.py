@@ -8,10 +8,10 @@ from core.middlewares.log_interceptor import LoggerMiddleware
 from core.middlewares.webhook import CallWebHookMiddleware
 from core.settings import settings
 from core.settings.database import init_db, validate_db_conections
-from core.utils.environment import EnvironmentsTypes
 from core.utils.logger import logger
 from core.utils.logger_config import LoggerConfig
-from core.utils.validations import validation_pydantic_field
+from shared.app.environment import EnvironmentsTypes
+from shared.presentation.dtos.validations import validation_pydantic_field
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -41,7 +41,7 @@ def root():
     return RedirectResponse(url="/docs")
 
 
-if EnvironmentsTypes.DOCKER.value[0] == settings.ENVIRONMENT:
+if EnvironmentsTypes.DOCKER.value.env_name == settings.ENVIRONMENT:
     init_db()
 logger.info(f"ENVIRONMENT: {settings.ENVIRONMENT}")
 validate_db_conections()

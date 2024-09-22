@@ -47,7 +47,7 @@ class AuthGeneralPlatformModel(BaseModelClass):
     active = Column(Boolean, nullable=False)
     """Boolean field that indicates whether this external authentication is currently active."""
 
-    type = Column(Enum(PlatformsLogin), nullable=False)
+    platform = Column(Enum(PlatformsLogin), nullable=False)
     """Enum field that represents the external platform (Google, Apple, Facebook, etc.). Must be one of the values defined in `PlatformsLogin`."""
 
     user = relationship(

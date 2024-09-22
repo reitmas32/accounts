@@ -1,5 +1,5 @@
 from core.settings import settings
-from core.utils.exceptions import FilterException
+from shared.app.errors.invalid import FilterError
 
 
 class ManagerFilter:
@@ -39,7 +39,7 @@ class ManagerFilter:
                 invalid_keys.append(key)
 
         if invalid_keys:
-            raise FilterException(invalid_keys=invalid_keys, valid_keys=valid_keys)
+            raise FilterError(invalid_keys=invalid_keys, valid_keys=valid_keys)
         return cleaned_data
 
     def get_unary_expressions(self):

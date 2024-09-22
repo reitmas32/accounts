@@ -4,11 +4,9 @@ from sqlalchemy.orm import Session
 
 from api.v1.emails.logic.schemas import SignupEmailSchema
 from api.v1.users.crud.proxies import RepositoryUser
-from core.controllers.saga.controller import StepSAGA
-from core.utils.exceptions import (
-    DontFindResourceException,
-    UserNameUniqueException,
-)
+from shared.app.controllers.saga.controller import StepSAGA
+from shared.app.errors.uniques import UserNameUniqueError
+from shared.databases.errors import EntityNotFoundError
 
 if TYPE_CHECKING:
     from shared.databases.postgres.models import UserModel
@@ -54,7 +52,7 @@ class CreateUserStep(StepSAGA):
         """
         existing_user_name = self.repository.get_user(user_name=self.user.user_name)
         if existing_user_name is not None:
-            raise UserNameUniqueException(user_name=self.user.user_name)
+            raise UserNameUniqueError(user_name=self.user.user_name)
 
         self.user_created: UserModel = self.repository.add(
             user_name=self.user.user_name,
@@ -63,7 +61,7 @@ class CreateUserStep(StepSAGA):
         )
 
         if self.user_created is None:
-            raise UserNameUniqueException(user_name=self.user.user_name)
+            raise UserNameUniqueError(user_name=self.user.user_name)
 
         return self.user_created
 
@@ -99,7 +97,7 @@ class FindUserStep(StepSAGA):
         """
         user = self.repository.get_user(user_name=self.user_name)
         if user is None:
-            raise DontFindResourceException(resource=self.user_name)
+            raise EntityNotFoundError(resource=self.user_name)
 
         return user
 

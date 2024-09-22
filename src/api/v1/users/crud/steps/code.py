@@ -12,13 +12,13 @@ from api.v1.users.crud.resources import (
 )
 from core.controllers.saga.controller import StepSAGA
 from core.settings import email_client, settings
-from core.utils.exceptions import (
-    CodeAlreadyExpiredException,
-    CodeAlreadyUseException,
-    DontFindResourceException,
-    DontValidCodeException,
-)
 from shared.app.enums import CodeTypeEnum
+from shared.app.errors.invalid import (
+    CodeAlreadyUsedError,
+    CodeExpiredError,
+    CodeInvalidError,
+)
+from shared.databases.errors import EntityNotFoundError
 from shared.databases.postgres.models.login_methods import LoginMethodModel
 from shared.databases.postgres.models.user import UserModel
 
@@ -138,7 +138,7 @@ class FindCodeStep(StepSAGA):
         """
         code = self.repository.get_code(code=self.code)
         if code is None:
-            raise DontFindResourceException(resource=self.email)
+            raise EntityNotFoundError(resource=self.email)
 
         return code
 
@@ -178,15 +178,15 @@ class VerifyCodeStep(StepSAGA):
 
         code = self.repository.get_code_by_user_id(code=self.code, user_id=payload.id)
         if code is None:
-            raise DontValidCodeException(user_name=payload.user_name, code=self.code)
+            raise CodeInvalidError(code=self.code)
         if code.used_at is not None:
-            raise CodeAlreadyUseException(user_name=payload.user_name, code=self.code)
+            raise CodeAlreadyUsedError(user_name=payload.user_name, code=self.code)
 
         code_date: datetime = code.created.replace(tzinfo=tz("UTC"))
 
         timedelta_code = now - code_date
         if int(timedelta_code.total_seconds()) > settings.TIME_SECONDS_EXPIRE_VERIFICATION_CODE:
-            raise CodeAlreadyExpiredException
+            raise CodeExpiredError(code=self.code)
         return code
 
     def rollback(self):

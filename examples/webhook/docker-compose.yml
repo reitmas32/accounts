@@ -1,0 +1,6 @@
+services:
+  webhook:
+    build:
+      dockerfile: Dockerfile.deploy
+    ports:
+      - 8001:8001
