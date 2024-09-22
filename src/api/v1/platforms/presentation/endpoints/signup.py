@@ -22,6 +22,7 @@ from core.utils.responses import (
     summary="Signup By Platform",
     status_code=status.HTTP_201_CREATED,
     response_model=EnvelopeResponse,
+    tags=["Auth API"],
 )
 async def signup(
     payload: SignupPlatformDto,

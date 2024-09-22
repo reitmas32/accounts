@@ -14,6 +14,7 @@ from .routers import router
     summary="Verify id JWT is valid",
     status_code=status.HTTP_200_OK,
     response_model=EnvelopeResponse,
+    tags=["Auth API"],
 )
 async def verify_jwt(
     auth: str = Header(),
