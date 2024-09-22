@@ -9,4 +9,4 @@ class CreatePlatformDto(BaseModel):
     user_id: UUID
     external_id: str
     active: bool = False
-    type: PlatformsLogin
+    platform: PlatformsLogin

@@ -7,4 +7,4 @@ from shared.app.enums.platform_login import PlatformsLogin
 class ListCodeSchema(EntityBase):
     user_id: UUID
     external_id: str
-    type: PlatformsLogin
+    platform: PlatformsLogin

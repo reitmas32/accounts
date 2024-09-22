@@ -8,4 +8,4 @@ class PlatformFilters(BaseFilters):
     user_id: UUID | None = None
     external_id: str | None = None
     active: bool | None = None
-    type: PlatformsLogin | None = None
+    platform: PlatformsLogin | None = None
