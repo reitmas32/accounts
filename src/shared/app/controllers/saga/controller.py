@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import Any
 
 from fastapi import HTTPException
 
@@ -22,8 +23,9 @@ class StepSAGA(ABC):
 
 
 class SagaController:
-    def __init__(self, steps: list[StepSAGA]):
+    def __init__(self, steps: list[StepSAGA], prev_saga: Any | None = None):
         self.steps = steps
+        self.prev_saga = prev_saga
         self.payloads = {}
 
     def execute(self):
@@ -45,5 +47,11 @@ class SagaController:
             try:
                 step.rollback()
             except Exception as e:  # noqa: PERF203, BLE001
+                # Si no se puede deshacer un paso, registrar el error y continuar
+                log.error(f"Failed to rollback step: {type(step).__name__}, Error: {e}")
+        if self.prev_saga is not None:
+            try:
+                self.prev_saga.rollback()
+            except Exception as e:  # noqa: BLE001
                 # Si no se puede deshacer un paso, registrar el error y continuar
                 log.error(f"Failed to rollback step: {type(step).__name__}, Error: {e}")
