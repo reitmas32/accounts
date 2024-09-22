@@ -38,11 +38,16 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
                 error_detail = {"detail": str(e)}
                 status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
 
+            internal_code = e.internal_code if hasattr(e, "internal_code") else status_code
+            external_code = e.external_code if hasattr(e, "external_code") else status_code
+
             response = EnvelopeResponse(
                 errors=error_detail,
                 data=None,
                 message=str(e),
                 response_code=status_code,
                 success=False,
+                internal_code=internal_code,
+                external_code=external_code,
             )
             return JSONResponse(status_code=status_code, content=dict(response))
