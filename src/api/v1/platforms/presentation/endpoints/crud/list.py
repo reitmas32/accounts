@@ -5,13 +5,12 @@ from api.v1.platforms.infrastructure.repositories.postgres.user import (
     PlatformRepository,
 )
 from api.v1.platforms.presentation.dtos.filters import PlatformFilters
+from api.v1.platforms.presentation.endpoints.routers import router
 from core.settings import log
 from core.utils.responses import (
     EnvelopeResponse,
 )
 from shared.app.use_cases.list import PaginationParams
-
-from .routers import router
 
 
 @router.get(

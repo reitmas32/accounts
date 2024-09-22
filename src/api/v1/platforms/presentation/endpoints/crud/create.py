@@ -1,4 +1,3 @@
-
 from fastapi import status
 
 from api.v1.platforms.domain.entities.platform import PlatformEntity
@@ -7,12 +6,11 @@ from api.v1.platforms.infrastructure.repositories.postgres.user import (
     PlatformRepository,
 )
 from api.v1.platforms.presentation.dtos import CreatePlatformDto
+from api.v1.platforms.presentation.endpoints.routers import router
 from core.utils.logger import logger
 from core.utils.responses import (
     EnvelopeResponse,
 )
-
-from .routers import router
 
 
 @router.post(
