@@ -1,6 +1,7 @@
 from api.v1.platforms.domain.entities.platform import PlatformEntity
 from api.v1.users.domain.steps.create import CreateUserByUserNameStep
 from shared.app.controllers.saga.controller import StepSAGA
+from shared.app.errors.uniques.platform_id_unique import PlatformIDUniqueError
 from shared.databases.infrastructure.repository import RepositoryInterface
 
 
@@ -9,8 +10,14 @@ class CreatePlatformStep(StepSAGA):
         self.entity = entity
         self.repository = repository
 
-    def __call__(self, payload: None = None, all_payloads: dict | None = None):  # noqa: ARG002
+    def __call__(self, payload: None = None, all_payloads: dict | None = None):
         user = all_payloads[CreateUserByUserNameStep]
+
+        platform = payload
+
+        if platform is not None:
+            raise PlatformIDUniqueError(platform=platform.platform, id=platform.external_id)
+
         self.entity.user_id = user.id
         self.platform = None
         self.platform = self.repository.add( **self.entity.model_dump())

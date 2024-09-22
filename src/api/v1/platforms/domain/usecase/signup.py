@@ -3,6 +3,7 @@ from api.v1.login_methods.domain.steps.create_jwt import CreateJWTStep
 from api.v1.platforms.domain.entities.platform import PlatformEntity
 from api.v1.platforms.domain.entities.singup import SignupPlatformEntity
 from api.v1.platforms.domain.steps.create import CreatePlatformStep
+from api.v1.platforms.domain.steps.search import SearchPlatformStep
 from api.v1.users.domain.steps.create import CreateUserByUserNameStep
 from shared.app.controllers.saga.controller import SagaController
 from shared.databases.infrastructure.repository import RepositoryInterface
@@ -33,6 +34,7 @@ class SignUpPlatformUseCase:
                     user_name=payload.user_name, repository=self.user_repository
                 ),
                 # TODO: Validate the Token
+                SearchPlatformStep(external_id=payload.external_id, platform=payload.platform, repository=self.repository),
                 CreatePlatformStep(repository=self.repository, entity=platform),
                 CreateLoginMethodStep(repository=self.login_method_repository),
             ],
