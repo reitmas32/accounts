@@ -72,6 +72,7 @@ class StatusCodes(Enum):
     APP_INVALID_PASSWORD_FORMAT = 101_508, "Password does not meet the required format."
     APP_UNVERIFIED_ACCOUNT = 101_509, "The account is not verified."
     APP_MISSING_CREDENTIALS = 101_510, "The request not found email or user_name"
+    APP_JWT_EXPIRED = 101_511, "The JWT has expired"
 
     def __new__(cls, value, description):
         obj = object.__new__(cls)
