@@ -78,6 +78,22 @@ class Settings(PydanticBaseSettings):
     # Password security settings
     # ----------------------------------------------------------------
     HASHING_ALGORITHM: HashingAlgorithmsEnum = HashingAlgorithmsEnum.BCRYPT
+    PASSWORD_MIN_LENGTH: int = 8
+    PASSWORD_MAX_LENGTH: int = 20
+    PASSWORD_UPPERCASE_COUNT: int = 1
+    PASSWORD_LOWERCASE_COUNT: int = 1
+    PASSWORD_DIGIT_COUNT: int = 1
+    PASSWORD_SPECIAL_CHAR_COUNT: int = 1
+    PASSWORD_SPECIAL_CHARS: str = '[!@#$%^&*(),.?":{}|<>]'
+
+    PASSWORD_VALIDATIONS: list[str] = [
+        "MIN_LENGTH",
+        "MAX_LENGTH",
+        "UPPERCASE",
+        "LOWERCASE",
+        "DIGIT",
+        "SPECIAL_CHAR"
+    ]
 
     # Token JWT settings
     # ----------------------------------------------------------------
