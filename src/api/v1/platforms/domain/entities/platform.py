@@ -5,8 +5,8 @@ from shared.app.enums.platform_login import PlatformsLogin
 
 
 class PlatformEntity(EntityBase):
-    user_id: UUID
+    user_id: UUID | None = None
     external_id: str
     active: bool = False
-    type: PlatformsLogin
+    platform: PlatformsLogin
 
