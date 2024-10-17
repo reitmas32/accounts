@@ -8,7 +8,7 @@ from shared.app.handlers.password import PasswordHandler
 
 class EmailEntity(EntityBase):
     email: str
-    user_id: UUID
+    user_id: UUID | None = None
     password: str
 
     # Validación posterior a la creación del objeto para encriptar la contraseña
