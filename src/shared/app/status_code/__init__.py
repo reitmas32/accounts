@@ -73,6 +73,7 @@ class StatusCodes(Enum):
     APP_UNVERIFIED_ACCOUNT = 101_509, "The account is not verified."
     APP_MISSING_CREDENTIALS = 101_510, "The request not found email or user_name"
     APP_JWT_EXPIRED = 101_511, "The JWT has expired"
+    APP_CODE_LENGTH = 101_512, "The length of the code is invalid"
 
     def __new__(cls, value, description):
         obj = object.__new__(cls)
