@@ -9,6 +9,15 @@ services:
       - 5440:5432
     networks:
       - "local-development"
+  db-mysql:
+      image: mysql:8
+      environment:
+        MYSQL_ROOT_PASSWORD: secret
+        MYSQL_DATABASE: jalo
+      ports:
+        - 3306:3306
+      networks:
+        - "local-development"
   tests:
     build:
       dockerfile: deployment/Dockerfile.test
