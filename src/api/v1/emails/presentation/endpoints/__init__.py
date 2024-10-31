@@ -1,3 +1,4 @@
+from .activate import *  # noqa: F403
 from .create import *  # noqa: F403
 from .delete import *  # noqa: F403
 from .list import *  # noqa: F403
