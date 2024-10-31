@@ -5,6 +5,9 @@ from api.v1.emails.domain.entities.email import EmailEntity
 from api.v1.emails.domain.usecase.create import SignUpWithEmailUseCase
 from api.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from api.v1.emails.presentation.dtos import SignupEmailDto
+from api.v1.login_methods.infrastructure.repositories.postgres.login_method import (
+    LoginMethodRepository,
+)
 from api.v1.users.infrastructure.repositories.postgres.user import UserRepository
 from core.utils.logger import logger
 from core.utils.responses import (
@@ -19,6 +22,7 @@ from .routers import router
     summary="SignUp user with email",
     status_code=status.HTTP_201_CREATED,
     response_model=EnvelopeResponse,
+    tags=["Auth API"],
 )
 async def signup(
     request: Request,
@@ -45,6 +49,7 @@ async def signup(
         email_repository=EmailRepository(),
         user_repository=UserRepository(),
         code_repository=CodeRepository(),
+        login_method_repository=LoginMethodRepository(),
         user_name=payload.user_name,
     )
 

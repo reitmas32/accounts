@@ -3,6 +3,7 @@ import string
 from typing import TYPE_CHECKING
 
 from api.v1.emails.domain.entities.email import EmailEntity
+from api.v1.login_methods.domain.entities.login_method import LoginMethodEntity
 from core.settings import email_client, settings
 from shared.app.enums.code_type import CodeTypeEnum
 from shared.app.enums.user_login_methods import UserLoginMethodsTypeEnum
@@ -14,6 +15,7 @@ from shared.presentation.templates.email import get_data_for_email_activate_acco
 if TYPE_CHECKING:
     from shared.databases.postgres.models.code import CodeModel
     from shared.databases.postgres.models.email import EmailModel
+    from shared.databases.postgres.models.login_methods import LoginMethodModel
     from shared.databases.postgres.models.user import UserModel
 
 
@@ -44,18 +46,20 @@ class SignUpWithEmailUseCase:
         user_repository: RepositoryInterface,
         email_repository: RepositoryInterface,
         code_repository: RepositoryInterface,
+        login_method_repository: RepositoryInterface,
         user_name: str | None = None,
     ):
         self.user_repository = user_repository
         self.email_repository = email_repository
         self.code_repository = code_repository
+        self.login_method_repository = login_method_repository
         self.user_name = user_name
 
     def execute(self, payload: EmailEntity):
-
         self.user_model: UserModel = None
         self.email_model: EmailModel = None
         self.code: CodeModel = None
+        self.login_method: LoginMethodModel = None
         try:
             user_entity = self.user_repository.get_by_attributes(
                 filters={"user_name": self.user_name}
@@ -98,6 +102,15 @@ class SignUpWithEmailUseCase:
                 message_text=message_text,
             )
 
+            login_method = LoginMethodEntity(
+                user_id=self.user_model.id,
+                entity_id=self.email_model.id,
+                entity_type=UserLoginMethodsTypeEnum.EMAIL,
+                active=True,
+                verify=True,
+            )
+            self.login_method = self.login_method_repository.add(**login_method.model_dump())
+
             return self.email_model  # noqa: TRY300
         except Exception as e:
             self.rollback()
@@ -111,3 +124,5 @@ class SignUpWithEmailUseCase:
             self.email_repository.delete_by_id(self.email_model.id)
         if self.user_model:
             self.user_repository.delete_by_id(self.user_model.id)
+        if self.login_method:
+            self.repository.delete_by_id(self.login_method.id)
