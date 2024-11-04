@@ -11,9 +11,9 @@ from shared.databases.errors.entity_not_found import EntityNotFoundError
 from shared.databases.infrastructure.repository import RepositoryInterface
 
 if TYPE_CHECKING:
-    from shared.databases.postgres.models.code import CodeModel
-    from shared.databases.postgres.models.email import EmailModel
-    from shared.databases.postgres.models.login_methods import LoginMethodModel
+    from shared.databases.orms.sqlalchemy.models.code import CodeModel
+    from shared.databases.orms.sqlalchemy.models.email import EmailModel
+    from shared.databases.orms.sqlalchemy.models.login_methods import LoginMethodModel
 
 
 class ActivationEmailUseCase:

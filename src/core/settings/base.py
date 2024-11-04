@@ -8,12 +8,13 @@ from typing import ClassVar
 from dotenv import load_dotenv
 
 # Third Party Stuff
-from pydantic import PostgresDsn
+from pydantic import MySQLDsn, PostgresDsn
 from pydantic_settings import BaseSettings as PydanticBaseSettings
 from pydantic_settings import SettingsConfigDict
 
 from core.settings.enum import HashingAlgorithmsEnum, JWTAlgorithmsEnum
 from shared.app.environment import EnvironmentsTypes
+from shared.databases.enums import DataBasesEnum
 
 LIST_PATH_TO_ADD = []
 if LIST_PATH_TO_ADD:
@@ -48,7 +49,9 @@ class Settings(PydanticBaseSettings):
 
     # Database settings
     # ----------------------------------------------------------------
-    POSTGRES_DSN: PostgresDsn
+    POSTGRES_DSN: PostgresDsn | None
+    MYSQL_DSN: MySQLDsn | None
+    ENGINE_DB: DataBasesEnum = DataBasesEnum.POSTGRESQL
 
     # Sentry settings
     # ----------------------------------------------------------------

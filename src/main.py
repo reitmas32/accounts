@@ -44,5 +44,5 @@ def root():
 if EnvironmentsTypes.DOCKER.value.env_name == settings.ENVIRONMENT:
     init_db()
 logger.info(f"ENVIRONMENT: {settings.ENVIRONMENT}")
-validate_db_conections()
+#validate_db_conections()
 validation_pydantic_field(app)

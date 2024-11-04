@@ -1,10 +1,9 @@
-from sqlalchemy import Boolean, Column, Enum, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Boolean, Column, Enum, ForeignKey, String
 from sqlalchemy.orm import relationship
 
 from shared.app.enums import UserLoginMethodsTypeEnum
-from shared.databases.postgres.models.base_model import BaseModelClass
-from shared.databases.postgres.models.user import UserModel
+from shared.databases.orms.sqlalchemy.base_model_sqlalchemy import BaseModelClass
+from shared.databases.orms.sqlalchemy.models.user import UserModel
 
 
 class LoginMethodModel(BaseModelClass):
@@ -30,13 +29,13 @@ class LoginMethodModel(BaseModelClass):
     __tablename__ = "login_methods"  # Specifies the table name in the database
 
     user_id = Column(
-        ForeignKey(UserModel.id, deferrable=True, initially="DEFERRED"),
+        ForeignKey(UserModel.id),
         nullable=False,
         index=True,
     )
     """Foreign key to the `UserModel`, indicating which user the login method belongs to. Indexed for faster lookup."""
 
-    entity_id = Column(UUID, nullable=False)
+    entity_id = Column(String(36), nullable=False)
     """UUID representing the entity associated with the login method (e.g., device or account)."""
 
     entity_type = Column(Enum(UserLoginMethodsTypeEnum), nullable=False)

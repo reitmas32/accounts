@@ -8,19 +8,28 @@ from sqlalchemy.pool import NullPool
 from core.settings import settings
 from core.utils.logger import logger
 from shared.app.errors.base import BaseError
-from shared.databases.postgres.models import (
+from shared.databases.enums import DataBasesEnum
+from shared.databases.orms.sqlalchemy.base_model_sqlalchemy import Base as BaseModel
+from shared.databases.orms.sqlalchemy.models import (
     AuthGeneralPlatformModel,
     CodeModel,
     EmailModel,
     LoginMethodModel,
     UserModel,
 )
-from shared.databases.postgres.models.base_model import Base as BaseModel
+
+# TODO: Implememnt Managewr or Handler by this code
+DB_DSN: str = ""
+
+if settings.ENGINE_DB == DataBasesEnum.MYSQL:
+    DB_DSN = settings.MYSQL_DSN.unicode_string()
+else:
+    DB_DSN = settings.POSTGRES_DSN.unicode_string()
 
 engine = create_engine(
-    settings.POSTGRES_DSN.unicode_string(),
+    DB_DSN,
     poolclass=NullPool,
-    connect_args={"application_name": "fee-api-service"},
+    connect_args={},
 )
 Session = sessionmaker(bind=engine, autocommit=False)  # noqa: F811
 
@@ -74,11 +83,17 @@ def validate_db_conections():
         logger.info("1) Table 'users'................. O.K")
         session.execute(select(CodeModel).select_from(CodeModel).limit(1)).all()
         logger.info("2) Table 'codes'................. O.K")
-        session.execute(select(LoginMethodModel).select_from(LoginMethodModel).limit(1)).all()
+        session.execute(
+            select(LoginMethodModel).select_from(LoginMethodModel).limit(1)
+        ).all()
         logger.info("3) Table 'user_login_methods'..... O.K")
         session.execute(select(EmailModel).select_from(EmailModel).limit(1)).all()
         logger.info("4) Table 'auth_email'..... O.K")
-        session.execute(select(AuthGeneralPlatformModel).select_from(AuthGeneralPlatformModel).limit(1)).all()
+        session.execute(
+            select(AuthGeneralPlatformModel)
+            .select_from(AuthGeneralPlatformModel)
+            .limit(1)
+        ).all()
         logger.info("5) Table 'auth_general_platform'..... O.K")
         logger.info("Connection 💲 Success")
     except Exception as e:  # noqa: BLE001
@@ -88,5 +103,6 @@ def validate_db_conections():
 
 
 def init_db():
-    create_schemas()
+    if settings.ENGINE_DB == DataBasesEnum.POSTGRESQL:
+        create_schemas()
     BaseModel.metadata.create_all(engine)

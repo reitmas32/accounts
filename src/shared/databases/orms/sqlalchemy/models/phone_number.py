@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.orm import relationship
 
-from shared.databases.postgres.models.base_model import BaseModelClass
+from shared.databases.orms.sqlalchemy.base_model_sqlalchemy import BaseModelClass
 
 from .user import UserModel
 
@@ -26,13 +26,13 @@ class PhoneNumberModel(BaseModelClass):
     __tablename__ = "phone_number"  # Specifies the table name in the database
 
     user_id = Column(
-        ForeignKey(UserModel.id, deferrable=True, initially="DEFERRED"),
+        ForeignKey(UserModel.id ),
         nullable=False,
         index=True,
     )
     """Foreign key to the `UserModel`, indicating which user this phone number belongs to. Indexed for faster lookup."""
 
-    phone_number = Column(String, nullable=False)
+    phone_number = Column(String(20), nullable=False)
     """String representing the user's phone number. This field cannot be null."""
 
     user = relationship(

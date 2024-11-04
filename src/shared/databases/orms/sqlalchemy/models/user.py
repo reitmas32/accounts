@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy import JSON, Column, Date, String, event
 
-from shared.databases.postgres.models.base_model import BaseModelClass
+from shared.databases.orms.sqlalchemy.base_model_sqlalchemy import BaseModelClass
 
 
 class UserModel(BaseModelClass):
@@ -31,10 +31,10 @@ class UserModel(BaseModelClass):
 
     __tablename__ = "users"  # Specifies the table name in the database
 
-    user_name = Column(String, nullable=True)
+    user_name = Column(String(100), nullable=True)
     """String representing the user's unique username. If not provided, a default username is generated."""
 
-    name = Column(String, nullable=True)
+    name = Column(String(100), nullable=True)
     """String representing the user's full name."""
 
     birthday = Column(Date, nullable=True)

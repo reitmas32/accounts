@@ -2,7 +2,7 @@ from sqlalchemy import Boolean, Column, Enum, ForeignKey, String
 from sqlalchemy.orm import relationship
 
 from shared.app.enums import PlatformsLogin
-from shared.databases.postgres.models.base_model import BaseModelClass
+from shared.databases.orms.sqlalchemy.base_model_sqlalchemy import BaseModelClass
 
 from .user import UserModel
 
@@ -32,16 +32,16 @@ class AuthGeneralPlatformModel(BaseModelClass):
     __tablename__ = "auth_general_platforms"  # Specifies the table name in the database
 
     user_id = Column(
-        ForeignKey(UserModel.id, deferrable=True, initially="DEFERRED"),
+        ForeignKey(UserModel.id ),
         nullable=False,
         index=True,
     )
     """Foreign key to the `UserModel`, indicating which user the external authentication belongs to. Indexed for faster lookup."""
 
-    external_id = Column(String, nullable=False)
+    external_id = Column(String(200), nullable=False)
     """Unique identifier provided by the external authentication provider (e.g., the ID from Google or Facebook)."""
 
-    email = Column(String, nullable=True)
+    email = Column(String(100), nullable=True)
     """Optional email provided by the external platform (e.g., email used in Google or Apple account)."""
 
     active = Column(Boolean, nullable=False)

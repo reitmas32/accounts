@@ -1,7 +1,7 @@
 from sqlalchemy import Column, ForeignKey, String
 from sqlalchemy.orm import relationship
 
-from shared.databases.postgres.models.base_model import BaseModelClass
+from shared.databases.orms.sqlalchemy.base_model_sqlalchemy import BaseModelClass
 
 from .user import UserModel
 
@@ -28,16 +28,16 @@ class EmailModel(BaseModelClass):
     __tablename__ = "emails"  # Specifies the table name in the database
 
     user_id = Column(
-        ForeignKey(UserModel.id, deferrable=True, initially="DEFERRED"),
+        ForeignKey(UserModel.id ),
         nullable=False,
         index=True,
     )
     """Foreign key to the `UserModel`, indicating which user this email belongs to. Indexed for faster lookup."""
 
-    email = Column(String, nullable=False)
+    email = Column(String(100), nullable=False)
     """String representing the email address associated with the user. This field cannot be null."""
 
-    password = Column(String, nullable=False)
+    password = Column(String(100), nullable=False)
     """String representing the password linked to the email account. This field cannot be null."""
 
     user = relationship(UserModel, primaryjoin="EmailModel.user_id == UserModel.id")

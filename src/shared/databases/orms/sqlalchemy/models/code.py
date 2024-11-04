@@ -1,9 +1,8 @@
 from sqlalchemy import Column, DateTime, Enum, ForeignKey, String
-from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 from shared.app.enums import CodeTypeEnum, UserLoginMethodsTypeEnum
-from shared.databases.postgres.models.base_model import BaseModelClass
+from shared.databases.orms.sqlalchemy.base_model_sqlalchemy import BaseModelClass
 
 from .user import UserModel
 
@@ -32,17 +31,17 @@ class CodeModel(BaseModelClass):
 
     __tablename__ = "codes"  # Specifies the table name in the database
 
-    code = Column(String, nullable=False)
+    code = Column(String(20), nullable=False)
     """String representing the actual verification code."""
 
     user_id = Column(
-        ForeignKey(UserModel.id, deferrable=True, initially="DEFERRED"),
+        ForeignKey(UserModel.id ),
         nullable=False,
         index=True,
     )
     """Foreign key to the `UserModel`, indicating which user the verification code was generated for. Indexed for faster lookup."""
 
-    entity_id = Column(UUID, nullable=False)
+    entity_id = Column(String(36), nullable=False)
     """UUID representing the entity associated with the verification code (e.g., device or session)."""
 
     entity_type = Column(Enum(UserLoginMethodsTypeEnum), nullable=False)

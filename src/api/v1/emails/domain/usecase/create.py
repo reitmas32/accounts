@@ -13,10 +13,10 @@ from shared.databases.infrastructure.repository import RepositoryInterface
 from shared.presentation.templates.email import get_data_for_email_activate_account
 
 if TYPE_CHECKING:
-    from shared.databases.postgres.models.code import CodeModel
-    from shared.databases.postgres.models.email import EmailModel
-    from shared.databases.postgres.models.login_methods import LoginMethodModel
-    from shared.databases.postgres.models.user import UserModel
+    from shared.databases.orms.sqlalchemy.models.code import CodeModel
+    from shared.databases.orms.sqlalchemy.models.email import EmailModel
+    from shared.databases.orms.sqlalchemy.models.login_methods import LoginMethodModel
+    from shared.databases.orms.sqlalchemy.models.user import UserModel
 
 
 def generate_code(length):
