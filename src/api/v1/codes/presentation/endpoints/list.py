@@ -1,7 +1,7 @@
 from fastapi import Depends, Request, status
 
-from api.v1.codes.domain.usecase.list import ListCodeUseCase
-from api.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
+from context.v1.codes.domain.usecase.list import ListCodeUseCase
+from context.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
 from api.v1.codes.presentation.dtos.filters import CodeFilters
 from core.settings import log
 from core.utils.responses import (

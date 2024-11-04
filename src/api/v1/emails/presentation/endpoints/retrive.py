@@ -15,7 +15,7 @@ from core.utils.responses import (
 from .routers import router
 
 if TYPE_CHECKING:
-    from api.v1.codes.domain.entities.code import CodeEntity
+    from context.v1.codes.domain.entities.code import CodeEntity
 
 
 @router.get(

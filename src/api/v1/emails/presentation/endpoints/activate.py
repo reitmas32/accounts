@@ -1,6 +1,6 @@
 from fastapi import status
 
-from api.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
+from context.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
 from api.v1.emails.domain.entities.activation import ActivateEmailEntity
 from api.v1.emails.domain.usecase.activation import ActivationEmailUseCase
 from api.v1.emails.infrastructure.repositories.postgres.email import EmailRepository

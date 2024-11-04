@@ -10,7 +10,7 @@ class FindLoginMethodByPlatformStep(StepSAGA):
 
     def __call__(self, payload: None = None, all_payloads: dict | None = None):  # noqa: ARG002
 
-        login_methods = self.repository.get_by_attributes(filters={"entity_id": payload.id})
+        login_methods = self.repository.get_by_attributes(filters={"entity_id": str(payload.id)})
         if login_methods is None or len(login_methods) == 0:
             raise EntityNotFoundError(resource="login_method")
 

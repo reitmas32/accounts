@@ -1,6 +1,5 @@
 from fastapi import Request, status
 
-from api.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
 from api.v1.emails.domain.entities.email import EmailEntity
 from api.v1.emails.domain.usecase.create import SignUpWithEmailUseCase
 from api.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
@@ -9,6 +8,7 @@ from api.v1.login_methods.infrastructure.repositories.postgres.login_method impo
     LoginMethodRepository,
 )
 from api.v1.users.infrastructure.repositories.postgres.user import UserRepository
+from context.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
 from core.utils.logger import logger
 from core.utils.responses import (
     EnvelopeResponse,
@@ -56,7 +56,7 @@ async def signup(
     new_entity: EmailEntity = use_case.execute(payload=entity)
 
     return EnvelopeResponse(
-        data=new_entity.model_dump(),
+        data=new_entity.as_dict().pop("password"),
         success=True,
         response_code=status.HTTP_201_CREATED,
     )
