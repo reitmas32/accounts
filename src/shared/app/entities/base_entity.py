@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 
 class EntityBase(BaseModel):
-    id: UUID | None = None
+    id: UUID | str | None = None
     created: datetime | None = None
     updated: datetime | None = None
     is_removed: bool | None = None
