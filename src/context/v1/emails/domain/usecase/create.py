@@ -111,7 +111,7 @@ class SignUpWithEmailUseCase:
             )
             self.login_method = self.login_method_repository.add(**login_method.model_dump())
 
-            return self.email_model  # noqa: TRY300
+            return EmailEntity(**self.email_model.model_dump())
         except Exception as e:
             self.rollback()
             raise e  # noqa: TRY201
