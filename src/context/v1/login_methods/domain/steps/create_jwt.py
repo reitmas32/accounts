@@ -1,4 +1,4 @@
-from api.v1.login_methods.domain.entities.login_method import LoginMethodEntity
+from context.v1.login_methods.domain.entities.login_method import LoginMethodEntity
 from shared.app.controllers.saga.controller import StepSAGA
 from shared.app.handlers.jwt import JWTHandler
 from shared.databases.errors.entity_not_found import EntityNotFoundError

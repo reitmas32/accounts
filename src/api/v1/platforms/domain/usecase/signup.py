@@ -1,5 +1,5 @@
-from api.v1.login_methods.domain.steps.create import CreateLoginMethodStep
-from api.v1.login_methods.domain.steps.create_jwt import CreateJWTStep
+from context.v1.login_methods.domain.steps.create import CreateLoginMethodStep
+from context.v1.login_methods.domain.steps.create_jwt import CreateJWTStep
 from api.v1.platforms.domain.entities.platform import PlatformEntity
 from api.v1.platforms.domain.entities.singup import SignupPlatformEntity
 from api.v1.platforms.domain.steps.create import CreatePlatformStep

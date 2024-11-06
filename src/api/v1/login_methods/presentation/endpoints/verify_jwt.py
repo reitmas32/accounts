@@ -1,6 +1,6 @@
 from fastapi import Header, status
 
-from api.v1.login_methods.domain.usecase.verify_jwt import VerifyJWTUseCase
+from context.v1.login_methods.domain.usecase.verify_jwt import VerifyJWTUseCase
 from core.utils.logger import logger
 from core.utils.responses import (
     EnvelopeResponse,

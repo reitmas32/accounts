@@ -1,4 +1,4 @@
-from api.v1.login_methods.domain.entities.login_method import LoginMethodEntity
+from context.v1.login_methods.domain.entities.login_method import LoginMethodEntity
 from shared.databases.infrastructure.repository import RepositoryInterface
 
 
