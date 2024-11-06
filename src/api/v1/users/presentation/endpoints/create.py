@@ -1,10 +1,10 @@
 
 from fastapi import Request, status
 
-from api.v1.users.domain.entities.user import UserEntity
-from api.v1.users.domain.usecase.create import CreateUserUseCase
-from api.v1.users.infrastructure.repositories.postgres.user import UserRepository
 from api.v1.users.presentation.dtos import CreateUserDto
+from context.v1.users.domain.entities.user import UserEntity
+from context.v1.users.domain.usecase.create import CreateUserUseCase
+from context.v1.users.infrastructure.repositories.postgres.user import UserRepository
 from core.utils.logger import logger
 from core.utils.responses import (
     EnvelopeResponse,

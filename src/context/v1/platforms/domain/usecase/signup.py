@@ -1,10 +1,10 @@
-from api.v1.users.domain.steps.create import CreateUserByUserNameStep
 from context.v1.login_methods.domain.steps.create import CreateLoginMethodStep
 from context.v1.login_methods.domain.steps.create_jwt import CreateJWTStep
 from context.v1.platforms.domain.entities.platform import PlatformEntity
 from context.v1.platforms.domain.entities.singup import SignupPlatformEntity
 from context.v1.platforms.domain.steps.create import CreatePlatformStep
 from context.v1.platforms.domain.steps.search import SearchPlatformStep
+from context.v1.users.domain.steps.create import CreateUserByUserNameStep
 from shared.app.controllers.saga.controller import SagaController
 from shared.databases.infrastructure.repository import RepositoryInterface
 
