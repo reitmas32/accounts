@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import field_validator
+from pydantic import field_serializer, field_validator
 
 from shared.app.entities.base_entity import EntityBase
 from shared.app.handlers.password import PasswordHandler
@@ -16,3 +16,7 @@ class EmailEntity(EntityBase):
     def hash_password(cls, value):  # noqa: N805
         # Verifica si la contraseña ya está encriptada
         return PasswordHandler.hash_password(password=value)
+
+    @field_serializer("user_id")
+    def serialize_user_id(self, value):
+        return str(value) if value is not None else None
