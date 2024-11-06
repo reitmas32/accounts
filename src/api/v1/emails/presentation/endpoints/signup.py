@@ -1,6 +1,7 @@
 from fastapi import Request, status
 
 from api.v1.emails.presentation.dtos import SignupEmailDto
+from api.v1.emails.presentation.schemas.signup import SignupEmailSchema
 from context.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
 from context.v1.emails.domain.entities.email import EmailEntity
 from context.v1.emails.domain.usecase.create import SignUpWithEmailUseCase
@@ -55,8 +56,10 @@ async def signup(
 
     new_entity: EmailEntity = use_case.execute(payload=entity)
 
+    response = SignupEmailSchema(**new_entity.model_dump())
+
     return EnvelopeResponse(
-        data=new_entity.as_dict().pop("password"),
+        data=response.model_dump(),
         success=True,
         response_code=status.HTTP_201_CREATED,
     )
