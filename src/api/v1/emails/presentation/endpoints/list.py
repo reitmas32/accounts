@@ -1,8 +1,8 @@
 from fastapi import Depends, Request, status
 
-from api.v1.emails.domain.usecase.list import ListEmailUseCase
-from api.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from api.v1.emails.presentation.dtos.filters import EmailFilters
+from context.v1.emails.domain.usecase.list import ListEmailUseCase
+from context.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from core.settings import log
 from core.utils.responses import (
     EnvelopeResponse,

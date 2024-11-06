@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from api.v1.emails.domain.entities.activation import ActivateEmailEntity
 from api.v1.login_methods.domain.steps.create_jwt import CreateJWTStep
+from context.v1.emails.domain.entities.activation import ActivateEmailEntity
 from shared.app.controllers.saga.controller import SagaController
 from shared.app.enums.code_type import CodeTypeEnum
 from shared.app.enums.user_login_methods import UserLoginMethodsTypeEnum

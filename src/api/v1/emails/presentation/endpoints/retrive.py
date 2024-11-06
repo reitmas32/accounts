@@ -4,8 +4,8 @@ from uuid import UUID
 from fastapi import Depends, Request, status
 from sqlalchemy.orm import Session
 
-from api.v1.emails.domain.usecase.retrive import RetriveEmailUseCase
-from api.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
+from context.v1.emails.domain.usecase.retrive import RetriveEmailUseCase
+from context.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from core.settings import log
 from core.settings.database import get_session
 from core.utils.responses import (

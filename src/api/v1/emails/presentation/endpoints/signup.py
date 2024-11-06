@@ -1,14 +1,14 @@
 from fastapi import Request, status
 
-from api.v1.emails.domain.entities.email import EmailEntity
-from api.v1.emails.domain.usecase.create import SignUpWithEmailUseCase
-from api.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from api.v1.emails.presentation.dtos import SignupEmailDto
 from api.v1.login_methods.infrastructure.repositories.postgres.login_method import (
     LoginMethodRepository,
 )
 from api.v1.users.infrastructure.repositories.postgres.user import UserRepository
 from context.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
+from context.v1.emails.domain.entities.email import EmailEntity
+from context.v1.emails.domain.usecase.create import SignUpWithEmailUseCase
+from context.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from core.utils.logger import logger
 from core.utils.responses import (
     EnvelopeResponse,

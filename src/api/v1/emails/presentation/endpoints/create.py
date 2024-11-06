@@ -1,10 +1,10 @@
 
 from fastapi import Request, status
 
-from api.v1.emails.domain.entities.email import EmailEntity
-from api.v1.emails.domain.usecase.create import CreateEmailUseCase
-from api.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from api.v1.emails.presentation.dtos import CreateEmailDto
+from context.v1.emails.domain.entities.email import EmailEntity
+from context.v1.emails.domain.usecase.create import CreateEmailUseCase
+from context.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from core.utils.logger import logger
 from core.utils.responses import (
     EnvelopeResponse,
