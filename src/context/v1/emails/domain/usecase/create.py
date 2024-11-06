@@ -2,8 +2,8 @@ import random
 import string
 from typing import TYPE_CHECKING
 
-from context.v1.login_methods.domain.entities.login_method import LoginMethodEntity
 from context.v1.emails.domain.entities.email import EmailEntity
+from context.v1.login_methods.domain.entities.login_method import LoginMethodEntity
 from core.settings import email_client, settings
 from shared.app.enums.code_type import CodeTypeEnum
 from shared.app.enums.user_login_methods import UserLoginMethodsTypeEnum

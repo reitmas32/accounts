@@ -1,9 +1,9 @@
 
 from fastapi import Request, status
 
+from api.v1.login_methods.presentation.dtos import CreateLoginMethodDto
 from context.v1.login_methods.domain.entities.login_method import LoginMethodEntity
 from context.v1.login_methods.domain.usecase.create import CreateLoginMethodUseCase
-from api.v1.login_methods.presentation.dtos import CreateLoginMethodDto
 from context.v1.login_methods.infrastructure.repositories.postgres.login_method import (
     LoginMethodRepository,
 )
