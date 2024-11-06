@@ -1,6 +1,6 @@
-from api.v1.platforms.domain.steps.create import CreatePlatformStep
 from api.v1.users.domain.steps.create import CreateUserByUserNameStep
 from context.v1.login_methods.domain.entities.login_method import LoginMethodEntity
+from context.v1.platforms.domain.steps.create import CreatePlatformStep
 from shared.app.controllers.saga.controller import StepSAGA
 from shared.databases.infrastructure.repository import RepositoryInterface
 

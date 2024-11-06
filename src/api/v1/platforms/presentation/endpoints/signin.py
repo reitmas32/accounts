@@ -1,14 +1,14 @@
 from fastapi import status
 
-from api.v1.platforms.domain.entities.singup import SignupPlatformEntity
-from api.v1.platforms.domain.usecase.singin import SignInPlatformUseCase
-from api.v1.platforms.infrastructure.repositories.postgres.user import (
-    PlatformRepository,
-)
 from api.v1.platforms.presentation.dtos.signin import SigninPlatformDto
 from api.v1.platforms.presentation.endpoints.routers import router
 from context.v1.login_methods.infrastructure.repositories.postgres.login_method import (
     LoginMethodRepository,
+)
+from context.v1.platforms.domain.entities.singup import SignupPlatformEntity
+from context.v1.platforms.domain.usecase.singin import SignInPlatformUseCase
+from context.v1.platforms.infrastructure.repositories.postgres.user import (
+    PlatformRepository,
 )
 from core.utils.logger import logger
 from core.utils.responses import (

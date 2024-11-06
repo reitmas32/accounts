@@ -1,4 +1,4 @@
-from api.v1.platforms.domain.entities.platform import PlatformEntity
+from context.v1.platforms.domain.entities.platform import PlatformEntity
 from shared.databases.infrastructure.repository import RepositoryInterface
 
 

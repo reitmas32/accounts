@@ -1,11 +1,11 @@
 from fastapi import Depends, Request, status
 
-from api.v1.platforms.domain.usecase.list import ListPlatformUseCase
-from api.v1.platforms.infrastructure.repositories.postgres.user import (
-    PlatformRepository,
-)
 from api.v1.platforms.presentation.dtos.filters import PlatformFilters
 from api.v1.platforms.presentation.endpoints.routers import router
+from context.v1.platforms.domain.usecase.list import ListPlatformUseCase
+from context.v1.platforms.infrastructure.repositories.postgres.user import (
+    PlatformRepository,
+)
 from core.settings import log
 from core.utils.responses import (
     EnvelopeResponse,

@@ -1,5 +1,5 @@
-from api.v1.platforms.domain.entities.platform import PlatformEntity
 from api.v1.users.domain.steps.create import CreateUserByUserNameStep
+from context.v1.platforms.domain.entities.platform import PlatformEntity
 from shared.app.controllers.saga.controller import StepSAGA
 from shared.app.errors.uniques.platform_id_unique import PlatformIDUniqueError
 from shared.databases.infrastructure.repository import RepositoryInterface

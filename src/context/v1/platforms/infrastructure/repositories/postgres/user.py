@@ -1,5 +1,5 @@
 
-from api.v1.platforms.domain.entities.platform import PlatformEntity
+from context.v1.platforms.domain.entities.platform import PlatformEntity
 from shared.databases.orms.sqlalchemy.models import AuthGeneralPlatformModel
 from shared.databases.postgres.repository import RepositoryPostgresBase
 

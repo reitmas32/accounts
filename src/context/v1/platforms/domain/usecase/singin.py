@@ -1,7 +1,7 @@
-from api.v1.platforms.domain.entities.signin import SigninPlatformEntity
-from api.v1.platforms.domain.steps.find import FindPlatformStep
 from context.v1.login_methods.domain.steps.create_jwt import CreateJWTStep
 from context.v1.login_methods.domain.steps.find import FindLoginMethodByPlatformStep
+from context.v1.platforms.domain.entities.signin import SigninPlatformEntity
+from context.v1.platforms.domain.steps.find import FindPlatformStep
 from shared.app.controllers.saga.controller import SagaController
 from shared.databases.infrastructure.repository import RepositoryInterface
 
