@@ -1,6 +1,7 @@
 from uuid import uuid4
 
 from shared.app.controllers.saga.controller import StepSAGA
+from shared.app.errors.uniques.user_name_unique import UserNameUniqueError
 from shared.databases.infrastructure.repository import RepositoryInterface
 
 
@@ -13,6 +14,9 @@ class CreateUserByUserNameStep(StepSAGA):
 
     def __call__(self, payload: None = None, all_payloads: dict | None = None):  # noqa: ARG002
         self.user = None
+        current_users_with_user_name = self.repository.get_by_attributes(filters={"user_name": self.user_name}, limit=1)
+        if len(current_users_with_user_name) > 0:
+            raise UserNameUniqueError(user_name=self.user_name)
         self.user = self.repository.add(user_name=self.user_name)
         return self.user
 
