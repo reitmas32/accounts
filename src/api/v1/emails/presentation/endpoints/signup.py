@@ -1,9 +1,11 @@
+from typing import TYPE_CHECKING
+
 from fastapi import Request, status
 
 from api.v1.emails.presentation.dtos import SignupEmailDto
 from api.v1.emails.presentation.schemas.signup import SignupEmailSchema
 from context.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
-from context.v1.emails.domain.entities.email import EmailEntity
+from context.v1.emails.domain.entities.signup import SignupEmailEntity
 from context.v1.emails.domain.usecase.create import SignUpWithEmailUseCase
 from context.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from context.v1.login_methods.infrastructure.repositories.postgres.login_method import (
@@ -16,6 +18,9 @@ from core.utils.responses import (
 )
 
 from .routers import router
+
+if TYPE_CHECKING:
+    from context.v1.emails.domain.entities.email import EmailEntity
 
 
 @router.post(
@@ -44,7 +49,7 @@ async def signup(
     """
     logger.info("Create Email")
 
-    entity: EmailEntity = EmailEntity(**payload.model_dump())
+    entity = SignupEmailEntity(**payload.model_dump())
 
     use_case = SignUpWithEmailUseCase(
         email_repository=EmailRepository(),
