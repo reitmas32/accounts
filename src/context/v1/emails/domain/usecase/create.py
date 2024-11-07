@@ -1,22 +1,22 @@
 import random
 import string
-from typing import TYPE_CHECKING
+from datetime import datetime
 
+from context.v1.codes.domain.entities.code import CodeEntity
+from context.v1.codes.domain.steps.create import CreateCodeStep
 from context.v1.emails.domain.entities.email import EmailEntity
-from context.v1.login_methods.domain.entities.login_method import LoginMethodEntity
+from context.v1.emails.domain.entities.signup import SignupEmailEntity
+from context.v1.emails.domain.steps.create import CreateEmailStep
+from context.v1.login_methods.domain.steps.create import (
+    CreateLoginMethodEmailStep,
+)
+from context.v1.users.domain.steps.create import CreateUserByUserNameStep
 from core.settings import email_client, settings
+from shared.app.controllers.saga.controller import SagaController
 from shared.app.enums.code_type import CodeTypeEnum
 from shared.app.enums.user_login_methods import UserLoginMethodsTypeEnum
-from shared.app.errors.uniques.email_unique import EmailUniqueError
-from shared.app.errors.uniques.user_name_unique import UserNameUniqueError
 from shared.databases.infrastructure.repository import RepositoryInterface
 from shared.presentation.templates.email import get_data_for_email_activate_account
-
-if TYPE_CHECKING:
-    from shared.databases.orms.sqlalchemy.models.code import CodeModel
-    from shared.databases.orms.sqlalchemy.models.email import EmailModel
-    from shared.databases.orms.sqlalchemy.models.login_methods import LoginMethodModel
-    from shared.databases.orms.sqlalchemy.models.user import UserModel
 
 
 def generate_code(length):
@@ -55,74 +55,53 @@ class SignUpWithEmailUseCase:
         self.login_method_repository = login_method_repository
         self.user_name = user_name
 
-    def execute(self, payload: EmailEntity):
-        self.user_model: UserModel = None
-        self.email_model: EmailModel = None
-        self.code: CodeModel = None
-        self.login_method: LoginMethodModel = None
-        try:
-            user_entity = self.user_repository.get_by_attributes(
-                filters={"user_name": self.user_name}
-            )
+    def execute(self, payload: SignupEmailEntity):
 
-            if len(user_entity) != 0:
-                raise UserNameUniqueError(user_name=self.user_name)  # noqa: TRY301
+        email_entity = EmailEntity(**payload.model_dump())
 
-            email_entity = self.email_repository.get_by_attributes(
-                filters={"email": payload.email}
-            )
+        controller = SagaController(
+            [
+                CreateUserByUserNameStep(
+                    user_name=payload.user_name, repository=self.user_repository
+                ),
+                CreateEmailStep(entity=email_entity, repository=self.email_repository),
+                CreateLoginMethodEmailStep(repository=self.login_method_repository),
+            ],
+        )
 
-            if len(email_entity) != 0:
-                raise EmailUniqueError(email=payload.email)  # noqa: TRY301
+        payloads = controller.execute()
 
-            self.user_model: UserModel = self.user_repository.add(
-                user_name=self.user_name
-            )
+        new_code = generate_code(length=settings.LENGHT_CODE_VALIDATE_EMAIL)
 
-            payload.user_id = self.user_model.id
+        code_entity = CodeEntity(
+            code=new_code,
+            user_id=payloads[CreateUserByUserNameStep].id,
+            entity_id=payloads[CreateEmailStep].id,
+            entity_type=UserLoginMethodsTypeEnum.EMAIL,
+            type=CodeTypeEnum.SIGN_UP,
+            used_at=datetime.now().astimezone(),
+        )
 
-            self.email_model = self.email_repository.add(**payload.model_dump())
+        controller_code = SagaController(
+            [
+                CreateCodeStep(entity=code_entity, repository=self.code_repository),
+            ],
+            prev_saga=controller,
+        )
 
-            new_code = generate_code(length=settings.LENGHT_CODE_VALIDATE_EMAIL)
+        _ = controller_code.execute()
 
-            self.code: CodeModel = self.code_repository.add(
-                code=new_code,
-                user_id=self.user_model.id,
-                entity_id=self.email_model.id,
-                entity_type=UserLoginMethodsTypeEnum.EMAIL,
-                type=CodeTypeEnum.ACCOUNT_ACTIVATION,
-            )
-            subject_text, message_text = get_data_for_email_activate_account(
-                user_name=self.user_model.user_name, activation_code=new_code
-            )
+        subject_text, message_text = get_data_for_email_activate_account(
+            user_name=payloads[CreateUserByUserNameStep].user_name, activation_code=new_code
+        )
 
-            email_client.send_email(
-                email_subject=self.email_model.email,
-                subject_text=subject_text,
-                message_text=message_text,
-            )
+        email_client.send_email(
+            email_subject=payload.email,
+            subject_text=subject_text,
+            message_text=message_text,
+        )
 
-            login_method = LoginMethodEntity(
-                user_id=self.user_model.id,
-                entity_id=self.email_model.id,
-                entity_type=UserLoginMethodsTypeEnum.EMAIL,
-                active=True,
-                verify=True,
-            )
-            self.login_method = self.login_method_repository.add(**login_method.model_dump())
+        email_entity: EmailEntity = payloads[CreateEmailStep]
 
-            return EmailEntity(**self.email_model.model_dump())
-        except Exception as e:
-            self.rollback()
-            raise e  # noqa: TRY201
+        return email_entity
 
-    def rollback(self):
-        # Eliminar el user y el email si hubo error en el proceso
-        if self.code:
-            self.code_repository.delete_by_id(self.code.id)
-        if self.email_model:
-            self.email_repository.delete_by_id(self.email_model.id)
-        if self.user_model:
-            self.user_repository.delete_by_id(self.user_model.id)
-        if self.login_method:
-            self.repository.delete_by_id(self.login_method.id)
