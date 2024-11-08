@@ -4,6 +4,7 @@ from uuid import UUID
 from fastapi import Depends, Request, status
 from sqlalchemy.orm import Session
 
+from api.v1.emails.presentation.endpoints.routers import router
 from context.v1.emails.domain.usecase.retrive import RetriveEmailUseCase
 from context.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from core.settings import log
@@ -11,8 +12,6 @@ from core.settings.database import get_session
 from core.utils.responses import (
     EnvelopeResponse,
 )
-
-from .routers import router
 
 if TYPE_CHECKING:
     from context.v1.codes.domain.entities.code import CodeEntity

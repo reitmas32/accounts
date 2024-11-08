@@ -1,6 +1,7 @@
 from fastapi import Depends, Request, status
 
 from api.v1.emails.presentation.dtos.filters import EmailFilters
+from api.v1.emails.presentation.endpoints.routers import router
 from context.v1.emails.domain.usecase.list import ListEmailUseCase
 from context.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from core.settings import log
@@ -8,8 +9,6 @@ from core.utils.responses import (
     EnvelopeResponse,
 )
 from shared.app.use_cases.list import PaginationParams
-
-from .routers import router
 
 
 @router.get(

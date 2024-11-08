@@ -2,12 +2,11 @@ from uuid import UUID
 
 from fastapi import status
 
+from api.v1.emails.presentation.endpoints.routers import router
 from core.utils.logger import logger
 from core.utils.responses import (
     EnvelopeResponse,
 )
-
-from .routers import router
 
 
 @router.delete(
