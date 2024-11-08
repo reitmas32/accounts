@@ -1,6 +1,5 @@
 import random
 import string
-from datetime import datetime
 
 from context.v1.codes.domain.entities.code import CodeEntity
 from context.v1.codes.domain.steps.create import CreateCodeStep
@@ -15,6 +14,7 @@ from core.settings import email_client, settings
 from shared.app.controllers.saga.controller import SagaController
 from shared.app.enums.code_type import CodeTypeEnum
 from shared.app.enums.user_login_methods import UserLoginMethodsTypeEnum
+from shared.app.handlers.password import PasswordHandler
 from shared.databases.infrastructure.repository import RepositoryInterface
 from shared.presentation.templates.email import get_data_for_email_activate_account
 
@@ -59,6 +59,8 @@ class SignUpWithEmailUseCase:
 
         email_entity = EmailEntity(**payload.model_dump())
 
+        email_entity.password = PasswordHandler.hash_password(password=email_entity.password)
+
         controller = SagaController(
             [
                 CreateUserByUserNameStep(
@@ -78,8 +80,7 @@ class SignUpWithEmailUseCase:
             user_id=payloads[CreateUserByUserNameStep].id,
             entity_id=payloads[CreateEmailStep].id,
             entity_type=UserLoginMethodsTypeEnum.EMAIL,
-            type=CodeTypeEnum.SIGN_UP,
-            used_at=datetime.now().astimezone(),
+            type=CodeTypeEnum.ACCOUNT_ACTIVATION,
         )
 
         controller_code = SagaController(
