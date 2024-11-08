@@ -23,7 +23,7 @@ from core.utils.responses import (
     response_model=EnvelopeResponse,
     tags=["Auth API"],
 )
-async def signup(
+async def signip(
     payload: SigninPlatformDto,
 ):
     logger.info("Signin By Platform")
