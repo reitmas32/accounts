@@ -4,18 +4,18 @@ from uuid import UUID
 
 from fastapi import Request, status
 
-from api.v1.platforms.domain.usecase.retrive import RetrivePlatformUseCase
-from api.v1.platforms.infrastructure.repositories.postgres.user import (
+from api.v1.platforms.presentation.endpoints.routers import router
+from context.v1.platforms.domain.usecase.retrive import RetrivePlatformUseCase
+from context.v1.platforms.infrastructure.repositories.postgres.user import (
     PlatformRepository,
 )
-from api.v1.platforms.presentation.endpoints.routers import router
 from core.settings import log
 from core.utils.responses import (
     EnvelopeResponse,
 )
 
 if TYPE_CHECKING:
-    from api.v1.platforms.domain.entities.platform import PlatformEntity
+    from context.v1.platforms.domain.entities.platform import PlatformEntity
 
 
 @router.get(

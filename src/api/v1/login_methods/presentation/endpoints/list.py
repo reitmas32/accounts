@@ -1,10 +1,10 @@
 from fastapi import Depends, Request, status
 
-from api.v1.login_methods.domain.usecase.list import ListLoginMethodUseCase
-from api.v1.login_methods.infrastructure.repositories.postgres.login_method import (
+from api.v1.login_methods.presentation.dtos.filters import LoginMethodFilters
+from context.v1.login_methods.domain.usecase.list import ListLoginMethodUseCase
+from context.v1.login_methods.infrastructure.repositories.postgres.login_method import (
     LoginMethodRepository,
 )
-from api.v1.login_methods.presentation.dtos.filters import LoginMethodFilters
 from core.settings import log
 from core.utils.responses import (
     EnvelopeResponse,

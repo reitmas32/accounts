@@ -4,8 +4,8 @@ from uuid import UUID
 from fastapi import Depends, Request, status
 from sqlalchemy.orm import Session
 
-from api.v1.codes.domain.usecase.retrive import RetriveCodeUseCase
-from api.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
+from context.v1.codes.domain.usecase.retrive import RetriveCodeUseCase
+from context.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
 from core.settings import log
 from core.settings.database import get_session
 from core.utils.responses import (
@@ -15,7 +15,7 @@ from core.utils.responses import (
 from .routers import router
 
 if TYPE_CHECKING:
-    from api.v1.codes.domain.entities.code import CodeEntity
+    from context.v1.codes.domain.entities.code import CodeEntity
 
 
 @router.get(

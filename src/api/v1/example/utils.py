@@ -12,7 +12,7 @@ from api.v1.users.crud.resources import (
 )
 from core.settings import email_client, settings
 from core.utils.responses import get_current_date_time_to_app_standard
-from shared.databases.postgres.models.code import CodeTypeEnum
+from shared.databases.orms.sqlalchemy.models.code import CodeTypeEnum
 
 if TYPE_CHECKING:
     from shared.app.repositories.email.send import SendEmailRepository

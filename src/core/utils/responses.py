@@ -38,6 +38,8 @@ class EnvelopeResponse(BaseModel):
     errors: Any | None = None
     message: str | None = None
     response_code: int
+    internal_code: int | None = None
+    external_code: int | None = None
     success: bool
 
     data: str | dict | EnvelopeResponseBody | ListEnvelopeResponseBody | None = None

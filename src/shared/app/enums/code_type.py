@@ -5,6 +5,7 @@ class CodeTypeEnum(AbstractEnum):
     ACCOUNT_ACTIVATION = "account_activation"
     RESET_PASSWORD = "reset_password"  # noqa: S105
     TWO_FACTOR = "two_factor"
+    SIGN_UP = "signup"
 
     @staticmethod
     def get_enum_from_str(value_str: str):

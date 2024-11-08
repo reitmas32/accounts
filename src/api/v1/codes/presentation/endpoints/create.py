@@ -1,10 +1,10 @@
 
 from fastapi import Request, status
 
-from api.v1.codes.domain.entities.code import CodeEntity
-from api.v1.codes.domain.usecase.create import CreateCodeUseCase
-from api.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
 from api.v1.codes.presentation.dtos import CreateCodeDto
+from context.v1.codes.domain.entities.code import CodeEntity
+from context.v1.codes.domain.usecase.create import CreateCodeUseCase
+from context.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
 from core.utils.logger import logger
 from core.utils.responses import (
     EnvelopeResponse,
