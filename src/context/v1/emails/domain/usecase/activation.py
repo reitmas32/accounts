@@ -42,6 +42,7 @@ class ActivationEmailUseCase:
                 "entity_id": str(email.id),
                 "entity_type": UserLoginMethodsTypeEnum.EMAIL,
                 "type": CodeTypeEnum.ACCOUNT_ACTIVATION,
+                "used_at": None,
             },
             limit=1,
         )

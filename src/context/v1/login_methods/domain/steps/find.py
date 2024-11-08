@@ -30,9 +30,10 @@ class FindLoginMethodByPlatformStep(StepSAGA):
 
 
 class FindLoginMethodStep(StepSAGA):
-    def __init__(self, find_step_type: type, repository: RepositoryInterface):
+    def __init__(self, find_step_type: type, repository: RepositoryInterface, need_verification: bool = True):  # noqa: FBT001
         self.find_step_type = find_step_type
         self.repository = repository
+        self.need_verification = need_verification
 
     def __call__(self, payload: None = None, all_payloads: dict | None = None):  # noqa: ARG002
         entity = all_payloads.get(self.find_step_type)
@@ -48,7 +49,7 @@ class FindLoginMethodStep(StepSAGA):
         if login_methods is None or len(login_methods) == 0:
             raise EntityNotFoundError(resource="login_method")
 
-        if not login_methods[0].verify:
+        if self.need_verification and not login_methods[0].verify:
             raise AccountUnverifiedError
 
         return login_methods[0]

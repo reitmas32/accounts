@@ -1,6 +1,3 @@
-import random
-import string
-
 from context.v1.codes.domain.entities.code import CodeEntity
 from context.v1.codes.domain.steps.create import CreateCodeStep
 from context.v1.emails.domain.entities.email import EmailEntity
@@ -17,19 +14,7 @@ from shared.app.enums.user_login_methods import UserLoginMethodsTypeEnum
 from shared.app.handlers.password import PasswordHandler
 from shared.databases.infrastructure.repository import RepositoryInterface
 from shared.presentation.templates.email import get_data_for_email_activate_account
-
-
-def generate_code(length):
-    """
-    Generate a verification code.
-
-    Args:
-        length (int): Length of the verification code.
-
-    Returns:
-        str: Generated verification code.
-    """
-    return "".join(random.choices(string.digits, k=length))  # noqa: S311
+from shared.utils.codes import generate_code
 
 
 class CreateEmailUseCase:
