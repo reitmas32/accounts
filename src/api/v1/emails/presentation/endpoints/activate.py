@@ -23,7 +23,7 @@ from .routers import router
     response_model=EnvelopeResponse,
     tags=["Auth API"],
 )
-async def signup(
+async def activate(
     payload: ActivateEmailDto,
 ):
     logger.info("Activating Account from email")
@@ -44,6 +44,6 @@ async def signup(
     return EnvelopeResponse(
         data=jwt,
         success=True,
-        response_code=status.HTTP_201_CREATED,
+        response_code=status.HTTP_200_OK,
         message="The account has been activated"
     )
