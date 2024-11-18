@@ -76,6 +76,12 @@ class Settings(PydanticBaseSettings):
         "/api/v1/emails/reset-password",
         "/api/v1/emails/reset-password-confirm",
         "/api/v1/emails/send-code",
+        "/health"
+    ]
+
+    RESOURCE_API: list[str] = [
+        "/api",
+        "/health"
     ]
 
     # Password security settings
