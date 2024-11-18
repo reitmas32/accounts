@@ -2,6 +2,7 @@
 
 from pydantic import BaseModel
 
+from shared.app.entities.list_body import ListBodyEntity
 from shared.app.status_code import StatusCodes
 
 
@@ -13,11 +14,11 @@ class DetailsSchema(BaseModel):
     caller_id: str
 
 class ResponseSchema(BaseModel):
-    data: str | dict | None = None
+    data: ListBodyEntity | str | dict | None = None
     success: bool
     details: DetailsSchema
 
 
 class ResponseEntity(BaseModel):
-    data: str | dict | None = None
+    data: ListBodyEntity | str | dict | None = None
     code: StatusCodes
