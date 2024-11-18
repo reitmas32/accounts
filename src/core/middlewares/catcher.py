@@ -1,3 +1,5 @@
+import json
+
 from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from psycopg2.errors import ForeignKeyViolation
@@ -5,8 +7,15 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
 from starlette.middleware.base import BaseHTTPMiddleware
 
+from core.settings import settings
+from core.utils.logger import logger
 from core.utils.responses import EnvelopeResponse
 from shared.app.errors.base import BaseError
+from shared.presentation.schemas.envelope_response import (
+    DetailsSchema,
+    ResponseEntity,
+    ResponseSchema,
+)
 
 
 class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
@@ -15,7 +24,33 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next):
         try:
-            return await call_next(request)
+            response = await call_next(request)
+            path = request.url.path
+            if not any(path.startswith(resource) for resource in settings.RESOURCE_API):
+                return response
+            trace_id = logger.trace_id
+            caller_id = logger.caller_id
+
+            response_body = [section async for section in response.body_iterator]
+
+            response_dict = json.loads(
+                response_body[0],
+            )
+
+            response_entity = ResponseEntity(**response_dict)
+
+            return JSONResponse(
+                content=ResponseSchema(
+                    success=True,
+                    data=response_entity.data,
+                    details=DetailsSchema(
+                        code=response_entity.code,
+                        message=response_entity.code.description,
+                        trace_id=trace_id,
+                        caller_id=caller_id,
+                    ),
+                ).model_dump()
+            )
         except Exception as e:  # noqa: BLE001
             if isinstance(e, HTTPException):
                 error_detail = {"detail": str(e.detail)}
