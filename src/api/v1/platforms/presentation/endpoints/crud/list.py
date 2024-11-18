@@ -6,25 +6,24 @@ from context.v1.platforms.domain.usecase.list import ListPlatformUseCase
 from context.v1.platforms.infrastructure.repositories.postgres.user import (
     PlatformRepository,
 )
-from core.settings import log
-from core.utils.responses import (
-    EnvelopeResponse,
-)
+from core.utils.logger import logger
+from shared.app.status_code import StatusCodes
 from shared.app.use_cases.list import PaginationParams
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
 
 @router.get(
     "/",
-    summary="Returns a list o1.platforms",
+    summary="Returns a list of platforms",
     status_code=status.HTTP_200_OK,
-    response_model=EnvelopeResponse,
+    response_model=ResponseEntity,
 )
 async def retrieve_all(
     request: Request,
     pagination_params: PaginationParams = Depends(),
     query_params: PlatformFilters = Depends(),
 ):
-    log.info("Get Al1.platforms")
+    logger.info("Get All platforms")
 
     filters = query_params.model_dump(exclude_unset=True, exclude_defaults=True)
 
@@ -36,9 +35,4 @@ async def retrieve_all(
         url=request.url,
     )
 
-    return EnvelopeResponse(
-        errors=None,
-        data=entities.model_dump(),
-        response_code=status.HTTP_200_OK,
-        success=True,
-    )
+    return ResponseEntity(data=entities, code=StatusCodes.HTTP_200_OK)
