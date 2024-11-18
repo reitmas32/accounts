@@ -28,7 +28,7 @@ class ListBaseUseCase:
         )
 
         return ListBodyEntity(
-            next=next_link, prev=prev_link, count=total, data=entities
+            next=next_link, prev=prev_link, count=total, results=entities
         )
 
     def _generate_pagination_links(
