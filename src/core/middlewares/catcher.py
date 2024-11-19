@@ -1,7 +1,7 @@
 import json
 
 from fastapi import HTTPException, Request, status
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from psycopg2.errors import ForeignKeyViolation
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import NoResultFound
@@ -37,6 +37,9 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
                 response_body[0],
             )
 
+            if response_dict is None:
+                return Response(status_code=status.HTTP_204_NO_CONTENT)
+
             response_entity = ResponseEntity(**response_dict)
 
             return JSONResponse(
@@ -63,7 +66,9 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
                 status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
                 if isinstance(e.orig, ForeignKeyViolation):
                     err = e.orig
-                    error_detail = {f"{err.diag.table_name}": f"ForeignKeyViolation: {err.diag.table_name}"}
+                    error_detail = {
+                        f"{err.diag.table_name}": f"ForeignKeyViolation: {err.diag.table_name}"
+                    }
                     status_code = status.HTTP_409_CONFLICT
                     e = f"ForeignKeyViolation: {err.diag.table_name}"
             elif isinstance(e, BaseError):
@@ -73,8 +78,12 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
                 error_detail = {"detail": str(e)}
                 status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
 
-            internal_code = e.internal_code if hasattr(e, "internal_code") else status_code
-            external_code = e.external_code if hasattr(e, "external_code") else status_code
+            internal_code = (
+                e.internal_code if hasattr(e, "internal_code") else status_code
+            )
+            external_code = (
+                e.external_code if hasattr(e, "external_code") else status_code
+            )
 
             response = EnvelopeResponse(
                 errors=error_detail,
