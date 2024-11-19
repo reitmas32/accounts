@@ -13,9 +13,8 @@ from context.v1.login_methods.infrastructure.repositories.postgres.login_method 
 )
 from context.v1.users.infrastructure.repositories.postgres.user import UserRepository
 from core.utils.logger import logger
-from core.utils.responses import (
-    EnvelopeResponse,
-)
+from shared.app.status_code import StatusCodes
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
 from .routers import router
 
@@ -27,7 +26,7 @@ if TYPE_CHECKING:
     "/signup",
     summary="SignUp user with email",
     status_code=status.HTTP_201_CREATED,
-    response_model=EnvelopeResponse,
+    response_model=ResponseEntity,
     tags=["Auth API"],
 )
 async def signup(
@@ -63,8 +62,4 @@ async def signup(
 
     response = SignupEmailSchema(**new_entity.model_dump())
 
-    return EnvelopeResponse(
-        data=response.model_dump(),
-        success=True,
-        response_code=status.HTTP_201_CREATED,
-    )
+    return ResponseEntity(data=response.model_dump(), code=StatusCodes.HTTP_201_CREATED)

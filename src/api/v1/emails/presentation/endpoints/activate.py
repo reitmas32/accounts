@@ -9,9 +9,8 @@ from context.v1.login_methods.infrastructure.repositories.postgres.login_method 
     LoginMethodRepository,
 )
 from core.utils.logger import logger
-from core.utils.responses import (
-    EnvelopeResponse,
-)
+from shared.app.status_code import StatusCodes
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
 from .routers import router
 
@@ -19,8 +18,8 @@ from .routers import router
 @router.post(
     "/activate",
     summary="Activate account with code and email",
-    status_code=status.HTTP_201_CREATED,
-    response_model=EnvelopeResponse,
+    status_code=status.HTTP_200_OK,
+    response_model=ResponseEntity,
     tags=["Auth API"],
 )
 async def activate(
@@ -41,9 +40,4 @@ async def activate(
 
     jwt = use_case.execute(payload=entity)
 
-    return EnvelopeResponse(
-        data=jwt,
-        success=True,
-        response_code=status.HTTP_200_OK,
-        message="The account has been activated"
-    )
+    return ResponseEntity(data=jwt, code=StatusCodes.HTTP_200_OK)

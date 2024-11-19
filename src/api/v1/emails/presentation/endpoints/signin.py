@@ -9,9 +9,8 @@ from context.v1.login_methods.infrastructure.repositories.postgres.login_method 
 )
 from context.v1.users.infrastructure.repositories.postgres.user import UserRepository
 from core.utils.logger import logger
-from core.utils.responses import (
-    EnvelopeResponse,
-)
+from shared.app.status_code import StatusCodes
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
 from .routers import router
 
@@ -19,8 +18,8 @@ from .routers import router
 @router.post(
     "/signin",
     summary="SignIn user with email",
-    status_code=status.HTTP_201_CREATED,
-    response_model=EnvelopeResponse,
+    status_code=status.HTTP_200_OK,
+    response_model=ResponseEntity,
     tags=["Auth API"],
 )
 async def signup(
@@ -52,10 +51,6 @@ async def signup(
 
     jwt = use_case.execute(
         payload=entity
-    )  # el caso de uso debe genera una Response intermedia o porlomenos retornar el stataus code
-
-    return EnvelopeResponse(
-        data=jwt,
-        success=True,
-        response_code=status.HTTP_200_OK,
     )
+
+    return ResponseEntity(data=jwt, code=StatusCodes.HTTP_201_CREATED)
