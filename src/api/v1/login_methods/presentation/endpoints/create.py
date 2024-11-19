@@ -8,9 +8,8 @@ from context.v1.login_methods.infrastructure.repositories.postgres.login_method 
     LoginMethodRepository,
 )
 from core.utils.logger import logger
-from core.utils.responses import (
-    EnvelopeResponse,
-)
+from shared.app.status_code import StatusCodes
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
 from .routers import router
 
@@ -19,7 +18,7 @@ from .routers import router
     "",
     summary="Crear registro de login method",
     status_code=status.HTTP_201_CREATED,
-    response_model=EnvelopeResponse,
+    response_model=ResponseEntity,
 )
 async def create(
     request: Request,
@@ -31,10 +30,6 @@ async def create(
 
     use_case = CreateLoginMethodUseCase(repository=LoginMethodRepository())
 
-    new_entity: LoginMethodEntity = use_case.execute(payload=entity) # el caso de uso debe genera una Response intermedia o porlomenos retornar el stataus code
+    new_entity: LoginMethodEntity = use_case.execute(payload=entity)
 
-    return EnvelopeResponse(
-        data=new_entity.model_dump(),
-        success=True,
-        response_code=status.HTTP_201_CREATED,
-    )
+    return ResponseEntity(data=new_entity.model_dump(), code=StatusCodes.HTTP_201_CREATED)

@@ -7,16 +7,15 @@ from context.v1.emails.domain.entities.email import EmailEntity
 from context.v1.emails.domain.usecase.create import CreateEmailUseCase
 from context.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from core.utils.logger import logger
-from core.utils.responses import (
-    EnvelopeResponse,
-)
+from shared.app.status_code import StatusCodes
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
 
 @router.post(
     "",
     summary="Crear registro de email",
     status_code=status.HTTP_201_CREATED,
-    response_model=EnvelopeResponse,
+    response_model=ResponseEntity,
 )
 async def create(
     request: Request,
@@ -28,10 +27,6 @@ async def create(
 
     use_case = CreateEmailUseCase(repository=EmailRepository())
 
-    new_entity: EmailEntity = use_case.execute(payload=entity) # el caso de uso debe genera una Response intermedia o porlomenos retornar el stataus code
+    new_entity: EmailEntity = use_case.execute(payload=entity)
 
-    return EnvelopeResponse(
-        data=new_entity.model_dump(),
-        success=True,
-        response_code=status.HTTP_201_CREATED,
-    )
+    return ResponseEntity(data=new_entity.model_dump(), code=StatusCodes.HTTP_201_CREATED)
