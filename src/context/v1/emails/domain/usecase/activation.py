@@ -80,6 +80,10 @@ class ActivationEmailUseCase:
 
         login_method = login_methods[0]
 
+        self.login_method_repository.update_field_by_id(
+            id=str(login_method.id), field_name="verify", new_value=True
+        )
+
         controller_jwt = SagaController(
             [CreateJWTStep(login_method=login_method)],
         )
