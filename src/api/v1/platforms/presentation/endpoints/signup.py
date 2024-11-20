@@ -1,7 +1,7 @@
 from fastapi import status
 
 from api.v1.platforms.presentation.dtos.signup import SignupPlatformDto
-from api.v1.platforms.presentation.endpoints.routers import router
+from api.v1.platforms.presentation.endpoints.routers import router_operations as router
 from context.v1.login_methods.infrastructure.repositories.postgres.login_method import (
     LoginMethodRepository,
 )
@@ -21,7 +21,6 @@ from shared.presentation.schemas.envelope_response import ResponseEntity
     summary="Signup By Platform",
     status_code=status.HTTP_201_CREATED,
     response_model=ResponseEntity,
-    tags=["Auth API"],
 )
 async def signup(
     payload: SignupPlatformDto,
@@ -36,8 +35,6 @@ async def signup(
         login_method_repository=LoginMethodRepository(),
     )
 
-    jwt = use_case.execute(
-        payload=entity
-    )
+    jwt = use_case.execute(payload=entity)
 
     return ResponseEntity(data=jwt, code=StatusCodes.HTTP_201_CREATED)

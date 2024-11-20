@@ -1,7 +1,7 @@
 from fastapi import status
 
 from api.v1.platforms.presentation.dtos.signin import SigninPlatformDto
-from api.v1.platforms.presentation.endpoints.routers import router
+from api.v1.platforms.presentation.endpoints.routers import router_operations as router
 from context.v1.login_methods.infrastructure.repositories.postgres.login_method import (
     LoginMethodRepository,
 )
@@ -20,7 +20,6 @@ from shared.presentation.schemas.envelope_response import ResponseEntity
     summary="Signin By Platform",
     status_code=status.HTTP_200_OK,
     response_model=ResponseEntity,
-    tags=["Auth API"],
 )
 async def signip(
     payload: SigninPlatformDto,
@@ -34,8 +33,6 @@ async def signip(
         login_method_repository=LoginMethodRepository(),
     )
 
-    jwt = use_case.execute(
-        payload=entity
-    )
+    jwt = use_case.execute(payload=entity)
 
     return ResponseEntity(data=jwt, code=StatusCodes.HTTP_200_OK)

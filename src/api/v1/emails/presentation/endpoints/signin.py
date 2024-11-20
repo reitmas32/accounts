@@ -12,7 +12,7 @@ from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
 
-from .routers import router
+from .routers import router_operations as router
 
 
 @router.post(
@@ -20,7 +20,6 @@ from .routers import router
     summary="SignIn user with email",
     status_code=status.HTTP_200_OK,
     response_model=ResponseEntity,
-    tags=["Auth API"],
 )
 async def signup(
     request: Request,
@@ -46,11 +45,9 @@ async def signup(
     use_case = SignInWithEmailUseCase(
         email_repository=EmailRepository(),
         user_repository=UserRepository(),
-        login_method_repository=LoginMethodRepository()
+        login_method_repository=LoginMethodRepository(),
     )
 
-    jwt = use_case.execute(
-        payload=entity
-    )
+    jwt = use_case.execute(payload=entity)
 
     return ResponseEntity(data=jwt, code=StatusCodes.HTTP_201_CREATED)

@@ -16,7 +16,7 @@ from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
 
-from .routers import router
+from .routers import router_operations as router
 
 if TYPE_CHECKING:
     from context.v1.emails.domain.entities.email import EmailEntity
@@ -27,7 +27,6 @@ if TYPE_CHECKING:
     summary="SignUp user with email",
     status_code=status.HTTP_201_CREATED,
     response_model=ResponseEntity,
-    tags=["Auth API"],
 )
 async def signup(
     request: Request,

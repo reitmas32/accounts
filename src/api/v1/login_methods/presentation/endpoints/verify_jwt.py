@@ -13,7 +13,6 @@ from .routers import router_verify as router
     summary="Verify id JWT is valid",
     status_code=status.HTTP_200_OK,
     response_model=ResponseEntity,
-    tags=["Auth API"],
 )
 async def verify_jwt(
     auth: str = Header(),
@@ -22,13 +21,10 @@ async def verify_jwt(
 
     jwt = auth.split(" ")[1]
 
-    use_case = VerifyJWTUseCase(jwt= jwt)
+    use_case = VerifyJWTUseCase(jwt=jwt)
 
     is_valid: bool = use_case.execute()
 
-    response = {
-        "message": "JWT is valid",
-        "is_valid": is_valid
-    }
+    response = {"message": "JWT is valid", "is_valid": is_valid}
 
     return ResponseEntity(data=response, code=StatusCodes.HTTP_200_OK)

@@ -12,7 +12,7 @@ from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
 
-from .routers import router
+from .routers import router_operations as router
 
 
 @router.post(
@@ -20,7 +20,6 @@ from .routers import router
     summary="Activate account with code and email",
     status_code=status.HTTP_200_OK,
     response_model=ResponseEntity,
-    tags=["Auth API"],
 )
 async def activate(
     payload: ActivateEmailDto,

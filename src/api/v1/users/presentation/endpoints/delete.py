@@ -14,7 +14,6 @@ from .routers import router
     "/{id}",
     summary="elimina un usuario",
     status_code=status.HTTP_200_OK,
-    response_model=EnvelopeResponse,
 )
 async def delte(
     id: UUID,
