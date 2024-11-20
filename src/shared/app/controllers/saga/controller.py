@@ -4,7 +4,6 @@ from typing import Any
 from fastapi import HTTPException
 
 from core.settings import log
-from shared.app.errors.saga import SAGAError
 
 
 class TransactionFailedException(HTTPException):
@@ -36,9 +35,9 @@ class SagaController:
             try:
                 last_payload = step(payload=last_payload, all_payloads=self.payloads)
                 self.payloads[type(step)] = last_payload
-            except Exception as e:  # noqa: PERF203, BLE001
+            except Exception as e:  # noqa: PERF203
                 self.rollback()
-                raise SAGAError(e)
+                raise e  # noqa: TRY201
         return self.payloads
 
     def rollback(self):
