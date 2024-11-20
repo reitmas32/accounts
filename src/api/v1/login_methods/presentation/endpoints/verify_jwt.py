@@ -2,9 +2,8 @@ from fastapi import Header, status
 
 from context.v1.login_methods.domain.usecase.verify_jwt import VerifyJWTUseCase
 from core.utils.logger import logger
-from core.utils.responses import (
-    EnvelopeResponse,
-)
+from shared.app.status_code import StatusCodes
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
 from .routers import router
 
@@ -13,7 +12,7 @@ from .routers import router
     "/verify-jwt",
     summary="Verify id JWT is valid",
     status_code=status.HTTP_200_OK,
-    response_model=EnvelopeResponse,
+    response_model=ResponseEntity,
     tags=["Auth API"],
 )
 async def verify_jwt(
@@ -27,9 +26,9 @@ async def verify_jwt(
 
     is_valid: bool = use_case.execute()
 
-    return EnvelopeResponse(
-        data=None,
-        response_code=status.HTTP_200_OK,
-        success=is_valid,
-        message="JWT is valid",
-    )
+    response = {
+        "message": "JWT is valid",
+        "is_valid": is_valid
+    }
+
+    return ResponseEntity(data=response, code=StatusCodes.HTTP_200_OK)
