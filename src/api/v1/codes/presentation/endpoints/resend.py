@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from fastapi import Request, status
+from fastapi import status
 
 from api.v1.codes.presentation.dtos.resend import ResendCodeDto
 from api.v1.emails.presentation.schemas.signup import SignupEmailSchema
@@ -12,9 +12,8 @@ from context.v1.login_methods.infrastructure.repositories.postgres.login_method 
     LoginMethodRepository,
 )
 from core.utils.logger import logger
-from core.utils.responses import (
-    EnvelopeResponse,
-)
+from shared.app.status_code import StatusCodes
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
 from .routers import router
 
@@ -26,11 +25,10 @@ if TYPE_CHECKING:
     "/resend",
     summary="Resend code by email",
     status_code=status.HTTP_200_OK,
-    response_model=EnvelopeResponse,
+    response_model=ResponseEntity,
     tags=["Auth API"],
 )
 async def resend(
-    request: Request,
     payload: ResendCodeDto,
 ):
     logger.info("Resend Code")
@@ -49,8 +47,4 @@ async def resend(
 
     response = SignupEmailSchema(**new_entity.model_dump())
 
-    return EnvelopeResponse(
-        data=response.model_dump(),
-        success=True,
-        response_code=status.HTTP_200_OK,
-    )
+    return ResponseEntity(data=response.model_dump(), code=StatusCodes.HTTP_200_OK)
