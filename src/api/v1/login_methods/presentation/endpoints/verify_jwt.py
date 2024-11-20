@@ -5,10 +5,10 @@ from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
 
-from .routers import router
+from .routers import router_verify as router
 
 
-@router.post(
+@router.get(
     "/verify-jwt",
     summary="Verify id JWT is valid",
     status_code=status.HTTP_200_OK,
