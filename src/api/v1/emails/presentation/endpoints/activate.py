@@ -8,6 +8,9 @@ from context.v1.emails.infrastructure.repositories.postgres.email import EmailRe
 from context.v1.login_methods.infrastructure.repositories.postgres.login_method import (
     LoginMethodRepository,
 )
+from context.v1.refresh_token.infrastructure.repositories.postgres.refresh import (
+    RefreshTokenRepository,
+)
 from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
@@ -35,8 +38,15 @@ async def activate(
         email_repository=email_repository,
         code_repository=code_repository,
         login_method_repository=LoginMethodRepository(),
+        refresh_token_repository=RefreshTokenRepository(),
     )
 
-    jwt = use_case.execute(payload=entity)
+    jwt, refresh_token = use_case.execute(payload=entity)
 
-    return ResponseEntity(data=jwt, code=StatusCodes.HTTP_200_OK)
+    return ResponseEntity(
+        data={
+            "jwt": jwt,
+            "refresh_token": refresh_token
+        },
+        code=StatusCodes.HTTP_200_OK,
+    )

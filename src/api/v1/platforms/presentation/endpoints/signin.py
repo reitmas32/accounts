@@ -10,6 +10,9 @@ from context.v1.platforms.domain.usecase.singin import SignInPlatformUseCase
 from context.v1.platforms.infrastructure.repositories.postgres.user import (
     PlatformRepository,
 )
+from context.v1.refresh_token.infrastructure.repositories.postgres.refresh import (
+    RefreshTokenRepository,
+)
 from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
@@ -31,8 +34,12 @@ async def signip(
     use_case = SignInPlatformUseCase(
         repository=PlatformRepository(),
         login_method_repository=LoginMethodRepository(),
+        refresh_token_repository=RefreshTokenRepository(),
     )
 
-    jwt = use_case.execute(payload=entity)
+    jwt, refresh_token = use_case.execute(payload=entity)
 
-    return ResponseEntity(data=jwt, code=StatusCodes.HTTP_200_OK)
+    return ResponseEntity(
+        data={"jwt": jwt, "refresh_token": refresh_token},
+        code=StatusCodes.HTTP_200_OK,
+    )

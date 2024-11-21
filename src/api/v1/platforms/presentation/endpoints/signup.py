@@ -10,6 +10,9 @@ from context.v1.platforms.domain.usecase.signup import SignUpPlatformUseCase
 from context.v1.platforms.infrastructure.repositories.postgres.user import (
     PlatformRepository,
 )
+from context.v1.refresh_token.infrastructure.repositories.postgres.refresh import (
+    RefreshTokenRepository,
+)
 from context.v1.users.infrastructure.repositories.postgres.user import UserRepository
 from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
@@ -33,8 +36,15 @@ async def signup(
         repository=PlatformRepository(),
         user_repository=UserRepository(),
         login_method_repository=LoginMethodRepository(),
+        refresh_token_repository=RefreshTokenRepository(),
     )
 
-    jwt = use_case.execute(payload=entity)
+    jwt, refresh_token = use_case.execute(payload=entity)
 
-    return ResponseEntity(data=jwt, code=StatusCodes.HTTP_201_CREATED)
+    return ResponseEntity(
+        data={
+            "jwt": jwt,
+            "refresh_token": refresh_token
+        },
+        code=StatusCodes.HTTP_201_CREATED,
+    )

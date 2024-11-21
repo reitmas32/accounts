@@ -45,7 +45,7 @@ class Settings(PydanticBaseSettings):
     DATE_TIME_FORMAT: str = "%Y-%m-%d %H:%M:%S"
     API_V1: str = "v1"
     CORS_ORIGINS: ClassVar[list[str]] = ["*"]
-    SHOW_CRUDS_IN_SWAGGER_SCHEMA = False
+    SHOW_CRUDS_IN_SWAGGER_SCHEMA: bool = False
 
     # Database settings
     # ----------------------------------------------------------------
@@ -107,6 +107,7 @@ class Settings(PydanticBaseSettings):
     # Token JWT settings
     # ----------------------------------------------------------------
     TIME_SECONDS_EXPIRE_TOKEN_JWT: int = 60 * 60 * 24
+    TIME_SECONDS_EXPIRE_REFRESH_TOKEN_JWT: int = 60 * 60 * 24 * 30
     ALGORITHM_JWT: JWTAlgorithmsEnum = JWTAlgorithmsEnum.RS256
     PRIVATE_KEY_JWT: str
     PUBLIC_KEY_JWT: str
