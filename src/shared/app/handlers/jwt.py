@@ -25,7 +25,7 @@ class JWTHandler:
             payload = decode(token, settings.PUBLIC_KEY_JWT, algorithms=[settings.ALGORITHM_JWT.value])
             return JWTSchema(**payload)
         except ExpiredSignatureError:
-            raise JWTExpiredError("Token has expired")
+            raise JWTExpiredError
         except InvalidTokenError:
             raise JWTInvalidError("Invalid token")
         except ValidationError as e:
@@ -38,17 +38,16 @@ class RefreshTokenHandler:
         to_encode = {
             "refresh_token_id": refresh_token_id
         }
-        expire = get_current_date_time_to_app_standard() + timedelta(seconds=settings.TIME_SECONDS_EXPIRE_TOKEN_JWT)
+        expire = get_current_date_time_to_app_standard() + timedelta(seconds=settings.TIME_SECONDS_EXPIRE_REFRESH_TOKEN_JWT)
         to_encode.update({"exp": expire})
         return jwt.encode(to_encode, settings.PRIVATE_KEY_JWT, algorithm=settings.ALGORITHM_JWT.value)
 
     @staticmethod
     def validate_token(token: str) -> JWTSchema:
         try:
-            payload = decode(token, settings.PUBLIC_KEY_JWT, algorithms=[settings.ALGORITHM_JWT.value])
-            return JWTSchema(**payload)
+            return decode(token, settings.PUBLIC_KEY_JWT, algorithms=[settings.ALGORITHM_JWT.value])
         except ExpiredSignatureError:
-            raise JWTExpiredError("Token has expired")
+            raise JWTExpiredError
         except InvalidTokenError:
             raise JWTInvalidError("Invalid token")
         except ValidationError as e:
