@@ -106,8 +106,8 @@ class Settings(PydanticBaseSettings):
 
     # Token JWT settings
     # ----------------------------------------------------------------
-    TIME_SECONDS_EXPIRE_TOKEN_JWT: int = 60 * 60 * 24
-    TIME_SECONDS_EXPIRE_REFRESH_TOKEN_JWT: int = 60 * 60 * 24 * 30
+    TIME_SECONDS_EXPIRE_TOKEN_JWT: int = 60 * 15 # 15 MINS
+    TIME_SECONDS_EXPIRE_REFRESH_TOKEN_JWT: int = 60 * 60 * 24 * 30 # 30 DAYS
     ALGORITHM_JWT: JWTAlgorithmsEnum = JWTAlgorithmsEnum.RS256
     PRIVATE_KEY_JWT: str
     PUBLIC_KEY_JWT: str
