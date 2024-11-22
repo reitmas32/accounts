@@ -79,11 +79,11 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
                     success=False,
                     data=None,
                     details=DetailsSchema(
-                        code=internal_code,
-                        message=internal_code,
+                        code=str(internal_code),
+                        message=str(internal_code),
                         trace_id=trace_id,
                         caller_id=caller_id,
-                        errors=[str(e.__class__.__name__)]
+                        errors=[str(e.__class__.__name__)],
                     ),
                 ).model_dump(),
                 status_code=status_code,
