@@ -3,7 +3,7 @@ from uuid import UUID
 
 from fastapi import status
 
-from api.v1.emails.presentation.endpoints.routers import router
+from api.v1.emails.presentation.endpoints.routers import router_crud as router
 from context.v1.emails.domain.usecase.retrive import RetriveEmailUseCase
 from context.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from core.utils.logger import logger

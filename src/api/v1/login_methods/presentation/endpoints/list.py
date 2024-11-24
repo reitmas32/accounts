@@ -10,7 +10,7 @@ from shared.app.status_code import StatusCodes
 from shared.app.use_cases.list import PaginationParams
 from shared.presentation.schemas.envelope_response import ResponseEntity
 
-from .routers import router
+from .routers import router_crud as router
 
 
 @router.get(

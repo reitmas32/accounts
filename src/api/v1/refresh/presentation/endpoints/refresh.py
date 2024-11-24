@@ -1,6 +1,7 @@
 from fastapi import Depends, status
 from fastapi.security import HTTPAuthorizationCredentials
 
+from api.v1.refresh.presentation.schemas.new_jwt import NewJWTSchema
 from context.v1.login_methods.infrastructure.repositories.postgres.login_method import (
     LoginMethodRepository,
 )
@@ -37,8 +38,8 @@ async def verify_jwt(
         refresh_token_repository=RefreshTokenRepository(),
         login_methods_repository=LoginMethodRepository(),
     )
-    is_valid: bool = use_case.execute()
+    jwt: bool = use_case.execute()
 
-    response = {"jwt": is_valid}
+    response = NewJWTSchema(jwt=jwt)
 
-    return ResponseEntity(data=response, code=StatusCodes.HTTP_200_OK)
+    return ResponseEntity(data=response.model_dump(), code=StatusCodes.HTTP_200_OK)

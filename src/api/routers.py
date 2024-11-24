@@ -5,17 +5,17 @@ from api.v1.codes.presentation.endpoints import router as codes_endpoints
 from api.v1.codes.presentation.endpoints import (
     router_operations as codes_endpoints_operations,
 )
-from api.v1.emails.presentation.endpoints import router as emails_endpoints
+from api.v1.emails.presentation.endpoints import router_crud as emails_endpoints
 from api.v1.emails.presentation.endpoints import (
     router_operations as emails_endpoints_operations,
 )
 from api.v1.login_methods.presentation.endpoints import (
-    router as login_methods_endpoints,
+    router_crud as login_methods_endpoints,
 )
 from api.v1.login_methods.presentation.endpoints import (
     router_verify as login_methods_endpoints_operations,
 )
-from api.v1.platforms.presentation.endpoints import router as platforms_endpoints
+from api.v1.platforms.presentation.endpoints import router_crud as platforms_endpoints
 from api.v1.platforms.presentation.endpoints import (
     router_operations as platforms_endpoints_operations,
 )

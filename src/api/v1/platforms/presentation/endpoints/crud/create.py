@@ -1,7 +1,7 @@
 from fastapi import status
 
 from api.v1.platforms.presentation.dtos import CreatePlatformDto
-from api.v1.platforms.presentation.endpoints.routers import router
+from api.v1.platforms.presentation.endpoints.routers import router_crud as router
 from context.v1.platforms.domain.entities.platform import PlatformEntity
 from context.v1.platforms.domain.usecase.create import CreatePlatformUseCase
 from context.v1.platforms.infrastructure.repositories.postgres.user import (

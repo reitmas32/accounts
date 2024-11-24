@@ -1,7 +1,7 @@
 from fastapi import Depends, Request, status
 
 from api.v1.emails.presentation.dtos.filters import EmailFilters
-from api.v1.emails.presentation.endpoints.routers import router
+from api.v1.emails.presentation.endpoints.routers import router_crud as router
 from context.v1.emails.domain.usecase.list import ListEmailUseCase
 from context.v1.emails.infrastructure.repositories.postgres.email import EmailRepository
 from core.utils.logger import logger

@@ -4,7 +4,7 @@ from uuid import UUID
 
 from fastapi import status
 
-from api.v1.platforms.presentation.endpoints.routers import router
+from api.v1.platforms.presentation.endpoints.routers import router_crud as router
 from context.v1.platforms.domain.usecase.retrive import RetrivePlatformUseCase
 from context.v1.platforms.infrastructure.repositories.postgres.user import (
     PlatformRepository,

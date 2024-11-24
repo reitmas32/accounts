@@ -11,7 +11,7 @@ from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
 
-from .routers import router
+from .routers import router_crud as router
 
 
 @router.post(
