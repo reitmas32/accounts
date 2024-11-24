@@ -4,4 +4,5 @@ from .email import EmailModel  # noqa: F401
 from .login_methods import LoginMethodModel  # noqa: F401
 from .phone_number import PhoneNumberModel  # noqa: F401
 from .refresh_token import RefreshTokenModel  # noqa: F401
+from .role import RoleModel  # noqa: F401
 from .user import UserModel  # noqa: F401
