@@ -54,6 +54,15 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
                 status_code=response_entity.code.http,
             )
         except Exception as e:  # noqa: BLE001
+            errors = [str(e.__class__.__name__)]
+            if isinstance(e, BaseError):
+                status_code = e.external_code.http
+                errors = [
+                    {
+                        str(e.__class__.__name__): e.message,
+                    },
+                ]
+
             if isinstance(e, HTTPException):
                 status_code = e.status_code
             elif isinstance(e, IntegrityError):
@@ -62,8 +71,6 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
                     err = e.orig
                     status_code = status.HTTP_409_CONFLICT
                     e = f"ForeignKeyViolation: {err.diag.table_name}"
-            elif isinstance(e, BaseError):
-                status_code = e.external_code.http
             else:
                 status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
 
@@ -79,11 +86,11 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
                     success=False,
                     data=None,
                     details=DetailsSchema(
-                        code=str(internal_code),
-                        message=str(internal_code),
+                        code=internal_code,
+                        message=internal_code,
                         trace_id=trace_id,
                         caller_id=caller_id,
-                        errors=[str(e.__class__.__name__)],
+                        errors=errors,
                     ),
                 ).model_dump(),
                 status_code=status_code,
