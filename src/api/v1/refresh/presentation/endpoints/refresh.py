@@ -12,7 +12,7 @@ from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
 
-from .routers import router_verify as router
+from .routers import router_operations as router
 
 security_scheme = HTTPBearer()
 

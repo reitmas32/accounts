@@ -19,6 +19,10 @@ from api.v1.platforms.presentation.endpoints import router as platforms_endpoint
 from api.v1.platforms.presentation.endpoints import (
     router_operations as platforms_endpoints_operations,
 )
+from api.v1.refresh.presentation.endpoints import router as refresh_endpoints
+from api.v1.refresh.presentation.endpoints import (
+    router_operations as refresh_endpoints_operations,
+)
 from api.v1.users.presentation.endpoints import router as users_endpoints
 from core.settings import settings
 
@@ -32,12 +36,16 @@ api_v1_router.include_router(emails_endpoints, include_in_schema=settings.SHOW_C
 api_v1_router.include_router(login_methods_endpoints, include_in_schema=settings.SHOW_CRUDS_IN_SWAGGER_SCHEMA)
 api_v1_router.include_router(platforms_endpoints, include_in_schema=settings.SHOW_CRUDS_IN_SWAGGER_SCHEMA)
 api_v1_router.include_router(users_endpoints, include_in_schema=settings.SHOW_CRUDS_IN_SWAGGER_SCHEMA)
+api_v1_router.include_router(refresh_endpoints, include_in_schema=settings.SHOW_CRUDS_IN_SWAGGER_SCHEMA)
+
 
 
 api_v1_router.include_router(codes_endpoints_operations)
 api_v1_router.include_router(emails_endpoints_operations)
 api_v1_router.include_router(login_methods_endpoints_operations)
 api_v1_router.include_router(platforms_endpoints_operations)
+api_v1_router.include_router(refresh_endpoints_operations)
+
 
 
 
