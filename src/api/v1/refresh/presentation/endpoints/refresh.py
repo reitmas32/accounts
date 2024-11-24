@@ -1,5 +1,5 @@
 from fastapi import Depends, status
-from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.security import HTTPAuthorizationCredentials
 
 from context.v1.login_methods.infrastructure.repositories.postgres.login_method import (
     LoginMethodRepository,
@@ -9,16 +9,17 @@ from context.v1.refresh_token.infrastructure.repositories.postgres.refresh impor
     RefreshTokenRepository,
 )
 from core.utils.logger import logger
+from shared.app.depends.custom_http_bearer import CustomHTTPBearer
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
 
 from .routers import router_operations as router
 
-security_scheme = HTTPBearer()
+security_scheme = CustomHTTPBearer()
 
 
 @router.get(
-    "/refresh",
+    "/refresh-token/jwt",
     summary="Generate a new JWT with the refresh token",
     status_code=status.HTTP_200_OK,
     response_model=ResponseEntity,
