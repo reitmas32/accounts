@@ -1,8 +1,11 @@
 import uuid
 
-from sqlalchemy import JSON, Column, Date, String, event
+from sqlalchemy import JSON, Column, Date, ForeignKey, String, event
+from sqlalchemy.orm import relationship
 
 from shared.databases.orms.sqlalchemy.base_model_sqlalchemy import BaseModelClass
+
+from .role import RoleModel
 
 
 class UserModel(BaseModelClass):
@@ -42,6 +45,10 @@ class UserModel(BaseModelClass):
 
     extra_data = Column(JSON, nullable=True)
     """JSON field storing any additional data related to the user, such as preferences or settings."""
+
+    role_id = Column(ForeignKey(RoleModel.id), nullable=True)
+
+    role = relationship(RoleModel, primaryjoin="UserModel.role_id == RoleModel.id")
 
     @staticmethod
     def generate_default_username(target, connection, **kw):  # noqa: ARG004
