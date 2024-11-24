@@ -8,20 +8,21 @@ from context.v1.emails.infrastructure.repositories.postgres.email import EmailRe
 from context.v1.login_methods.infrastructure.repositories.postgres.login_method import (
     LoginMethodRepository,
 )
-from core.utils.logger import logger
-from core.utils.responses import (
-    EnvelopeResponse,
+from context.v1.refresh_token.infrastructure.repositories.postgres.refresh import (
+    RefreshTokenRepository,
 )
+from core.utils.logger import logger
+from shared.app.status_code import StatusCodes
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
-from .routers import router
+from .routers import router_operations as router
 
 
 @router.post(
     "/activate",
     summary="Activate account with code and email",
-    status_code=status.HTTP_201_CREATED,
-    response_model=EnvelopeResponse,
-    tags=["Auth API"],
+    status_code=status.HTTP_200_OK,
+    response_model=ResponseEntity,
 )
 async def activate(
     payload: ActivateEmailDto,
@@ -37,13 +38,15 @@ async def activate(
         email_repository=email_repository,
         code_repository=code_repository,
         login_method_repository=LoginMethodRepository(),
+        refresh_token_repository=RefreshTokenRepository(),
     )
 
-    jwt = use_case.execute(payload=entity)
+    jwt, refresh_token = use_case.execute(payload=entity)
 
-    return EnvelopeResponse(
-        data=jwt,
-        success=True,
-        response_code=status.HTTP_200_OK,
-        message="The account has been activated"
+    return ResponseEntity(
+        data={
+            "jwt": jwt,
+            "refresh_token": refresh_token
+        },
+        code=StatusCodes.HTTP_200_OK,
     )

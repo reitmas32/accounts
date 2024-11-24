@@ -3,11 +3,10 @@ from fastapi import Depends, Request, status
 from api.v1.codes.presentation.dtos.filters import CodeFilters
 from context.v1.codes.domain.usecase.list import ListCodeUseCase
 from context.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
-from core.settings import log
-from core.utils.responses import (
-    EnvelopeResponse,
-)
+from core.utils.logger import logger
+from shared.app.status_code import StatusCodes
 from shared.app.use_cases.list import PaginationParams
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
 from .routers import router
 
@@ -16,14 +15,14 @@ from .routers import router
     "/",
     summary="Returns a list of codes",
     status_code=status.HTTP_200_OK,
-    response_model=EnvelopeResponse,
+    response_model=ResponseEntity,
 )
 async def retrieve_all(
     request: Request,
     pagination_params: PaginationParams = Depends(),
     query_params: CodeFilters = Depends(),
 ):
-    log.info("Get All Codes")
+    logger.info("Get All Codes")
 
     filters = query_params.model_dump(exclude_unset=True, exclude_defaults=True)
 
@@ -35,9 +34,4 @@ async def retrieve_all(
         url=request.url,
     )
 
-    return EnvelopeResponse(
-        errors=None,
-        data=entities.model_dump(),
-        response_code=status.HTTP_200_OK,
-        success=True,
-    )
+    return ResponseEntity(data=entities, code=StatusCodes.HTTP_200_OK)

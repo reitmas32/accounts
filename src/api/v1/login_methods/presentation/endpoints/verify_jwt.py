@@ -1,35 +1,40 @@
-from fastapi import Header, status
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials
 
 from context.v1.login_methods.domain.usecase.verify_jwt import VerifyJWTUseCase
 from core.utils.logger import logger
-from core.utils.responses import (
-    EnvelopeResponse,
-)
+from shared.app.depends.custom_http_bearer import CustomHTTPBearer
+from shared.app.status_code import StatusCodes
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
-from .routers import router
+from .routers import router_verify as router
+
+security_scheme = CustomHTTPBearer()
 
 
-@router.post(
+@router.get(
     "/verify-jwt",
-    summary="Verify id JWT is valid",
+    summary="Verify if JWT is valid",
     status_code=status.HTTP_200_OK,
-    response_model=EnvelopeResponse,
-    tags=["Auth API"],
+    response_model=ResponseEntity,
+    dependencies=[Depends(security_scheme)],
 )
 async def verify_jwt(
-    auth: str = Header(),
+    authorization: HTTPAuthorizationCredentials = Depends(security_scheme),
 ):
     logger.info("Verify JWT")
 
-    jwt = auth.split(" ")[1]
+    if not authorization:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Authorization header is missing",
+        )
 
-    use_case = VerifyJWTUseCase(jwt= jwt)
+    jwt = authorization.credentials
 
+    use_case = VerifyJWTUseCase(jwt=jwt)
     is_valid: bool = use_case.execute()
 
-    return EnvelopeResponse(
-        data=None,
-        response_code=status.HTTP_200_OK,
-        success=is_valid,
-        message="JWT is valid",
-    )
+    response = {"message": "JWT is valid", "is_valid": is_valid}
+
+    return ResponseEntity(data=response, code=StatusCodes.HTTP_200_OK)

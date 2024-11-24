@@ -6,7 +6,7 @@ from core.utils.responses import (
     EnvelopeResponse,
 )
 
-from .routers import router
+from .routers import router_crud as router
 
 
 @router.put(

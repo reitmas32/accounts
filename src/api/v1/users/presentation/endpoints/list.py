@@ -4,10 +4,9 @@ from api.v1.users.presentation.dtos.filters import UserFilters
 from context.v1.users.domain.usecase.list import ListUserUseCase
 from context.v1.users.infrastructure.repositories.postgres.user import UserRepository
 from core.settings import log
-from core.utils.responses import (
-    EnvelopeResponse,
-)
+from shared.app.status_code import StatusCodes
 from shared.app.use_cases.list import PaginationParams
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
 from .routers import router
 
@@ -16,7 +15,7 @@ from .routers import router
     "/",
     summary="Returns a list of users",
     status_code=status.HTTP_200_OK,
-    response_model=EnvelopeResponse,
+    response_model=ResponseEntity,
 )
 async def retrieve_all(
     request: Request,
@@ -35,9 +34,4 @@ async def retrieve_all(
         url=request.url,
     )
 
-    return EnvelopeResponse(
-        errors=None,
-        data=entities.model_dump(),
-        response_code=status.HTTP_200_OK,
-        success=True,
-    )
+    return ResponseEntity(data=entities, code=StatusCodes.HTTP_200_OK)

@@ -74,6 +74,7 @@ class StatusCodes(Enum):
     APP_MISSING_CREDENTIALS = 101_510, "The request not found email or user_name"
     APP_JWT_EXPIRED = 101_511, "The JWT has expired"
     APP_CODE_LENGTH = 101_512, "The length of the code is invalid"
+    APP_AUTHORIZATION_HEADER_MISSING = 101_513, "The athorization header missing"
 
     def __new__(cls, value, description):
         obj = object.__new__(cls)

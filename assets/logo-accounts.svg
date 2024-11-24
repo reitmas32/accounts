@@ -1,14 +1,21 @@
 <?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
- "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="900.000000pt" height="675.000000pt" viewBox="0 0 900.000000 675.000000"
- preserveAspectRatio="xMidYMid meet">
-<metadata>
-Created by potrace 1.10, written by Peter Selinger 2001-2011
-</metadata>
-<g transform="translate(0.000000,675.000000) scale(0.100000,-0.100000)"
-fill="#298ed9" stroke="none">
+
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+     width="900.000000pt" height="675.000000pt" viewBox="0 0 900.000000 675.000000"
+     preserveAspectRatio="xMidYMid meet">
+
+  <defs>
+    <linearGradient id="myGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff69b4; stop-opacity:1" /> <!-- Rosa -->
+      <stop offset="33%" style="stop-color:#8a2be2; stop-opacity:1" /> <!-- Morado -->
+      <stop offset="66%" style="stop-color:#87cefa; stop-opacity:1" /> <!-- Azul Cielo -->
+      <stop offset="100%" style="stop-color:#00008b; stop-opacity:1" /> <!-- Azul Marino -->
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(0.000000,675.000000) scale(0.100000,-0.100000)"
+     fill="url(#myGradient)" stroke="none">
+
 <path d="M4350 5829 c-19 -5 -71 -13 -115 -18 -79 -9 -141 -23 -200 -43 -16
 -6 -46 -13 -65 -16 -19 -2 -44 -11 -55 -18 -11 -8 -29 -14 -40 -14 -12 0 -30
 -7 -41 -15 -10 -8 -27 -15 -36 -15 -14 0 -52 -16 -98 -42 -8 -4 -22 -11 -30

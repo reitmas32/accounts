@@ -2,7 +2,7 @@ from uuid import UUID
 
 from fastapi import status
 
-from api.v1.emails.presentation.endpoints.routers import router
+from api.v1.emails.presentation.endpoints.routers import router_crud as router
 from core.utils.logger import logger
 from core.utils.responses import (
     EnvelopeResponse,

@@ -3,6 +3,10 @@ from typing import TYPE_CHECKING
 
 from context.v1.emails.domain.entities.activation import ActivateEmailEntity
 from context.v1.login_methods.domain.steps.create_jwt import CreateJWTStep
+from context.v1.refresh_token.domain.entities.refresh_token import (
+    CreateRefreshTokenEntity,
+)
+from context.v1.refresh_token.domain.steps.create import CreateRefreshTokenStep
 from shared.app.controllers.saga.controller import SagaController
 from shared.app.enums.code_type import CodeTypeEnum
 from shared.app.enums.user_login_methods import UserLoginMethodsTypeEnum
@@ -22,10 +26,12 @@ class ActivationEmailUseCase:
         email_repository: RepositoryInterface,
         code_repository: RepositoryInterface,
         login_method_repository: RepositoryInterface,
+        refresh_token_repository: RepositoryInterface,
     ):
         self.email_repository = email_repository
         self.code_repository = code_repository
         self.login_method_repository = login_method_repository
+        self.refresh_token_repository = refresh_token_repository
 
     def execute(self, payload: ActivateEmailEntity):
         emails: list[EmailModel] = self.email_repository.get_by_attributes(
@@ -42,6 +48,7 @@ class ActivationEmailUseCase:
                 "entity_id": str(email.id),
                 "entity_type": UserLoginMethodsTypeEnum.EMAIL,
                 "type": CodeTypeEnum.ACCOUNT_ACTIVATION,
+                "used_at": None,
             },
             limit=1,
         )
@@ -79,10 +86,27 @@ class ActivationEmailUseCase:
 
         login_method = login_methods[0]
 
+        self.login_method_repository.update_field_by_id(
+            id=str(login_method.id), field_name="verify", new_value=True
+        )
+
         controller_jwt = SagaController(
-            [CreateJWTStep(login_method=login_method)],
+            [
+                CreateJWTStep(login_method=login_method),
+                CreateRefreshTokenStep(
+                    repository=self.refresh_token_repository,
+                    entity=CreateRefreshTokenEntity(
+                        user_id=email.user_id,
+                        login_method_id=login_method.id,
+                    ),
+                ),
+            ],
         )
 
         payloads_jwt = controller_jwt.execute()
 
-        return payloads_jwt[CreateJWTStep]
+        jwt = payloads_jwt[CreateJWTStep]
+
+        refresh_token = payloads_jwt[CreateRefreshTokenStep]
+
+        return jwt, refresh_token

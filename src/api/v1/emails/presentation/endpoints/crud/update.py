@@ -1,7 +1,7 @@
 from fastapi import Request, status
 
 from api.v1.codes.presentation.dtos import UpdateCodeDto
-from api.v1.emails.presentation.endpoints.routers import router
+from api.v1.emails.presentation.endpoints.routers import router_crud as router
 from core.settings import log
 from core.utils.responses import (
     EnvelopeResponse,

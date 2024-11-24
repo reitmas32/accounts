@@ -7,21 +7,22 @@ from context.v1.emails.infrastructure.repositories.postgres.email import EmailRe
 from context.v1.login_methods.infrastructure.repositories.postgres.login_method import (
     LoginMethodRepository,
 )
+from context.v1.refresh_token.infrastructure.repositories.postgres.refresh import (
+    RefreshTokenRepository,
+)
 from context.v1.users.infrastructure.repositories.postgres.user import UserRepository
 from core.utils.logger import logger
-from core.utils.responses import (
-    EnvelopeResponse,
-)
+from shared.app.status_code import StatusCodes
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
-from .routers import router
+from .routers import router_operations as router
 
 
 @router.post(
     "/signin",
     summary="SignIn user with email",
-    status_code=status.HTTP_201_CREATED,
-    response_model=EnvelopeResponse,
-    tags=["Auth API"],
+    status_code=status.HTTP_200_OK,
+    response_model=ResponseEntity,
 )
 async def signup(
     request: Request,
@@ -47,15 +48,16 @@ async def signup(
     use_case = SignInWithEmailUseCase(
         email_repository=EmailRepository(),
         user_repository=UserRepository(),
-        login_method_repository=LoginMethodRepository()
+        login_method_repository=LoginMethodRepository(),
+        refresh_token_repository=RefreshTokenRepository()
     )
 
-    jwt = use_case.execute(
-        payload=entity
-    )  # el caso de uso debe genera una Response intermedia o porlomenos retornar el stataus code
+    jwt, refresh_token = use_case.execute(payload=entity)
 
-    return EnvelopeResponse(
-        data=jwt,
-        success=True,
-        response_code=status.HTTP_200_OK,
+    return ResponseEntity(
+        data={
+            "jwt": jwt,
+            "refresh_token": refresh_token
+        },
+        code=StatusCodes.HTTP_200_OK,
     )

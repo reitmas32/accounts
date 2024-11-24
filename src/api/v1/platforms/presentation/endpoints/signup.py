@@ -1,7 +1,7 @@
 from fastapi import status
 
 from api.v1.platforms.presentation.dtos.signup import SignupPlatformDto
-from api.v1.platforms.presentation.endpoints.routers import router
+from api.v1.platforms.presentation.endpoints.routers import router_operations as router
 from context.v1.login_methods.infrastructure.repositories.postgres.login_method import (
     LoginMethodRepository,
 )
@@ -10,19 +10,20 @@ from context.v1.platforms.domain.usecase.signup import SignUpPlatformUseCase
 from context.v1.platforms.infrastructure.repositories.postgres.user import (
     PlatformRepository,
 )
+from context.v1.refresh_token.infrastructure.repositories.postgres.refresh import (
+    RefreshTokenRepository,
+)
 from context.v1.users.infrastructure.repositories.postgres.user import UserRepository
 from core.utils.logger import logger
-from core.utils.responses import (
-    EnvelopeResponse,
-)
+from shared.app.status_code import StatusCodes
+from shared.presentation.schemas.envelope_response import ResponseEntity
 
 
 @router.post(
     "/signup",
     summary="Signup By Platform",
     status_code=status.HTTP_201_CREATED,
-    response_model=EnvelopeResponse,
-    tags=["Auth API"],
+    response_model=ResponseEntity,
 )
 async def signup(
     payload: SignupPlatformDto,
@@ -35,14 +36,15 @@ async def signup(
         repository=PlatformRepository(),
         user_repository=UserRepository(),
         login_method_repository=LoginMethodRepository(),
+        refresh_token_repository=RefreshTokenRepository(),
     )
 
-    jwt = use_case.execute(
-        payload=entity
-    )  # el caso de uso debe genera una Response intermedia o porlomenos retornar el stataus code
+    jwt, refresh_token = use_case.execute(payload=entity)
 
-    return EnvelopeResponse(
-        data=jwt,
-        success=True,
-        response_code=status.HTTP_201_CREATED,
+    return ResponseEntity(
+        data={
+            "jwt": jwt,
+            "refresh_token": refresh_token
+        },
+        code=StatusCodes.HTTP_201_CREATED,
     )
