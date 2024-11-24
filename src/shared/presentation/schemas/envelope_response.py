@@ -7,7 +7,7 @@ from shared.app.status_code import StatusCodes
 
 
 class DetailsSchema(BaseModel):
-    errors: list[str] = []
+    errors: list = []
     message: str
     code: str
     trace_id: str
