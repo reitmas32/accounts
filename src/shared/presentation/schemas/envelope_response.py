@@ -8,8 +8,8 @@ from shared.app.status_code import StatusCodes
 
 class DetailsSchema(BaseModel):
     errors: list = []
-    message: str
-    code: str
+    message: str | int
+    code: str | int
     trace_id: str
     caller_id: str
 
