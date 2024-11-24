@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 
@@ -32,13 +32,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(api_v1_router)
-app.include_router(api_healthcheck_router)
+
+@app.middleware("http")
+async def redirect_trailing_slash(request, call_next):
+    if (
+        request.url.path != "/"
+        and not request.url.path.endswith("/")
+        and request.url.path.startswith("/api")
+    ):
+        return RedirectResponse(url=f"{request.url.path}/", status_code=307)
+    return await call_next(request)
 
 
 @app.get("/", include_in_schema=False)
 def root():
     return RedirectResponse(url="/docs")
+
+
+app.include_router(api_v1_router)
+app.include_router(api_healthcheck_router)
 
 
 if EnvironmentsTypes.DOCKER.value.env_name == settings.ENVIRONMENT:
