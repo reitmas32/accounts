@@ -19,7 +19,7 @@ from api.v1.platforms.presentation.endpoints import router_crud as platforms_end
 from api.v1.platforms.presentation.endpoints import (
     router_operations as platforms_endpoints_operations,
 )
-from api.v1.refresh.presentation.endpoints import router as refresh_endpoints
+from api.v1.refresh.presentation.endpoints import router_crud as refresh_endpoints
 from api.v1.refresh.presentation.endpoints import (
     router_operations as refresh_endpoints_operations,
 )
