@@ -20,7 +20,7 @@ security_scheme = CustomHTTPBearer()
 
 
 @router.get(
-    "/refresh-token/jwt",
+    "/refresh-jwt",
     summary="Generate a new JWT with the refresh token",
     status_code=status.HTTP_200_OK,
     response_model=ResponseEntity,
