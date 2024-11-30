@@ -37,10 +37,10 @@ app.add_middleware(
 async def redirect_trailing_slash(request, call_next):
     if (
         request.url.path != "/"
-        and not request.url.path.endswith("/")
-        and request.url.path.startswith("/api")
+        and request.url.path.endswith("/")
     ):
-        return RedirectResponse(url=f"{request.url.path}/", status_code=307)
+        path_without_end_slash = request.url.path[:-1]
+        return RedirectResponse(url=f"{path_without_end_slash}", status_code=307)
     return await call_next(request)
 
 
