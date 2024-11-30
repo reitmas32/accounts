@@ -12,7 +12,7 @@ from .routers import router
 
 
 @router.get(
-    "/",
+    "",
     summary="Returns a list of users",
     status_code=status.HTTP_200_OK,
     response_model=ResponseEntity,

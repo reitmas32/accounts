@@ -14,7 +14,7 @@ from .routers import router_crud as router
 
 
 @router.get(
-    "/",
+    "",
     summary="Returns a list of codes",
     status_code=status.HTTP_200_OK,
     response_model=ResponseEntity,

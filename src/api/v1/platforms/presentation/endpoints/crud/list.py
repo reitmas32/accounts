@@ -13,7 +13,7 @@ from shared.presentation.schemas.envelope_response import ResponseEntity
 
 
 @router.get(
-    "/",
+    "",
     summary="Returns a list of platforms",
     status_code=status.HTTP_200_OK,
     response_model=ResponseEntity,
