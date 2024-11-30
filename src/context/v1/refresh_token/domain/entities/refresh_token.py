@@ -3,8 +3,10 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
+from shared.app.entities.base_entity import EntityBase
 
-class RefreshTokenEntity(BaseModel):
+
+class RefreshTokenEntity(EntityBase):
     user_id: UUID | str
     login_method_id: UUID | str
     external_id: UUID | str
