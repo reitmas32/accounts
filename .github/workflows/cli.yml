@@ -1,119 +1,39 @@
-#name: CI Pipeline
-#on:
-#  push:
-#    branches:
-#      - main
-#      - development
-#      - staging
-#      - testing
-#  pull_request:
-#    branches:
-#      - main
-#      - development
-#      - staging
-#      - testing
-#jobs:
-#  run-tests:
-#    name: Run Tests
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#      - name: Run Tests and Collect Artifacts
-#        uses: ronihdzz/test-action@v2
-#        with:
-#          gh-token: ${{ secrets.GH_TOKEN }}
-#          artifacts-branch: 'artifacts'
-#          dockerfile-path: 'deployment/Dockerfile.test'
-#  build-and-push-docker-hub:
-#    name: Push to Docker Hub
-#    runs-on: ubuntu-latest
-#    needs: run-tests
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#      - name: Build and Push
-#        uses: ronihdzz/push-to-dockerhub-action@v2
-#        with:
-#          dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          dockerhub-password: ${{ secrets.DOCKERHUB_PASSWORD }}
-#          dockerhub-repository: ${{ vars.DOCKERHUB_REPOSITORY }}
-#          dockerfile-path: "deployment/Dockerfile.deploy"
-#          branch-environment-map: '{"main": "prod", "development": "dev", "staging": "stg", "testing": "test"}'
-#  build-and-push-digital-ocean:
-#    name: Push to Digital Ocean
-#    runs-on: ubuntu-latest
-#    needs: run-tests
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#      - name: Build and Push
-#        uses: ronihdzz/push-to-digitalocean-action@v2
-#        with:
-#          digitalocean-token: ${{ secrets.DIGITALOCEAN_TOKEN }}
-#          digitalocean-repository: ${{ vars.DIGITALOCEAN_REPOSITORY }}
-#          dockerfile-path: "deployment/Dockerfile.deploy"
-#          branch-environment-map: '{"main": "prod", "development": "dev", "staging": "stg", "testing": "test"}'
-#  deploy:
-#    runs-on: ubuntu-latest
-#    needs: 
-#      - build-and-push-docker-hub
-#      - build-and-push-digital-ocean
-#    steps:
-#      - name: Checkout Repository
-#        uses: actions/checkout@v2
-#
-#      - name: Set Environment Variables
-#        run: |
-#          echo "Setting environment variables..."
-#
-#          # Define branch to environment mapping
-#          BRANCH_ENV_MAP='{"main": "prod", "development": "dev", "staging": "stg", "testing": "test"}'
-#          echo "Branch to environment mapping: $BRANCH_ENV_MAP"
-#
-#          # Get the current branch name
-#          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
-#          echo "Current branch: $BRANCH_NAME"
-#
-#          # Determine the environment based on the branch name
-#          ENVIRONMENT=$(echo "$BRANCH_ENV_MAP" | jq -r --arg branch "$BRANCH_NAME" '.[$branch]')
-#          if [[ "$ENVIRONMENT" == "null" || -z "$ENVIRONMENT" ]]; then
-#            echo "Error: Branch '$BRANCH_NAME' not found in BRANCH_ENV_MAP."
-#            echo "The branch '$BRANCH_NAME' was selected, but it does not have a corresponding environment mapping."
-#            echo "Valid branches are: $(echo $BRANCH_ENV_MAP | jq -r 'keys | join(", ")')"
-#            exit 1
-#          fi
-#          echo "Determined environment: $ENVIRONMENT"
-#          echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_ENV
-#
-#      - name: Get Commit Details
-#        run: |
-#          echo "Fetching commit details..."
-#
-#          # Get commit details
-#          COMMIT_ID=$(git rev-parse HEAD)
-#          COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an')
-#          COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')
-#
-#          # Print commit details
-#          echo "Commit ID: $COMMIT_ID"
-#          echo "Commit Author: $COMMIT_AUTHOR"
-#          echo "Commit Message: $COMMIT_MESSAGE"
-#
-#          # Set commit details as environment variables
-#          echo "COMMIT_ID=$COMMIT_ID" >> $GITHUB_ENV
-#          echo "COMMIT_AUTHOR=$COMMIT_AUTHOR" >> $GITHUB_ENV
-#          echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
-#
-#      - name: Deploy to Digital Ocean Droplet
-#        uses: appleboy/ssh-action@v0.1.5
-#        with:
-#          host: ${{ secrets.HOST }}
-#          username: ${{ secrets.USERNAME }}
-#          key: ${{ secrets.SSHKEY }}
-#          passphrase: ${{ secrets.PASSPHRASE }}
-#          script: |
-#            echo "Starting deployment to Digital Ocean..."
-#            sudo -u deploy_rxd /opt/deploy_rxd/scripts/main.sh "${{ env.ENVIRONMENT }}" ${{ vars.APP_NAME }} "${{ env.COMMIT_AUTHOR }}" "${{ env.COMMIT_ID }}"
-#            echo "Deployment finished."
-#
+name: Publish Docker image
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  push_to_registry:
+    environment: dockerhub
+    name: Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: brainsdevops/mvn-nvm
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
