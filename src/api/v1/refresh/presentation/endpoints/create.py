@@ -1,5 +1,7 @@
 
 from fastapi import Request, status
+from fastapi.params import Depends
+from sqlalchemy.orm import Session
 
 from api.v1.refresh.presentation.dtos import CreateRefreshTokenDto
 from context.v1.refresh_token.domain.entities.refresh_token import RefreshTokenEntity
@@ -7,6 +9,7 @@ from context.v1.refresh_token.domain.usecase.create import CreateRefreshTokenUse
 from context.v1.refresh_token.infrastructure.repositories.postgres.refresh import (
     RefreshTokenRepository,
 )
+from core.settings.database import get_session
 from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
@@ -23,12 +26,13 @@ from .routers import router_crud as router
 async def create(
     request: Request,
     payload: CreateRefreshTokenDto,
+    session: Session = Depends(get_session)
 ):
     logger.info("Create Code")
 
     entity: RefreshTokenEntity = RefreshTokenEntity(**payload.model_dump())
 
-    use_case = CreateRefreshTokenUseCase(repository=RefreshTokenRepository())
+    use_case = CreateRefreshTokenUseCase(repository=RefreshTokenRepository(session=session))
 
     new_entity: RefreshTokenEntity = use_case.execute(payload=entity)
 

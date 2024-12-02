@@ -2,9 +2,14 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from fastapi import status
+from fastapi.params import Depends
+from sqlalchemy.orm import Session
 
-from context.v1.codes.domain.usecase.retrive import RetriveCodeUseCase
-from context.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
+from context.v1.refresh_token.domain.usecase.retrive import RetriveRefreshTokenUseCase
+from context.v1.refresh_token.infrastructure.repositories.postgres.refresh import (
+    RefreshTokenRepository,
+)
+from core.settings.database import get_session
 from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
@@ -12,23 +17,26 @@ from shared.presentation.schemas.envelope_response import ResponseEntity
 from .routers import router_crud as router
 
 if TYPE_CHECKING:
-    from context.v1.codes.domain.entities.code import CodeEntity
+    from context.v1.refresh_token.domain.entities.refresh_token import (
+        RefreshTokenEntity,
+    )
 
 
 @router.get(
     "/{id}",
-    summary="Returns the data of the authenticated user",
+    summary="Get RefreshToken by ID",
     status_code=status.HTTP_200_OK,
     response_model=ResponseEntity,
 )
 async def retrieve_one(
     id: UUID,
+    session: Session = Depends(get_session)
 ):
-    logger.info("Get User")
+    logger.info("Get RefreshToken")
 
-    use_case = RetriveCodeUseCase(repository=CodeRepository())
+    use_case = RetriveRefreshTokenUseCase(repository=RefreshTokenRepository(session=session))
 
-    entity: CodeEntity | None = use_case.execute(id=id)
+    entity: RefreshTokenEntity | None = use_case.execute(id=id)
 
     data = None
 

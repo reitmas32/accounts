@@ -32,13 +32,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(api_v1_router)
-app.include_router(api_healthcheck_router)
+
+@app.middleware("http")
+async def redirect_trailing_slash(request, call_next):
+    if (
+        request.url.path != "/"
+        and request.url.path.endswith("/")
+    ):
+        path_without_end_slash = request.url.path[:-1]
+        return RedirectResponse(url=f"{path_without_end_slash}", status_code=307)
+    return await call_next(request)
 
 
 @app.get("/", include_in_schema=False)
 def root():
     return RedirectResponse(url="/docs")
+
+
+app.include_router(api_v1_router)
+app.include_router(api_healthcheck_router)
 
 
 if EnvironmentsTypes.DOCKER.value.env_name == settings.ENVIRONMENT:

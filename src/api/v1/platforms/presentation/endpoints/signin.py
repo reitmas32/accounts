@@ -1,4 +1,6 @@
 from fastapi import status
+from fastapi.params import Depends
+from sqlalchemy.orm import Session
 
 from api.v1.platforms.presentation.dtos.signin import SigninPlatformDto
 from api.v1.platforms.presentation.endpoints.routers import router_operations as router
@@ -13,6 +15,7 @@ from context.v1.platforms.infrastructure.repositories.postgres.user import (
 from context.v1.refresh_token.infrastructure.repositories.postgres.refresh import (
     RefreshTokenRepository,
 )
+from core.settings.database import get_session
 from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
@@ -26,15 +29,17 @@ from shared.presentation.schemas.envelope_response import ResponseEntity
 )
 async def signip(
     payload: SigninPlatformDto,
+    session: Session = Depends(get_session)
+
 ):
     logger.info("Signin By Platform")
 
     entity: SignupPlatformEntity = SignupPlatformEntity(**payload.model_dump())
 
     use_case = SignInPlatformUseCase(
-        repository=PlatformRepository(),
-        login_method_repository=LoginMethodRepository(),
-        refresh_token_repository=RefreshTokenRepository(),
+        repository=PlatformRepository(session=session),
+        login_method_repository=LoginMethodRepository(session=session),
+        refresh_token_repository=RefreshTokenRepository(session=session),
     )
 
     jwt, refresh_token = use_case.execute(payload=entity)

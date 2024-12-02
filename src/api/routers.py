@@ -23,6 +23,7 @@ from api.v1.refresh.presentation.endpoints import router_crud as refresh_endpoin
 from api.v1.refresh.presentation.endpoints import (
     router_operations as refresh_endpoints_operations,
 )
+from api.v1.roles.presentation.endpoints import router as roles_endpoints
 from api.v1.users.presentation.endpoints import router as users_endpoints
 from core.settings import settings
 
@@ -37,7 +38,7 @@ api_v1_router.include_router(login_methods_endpoints, include_in_schema=settings
 api_v1_router.include_router(platforms_endpoints, include_in_schema=settings.SHOW_CRUDS_IN_SWAGGER_SCHEMA)
 api_v1_router.include_router(users_endpoints, include_in_schema=settings.SHOW_CRUDS_IN_SWAGGER_SCHEMA)
 api_v1_router.include_router(refresh_endpoints, include_in_schema=settings.SHOW_CRUDS_IN_SWAGGER_SCHEMA)
-
+api_v1_router.include_router(roles_endpoints, include_in_schema=settings.SHOW_CRUDS_IN_SWAGGER_SCHEMA)
 
 
 api_v1_router.include_router(codes_endpoints_operations)

@@ -41,7 +41,10 @@ services:
       - 9001:9000
     networks:
       - "local-development"
-    depends_on:
-      - db
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: "512m"
 networks:
   local-development:

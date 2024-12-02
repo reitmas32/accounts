@@ -1,4 +1,6 @@
 from fastapi import status
+from fastapi.params import Depends
+from sqlalchemy.orm import Session
 
 from api.v1.platforms.presentation.dtos.signup import SignupPlatformDto
 from api.v1.platforms.presentation.endpoints.routers import router_operations as router
@@ -14,6 +16,7 @@ from context.v1.refresh_token.infrastructure.repositories.postgres.refresh impor
     RefreshTokenRepository,
 )
 from context.v1.users.infrastructure.repositories.postgres.user import UserRepository
+from core.settings.database import get_session
 from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
@@ -27,16 +30,17 @@ from shared.presentation.schemas.envelope_response import ResponseEntity
 )
 async def signup(
     payload: SignupPlatformDto,
+    session: Session = Depends(get_session)
 ):
     logger.info("Signup By Platform")
 
     entity: SignupPlatformEntity = SignupPlatformEntity(**payload.model_dump())
 
     use_case = SignUpPlatformUseCase(
-        repository=PlatformRepository(),
-        user_repository=UserRepository(),
-        login_method_repository=LoginMethodRepository(),
-        refresh_token_repository=RefreshTokenRepository(),
+        repository=PlatformRepository(session=session),
+        user_repository=UserRepository(session=session),
+        login_method_repository=LoginMethodRepository(session=session),
+        refresh_token_repository=RefreshTokenRepository(session=session),
     )
 
     jwt, refresh_token = use_case.execute(payload=entity)

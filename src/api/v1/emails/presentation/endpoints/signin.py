@@ -1,4 +1,6 @@
 from fastapi import Request, status
+from fastapi.params import Depends
+from sqlalchemy.orm import Session
 
 from api.v1.emails.presentation.dtos.signin import SigninEmailDto
 from context.v1.emails.domain.entities.signin import SigninEmailEntity
@@ -11,6 +13,7 @@ from context.v1.refresh_token.infrastructure.repositories.postgres.refresh impor
     RefreshTokenRepository,
 )
 from context.v1.users.infrastructure.repositories.postgres.user import UserRepository
+from core.settings.database import get_session
 from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
@@ -27,6 +30,7 @@ from .routers import router_operations as router
 async def signup(
     request: Request,
     payload: SigninEmailDto,
+    session: Session = Depends(get_session)
 ):
     """
     Create a user registration via email.
@@ -46,10 +50,10 @@ async def signup(
     entity = SigninEmailEntity(**payload.model_dump())
 
     use_case = SignInWithEmailUseCase(
-        email_repository=EmailRepository(),
-        user_repository=UserRepository(),
-        login_method_repository=LoginMethodRepository(),
-        refresh_token_repository=RefreshTokenRepository()
+        email_repository=EmailRepository(session=session),
+        user_repository=UserRepository(session=session),
+        login_method_repository=LoginMethodRepository(session=session),
+        refresh_token_repository=RefreshTokenRepository(session=session)
     )
 
     jwt, refresh_token = use_case.execute(payload=entity)
