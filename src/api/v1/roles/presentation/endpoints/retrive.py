@@ -2,9 +2,12 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from fastapi import status
+from fastapi.params import Depends
+from sqlalchemy.orm import Session
 
 from context.v1.roles.domain.usecase.retrive import RetriveRoleUseCase
 from context.v1.roles.infrastructure.repositories.postgres.role import RoleRepository
+from core.settings.database import get_session
 from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
@@ -23,6 +26,8 @@ if TYPE_CHECKING:
 )
 async def retrieve_one(
     id: UUID,
+    session: Session = Depends(get_session)
+
 ):
     logger.info("Get User")
 
