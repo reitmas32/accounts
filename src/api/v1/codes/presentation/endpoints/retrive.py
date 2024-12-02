@@ -2,9 +2,12 @@ from typing import TYPE_CHECKING
 from uuid import UUID
 
 from fastapi import status
+from fastapi.params import Depends
+from sqlalchemy.orm import Session
 
 from context.v1.codes.domain.usecase.retrive import RetriveCodeUseCase
 from context.v1.codes.infrastructure.repositories.postgres.user import CodeRepository
+from core.settings.database import get_session
 from core.utils.logger import logger
 from shared.app.status_code import StatusCodes
 from shared.presentation.schemas.envelope_response import ResponseEntity
@@ -23,10 +26,12 @@ if TYPE_CHECKING:
 )
 async def retrieve_one(
     id: UUID,
+    session: Session = Depends(get_session)
+
 ):
     logger.info("Get User")
 
-    use_case = RetriveCodeUseCase(repository=CodeRepository())
+    use_case = RetriveCodeUseCase(repository=CodeRepository(session=session))
 
     entity: CodeEntity | None = use_case.execute(id=id)
 
