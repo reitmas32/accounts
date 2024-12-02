@@ -1,26 +1,19 @@
 import uuid
 from datetime import datetime
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from pytz import timezone
 from sqlalchemy import and_
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
 
 from core.settings import log, settings
-from core.settings.database import use_database_session
 from shared.databases.infrastructure.repository import RepositoryInterface
-
-if TYPE_CHECKING:
-    from sqlalchemy.orm import Session
 
 
 class RepositoryPostgresBase(RepositoryInterface):
-    def __init__(self):
-        with (
-            use_database_session() as session
-        ):  # TODO: Pensar si es correcto esto o sera mejor inyectar el session
-            self.session: Session = session
-        self.logger = log
+    def __init__(self, session: Session):
+        self.session = session
 
     def update_field_by_id(
         self, id: uuid.UUID, field_name: str, new_value: Any
