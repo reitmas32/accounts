@@ -1,5 +1,6 @@
 from fastapi import Depends, status
 from fastapi.security import HTTPAuthorizationCredentials
+from sqlalchemy.orm import Session
 
 from api.v1.refresh.presentation.schemas.new_jwt import NewJWTSchema
 from context.v1.login_methods.infrastructure.repositories.postgres.login_method import (
@@ -9,6 +10,7 @@ from context.v1.refresh_token.domain.usecase.refresh import RefreshTokenUseCase
 from context.v1.refresh_token.infrastructure.repositories.postgres.refresh import (
     RefreshTokenRepository,
 )
+from core.settings.database import get_session
 from core.utils.logger import logger
 from shared.app.depends.custom_http_bearer import CustomHTTPBearer
 from shared.app.status_code import StatusCodes
@@ -28,6 +30,7 @@ security_scheme = CustomHTTPBearer()
 )
 async def verify_jwt(
     authorization: HTTPAuthorizationCredentials = Depends(security_scheme),
+    session: Session = Depends(get_session)
 ):
     logger.info("Verify JWT")
 
@@ -35,8 +38,8 @@ async def verify_jwt(
 
     use_case = RefreshTokenUseCase(
         jwt=jwt,
-        refresh_token_repository=RefreshTokenRepository(),
-        login_methods_repository=LoginMethodRepository(),
+        refresh_token_repository=RefreshTokenRepository(session=session),
+        login_methods_repository=LoginMethodRepository(session=session),
     )
     jwt: bool = use_case.execute()
 
