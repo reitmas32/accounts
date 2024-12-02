@@ -31,7 +31,7 @@ async def retrieve_one(
 ):
     logger.info("Get User")
 
-    use_case = RetriveRoleUseCase(repository=RoleRepository())
+    use_case = RetriveRoleUseCase(repository=RoleRepository(session=session))
 
     entity: RoleEntity | None = use_case.execute(id=id)
 

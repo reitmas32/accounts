@@ -35,8 +35,8 @@ async def activate(
 
     entity = ActivateEmailEntity(**payload.model_dump())
 
-    email_repository = EmailRepository()
-    code_repository = CodeRepository()
+    email_repository = EmailRepository(session=session)
+    code_repository = CodeRepository(session=session)
 
     use_case = ActivationEmailUseCase(
         email_repository=email_repository,
