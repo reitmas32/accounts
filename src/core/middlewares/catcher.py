@@ -1,7 +1,7 @@
 import json
 
 from fastapi import HTTPException, Request, status
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import JSONResponse
 from psycopg2.errors import ForeignKeyViolation
 from sqlalchemy.exc import IntegrityError
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -31,12 +31,15 @@ class CatcherExceptionsMiddleware(BaseHTTPMiddleware):
 
             response_body = [section async for section in response.body_iterator]
 
-            response_dict = json.loads(
-                response_body[0],
-            )
+            response_dict = None
+
+            if len(response_body) > 0:
+                response_dict = json.loads(
+                    response_body[0],
+                )
 
             if response_dict is None:
-                return Response(status_code=status.HTTP_204_NO_CONTENT)
+                return response
 
             response_entity = ResponseEntity(**response_dict)
 
